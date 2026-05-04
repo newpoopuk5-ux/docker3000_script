@@ -1,0 +1,369 @@
+{
+  "sets": {
+    "basic": {
+      "description": "Small starter set: upscaler + BigLust + Juggernaut + Lustify",
+      "upscalers": [
+        {
+          "name": "RealESRGAN_x4plus.pth",
+          "source": "direct",
+          "url": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
+        }
+      ],
+      "checkpoints": [
+        {
+          "name": "biglust_full_fp16.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16"
+        },
+        {
+          "name": "juggernautXL_juggXlByRundiffusion.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/782002"
+        },
+        {
+          "name": "lustifySDXL_pruned_fp16.safetensors",
+          "source": "direct",
+          "url": "https://civitai.red/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        }
+      ],
+      "loras": [],
+      "private_hf": []
+    },
+    "all": {
+      "description": "All checkpoints discussed in chat + upscaler",
+      "upscalers": [
+        {
+          "name": "RealESRGAN_x4plus.pth",
+          "source": "direct",
+          "url": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
+        }
+      ],
+      "checkpoints": [
+        {
+          "name": "hassakuXLIllustrious.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2615702"
+        },
+        {
+          "name": "hassakuSD15.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/106922"
+        },
+        {
+          "name": "hassakuXLPony.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/575495"
+        },
+        {
+          "name": "vxpILXL_v188_fp16.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1774915?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        },
+        {
+          "name": "vxpILXL_source.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1201891"
+        },
+        {
+          "name": "ponyDiffusionV6XL.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/290640"
+        },
+        {
+          "name": "illustriousXL_v01.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/889818"
+        },
+        {
+          "name": "waiIllustriousSDXL_v17.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2883731"
+        },
+        {
+          "name": "animij_v10.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1528632"
+        },
+        {
+          "name": "animij_v20.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1613008"
+        },
+        {
+          "name": "JANKUtrainedChenkinNoobai_v777.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2786084"
+        },
+        {
+          "name": "waiANIponyXL.safetensors",
+          "source": "direct",
+          "url": "https://civitai.red/api/download/models/1767402?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        },
+        {
+          "name": "waiANIHENTAIPONYXL.safetensors",
+          "source": "direct",
+          "url": "https://civitai.red/api/download/models/952743?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        },
+        {
+          "name": "biglust_full_fp16.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16"
+        },
+        {
+          "name": "juggernautXL_juggXlByRundiffusion.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/782002"
+        },
+        {
+          "name": "lustifySDXL_pruned_fp16.safetensors",
+          "source": "direct",
+          "url": "https://civitai.red/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        }
+      ],
+      "loras": [],
+      "private_hf": [
+        {
+          "enabled": false,
+          "repo_id": "YOUR_HF_USERNAME/YOUR_PRIVATE_REPO",
+          "files": [
+            {
+              "repo_path": "loras/my_loras.zip",
+              "target": "/workspace/my_loras.zip",
+              "unzip_to": "/workspace/ComfyUI/models/loras"
+            },
+            {
+              "repo_path": "checkpoints/private_model_1.safetensors",
+              "target": "/workspace/ComfyUI/models/checkpoints/private_model_1.safetensors"
+            }
+          ]
+        }
+      ]
+    },
+    "flux_user": {
+      "description": "User-provided Flux models from Civitai/Hugging Face",
+      "vae": [
+        {
+          "name": "ae.safetensors",
+          "source": "hf",
+          "repo_id": "black-forest-labs/FLUX.1-schnell",
+          "repo_path": "ae.safetensors"
+        },
+        {
+          "name": "flux2-vae.safetensors",
+          "source": "hf",
+          "repo_id": "Comfy-Org/flux2-dev",
+          "repo_path": "flux2-vae.safetensors"
+        }
+      ],
+      "text_encoders": [
+        {
+          "name": "clip_l.safetensors",
+          "source": "hf",
+          "repo_id": "comfyanonymous/flux_text_encoders",
+          "repo_path": "clip_l.safetensors"
+        },
+        {
+          "name": "t5xxl_fp8_e4m3fn.safetensors",
+          "source": "hf",
+          "repo_id": "comfyanonymous/flux_text_encoders",
+          "repo_path": "t5xxl_fp8_e4m3fn.safetensors"
+        },
+        {
+          "name": "mistral_3_small_flux2_fp8.safetensors",
+          "source": "hf",
+          "repo_id": "comfyanonymous/flux_text_encoders",
+          "repo_path": "mistral_3_small_flux2_fp8.safetensors"
+        }
+      ],
+      "text_encoders_gguf": [],
+      "flux_diffusion_models": [],
+      "flux_gguf_unet": [],
+      "flux_loras": []
+    },
+    "flux_min": {
+      "description": "One-click Flux starter: GGUF Schnell + GGUF Dev + shared Flux text encoders and VAE",
+      "vae": [
+        {
+          "name": "ae.safetensors",
+          "source": "hf",
+          "repo_id": "MaxedOut/ComfyUI-Starter-Packs",
+          "repo_path": "Flux1/vae/ae.safetensors"
+        }
+      ],
+      "text_encoders": [
+        {
+          "name": "clip_l.safetensors",
+          "source": "hf",
+          "repo_id": "comfyanonymous/flux_text_encoders",
+          "repo_path": "clip_l.safetensors"
+        }
+      ],
+      "text_encoders_gguf": [
+        {
+          "name": "t5-v1_1-xxl-encoder-Q4_K_M.gguf",
+          "source": "hf",
+          "repo_id": "city96/t5-v1_1-xxl-encoder-gguf",
+          "repo_path": "t5-v1_1-xxl-encoder-Q4_K_M.gguf"
+        }
+      ],
+      "flux_gguf_unet": [
+        {
+          "name": "flux1-schnell-Q4_K_S.gguf",
+          "source": "hf",
+          "repo_id": "city96/FLUX.1-schnell-gguf",
+          "repo_path": "flux1-schnell-Q4_K_S.gguf"
+        },
+        {
+          "name": "flux1-dev-Q4_K_S.gguf",
+          "source": "hf",
+          "repo_id": "city96/FLUX.1-dev-gguf",
+          "repo_path": "flux1-dev-Q4_K_S.gguf"
+        }
+      ],
+      "flux_loras": []
+    },
+    "flux_official": {
+      "description": "Official split Flux files. Some Black Forest Labs files are gated and require HF_TOKEN with accepted terms.",
+      "vae": [
+        {
+          "name": "ae.safetensors",
+          "source": "hf",
+          "repo_id": "black-forest-labs/FLUX.1-schnell",
+          "repo_path": "ae.safetensors"
+        }
+      ],
+      "text_encoders": [
+        {
+          "name": "clip_l.safetensors",
+          "source": "hf",
+          "repo_id": "comfyanonymous/flux_text_encoders",
+          "repo_path": "clip_l.safetensors"
+        },
+        {
+          "name": "t5xxl_fp8_e4m3fn.safetensors",
+          "source": "hf",
+          "repo_id": "comfyanonymous/flux_text_encoders",
+          "repo_path": "t5xxl_fp8_e4m3fn.safetensors"
+        }
+      ],
+      "flux_diffusion_models": [
+        {
+          "name": "flux1-schnell.safetensors",
+          "source": "hf",
+          "repo_id": "black-forest-labs/FLUX.1-schnell",
+          "repo_path": "flux1-schnell.safetensors"
+        }
+      ],
+      "flux_loras": []
+    },
+    "flux_all": {
+      "description": "Flux official + GGUF starter models + Flux LoRA bucket",
+      "vae": [
+        {
+          "name": "ae.safetensors",
+          "source": "hf",
+          "repo_id": "MaxedOut/ComfyUI-Starter-Packs",
+          "repo_path": "Flux1/vae/ae.safetensors"
+        }
+      ],
+      "text_encoders": [
+        {
+          "name": "clip_l.safetensors",
+          "source": "hf",
+          "repo_id": "comfyanonymous/flux_text_encoders",
+          "repo_path": "clip_l.safetensors"
+        },
+        {
+          "name": "t5xxl_fp8_e4m3fn.safetensors",
+          "source": "hf",
+          "repo_id": "comfyanonymous/flux_text_encoders",
+          "repo_path": "t5xxl_fp8_e4m3fn.safetensors"
+        }
+      ],
+      "text_encoders_gguf": [
+        {
+          "name": "t5-v1_1-xxl-encoder-Q4_K_M.gguf",
+          "source": "hf",
+          "repo_id": "city96/t5-v1_1-xxl-encoder-gguf",
+          "repo_path": "t5-v1_1-xxl-encoder-Q4_K_M.gguf"
+        }
+      ],
+      "flux_diffusion_models": [
+        {
+          "name": "flux1-schnell.safetensors",
+          "source": "hf",
+          "repo_id": "black-forest-labs/FLUX.1-schnell",
+          "repo_path": "flux1-schnell.safetensors"
+        }
+      ],
+      "flux_gguf_unet": [
+        {
+          "name": "flux1-schnell-Q4_K_S.gguf",
+          "source": "hf",
+          "repo_id": "city96/FLUX.1-schnell-gguf",
+          "repo_path": "flux1-schnell-Q4_K_S.gguf"
+        },
+        {
+          "name": "flux1-dev-Q4_K_S.gguf",
+          "source": "hf",
+          "repo_id": "city96/FLUX.1-dev-gguf",
+          "repo_path": "flux1-dev-Q4_K_S.gguf"
+        }
+      ],
+      "flux_loras": []
+    },
+    "hf_loras": {
+      "description": "Private LoRAs uploaded to Hugging Face repo lisabew/comfy-loras",
+      "loras": [
+        {
+          "name": "armbinder.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "loras/armbinder.safetensors"
+        },
+        {
+          "name": "Armbinder_IL.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "loras/Armbinder_IL.safetensors"
+        },
+        {
+          "name": "bondage_armbinder.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "loras/bondage_armbinder.safetensors"
+        },
+        {
+          "name": "Free_use_with_armbinders.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "loras/Free_use_with_armbinders.safetensors"
+        },
+        {
+          "name": "PONYXL_STYLE_Gagala_ownwaifu.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "loras/PONYXL_STYLE_Gagala_ownwaifu.safetensors"
+        },
+        {
+          "name": "pussy spreader_noobep_V1.1.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "loras/pussy spreader_noobep_V1.1.safetensors"
+        },
+        {
+          "name": "RParmbinderPony.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "loras/RParmbinderPony.safetensors"
+        },
+        {
+          "name": "Sex_slave_training.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "loras/Sex_slave_training.safetensors"
+        }
+      ]
+    }
+  }
+}

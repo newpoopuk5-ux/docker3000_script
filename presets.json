@@ -1,0 +1,26 @@
+{
+  "pony_fast": {
+    "sampler_name": "euler",
+    "scheduler": "karras",
+    "steps": 28,
+    "cfg": 6.5,
+    "width": 832,
+    "height": 1216
+  },
+  "realistic_quality": {
+    "sampler_name": "dpmpp_2m_sde_gpu",
+    "scheduler": "karras",
+    "steps": 30,
+    "cfg": 5.5,
+    "width": 1024,
+    "height": 1024
+  },
+  "anime_clean": {
+    "sampler_name": "dpmpp_2m",
+    "scheduler": "karras",
+    "steps": 30,
+    "cfg": 6.5,
+    "width": 832,
+    "height": 1216
+  }
+}
