@@ -274,8 +274,19 @@ def _update_job(job_id: str, **fields) -> None:
 def _run_download_job(job_id: str, catalog_id: str) -> None:
     _update_job(job_id, status="running", started_at=time.time(), progress="starting")
 
-    def progress(msg: str) -> None:
-        _update_job(job_id, progress=msg)
+    def progress(msg: str, **stats) -> None:
+        fields: dict = {"progress": msg}
+        for key in (
+            "progress_pct",
+            "progress_done",
+            "progress_total",
+            "progress_speed",
+            "progress_eta",
+            "progress_connections",
+        ):
+            if key in stats and stats[key] is not None:
+                fields[key] = stats[key]
+        _update_job(job_id, **fields)
 
     try:
         found = _find_catalog_item(catalog_id)
