@@ -30,7 +30,10 @@ detect_volume_root() {
 VOLUME_ROOT="$(detect_volume_root)"
 COMFY_ROOT_HOST="${COMFY_ROOT_HOST:-$VOLUME_ROOT/ComfyUI}"
 
-mkdir -p "$COMFY_ROOT_HOST/output"
+mkdir -p "$COMFY_ROOT_HOST/output" "$VOLUME_ROOT/.muse-worker"
+
+WORKER_MODE="${WORKER_MODE:-${AUTOSTART_MODE:-none}}"
+export WORKER_MODE
 
 if [ "$PULL_IMAGE" = "1" ]; then
   echo "Pulling Docker image: $IMAGE"
@@ -51,7 +54,10 @@ fi
 
 docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
-VOLUME_ARGS=(-v "$COMFY_ROOT_HOST:/workspace/ComfyUI")
+VOLUME_ARGS=(
+  -v "$COMFY_ROOT_HOST:/workspace/ComfyUI"
+  -v "$VOLUME_ROOT/.muse-worker:/workspace/.muse-worker"
+)
 if [ "$MOUNT_CODE" = "1" ]; then
   VOLUME_ARGS+=(-v "$SCRIPT_DIR:/app")
 fi
@@ -62,11 +68,18 @@ docker run -d \
   --network host \
   "${VOLUME_ARGS[@]}" \
   -e UI_PORT="$UI_PORT" \
+  -e COMFY_PORT="$COMFY_PORT" \
   -e COMFY_URL="$COMFY_URL" \
   -e COMFY_ROOT="/workspace/ComfyUI" \
+  -e VOLUME_ROOT="$VOLUME_ROOT" \
+  -e WORKER_MODE="$WORKER_MODE" \
+  -e BOOTSTRAP="${BOOTSTRAP:-}" \
+  -e MODEL_SET="${MODEL_SET:-}" \
+  -e IMAGE="$IMAGE" \
   -e APP_PASSWORD="${APP_PASSWORD:-}" \
   -e UI_PASSWORD="${UI_PASSWORD:-}" \
   -e HF_TOKEN="${HF_TOKEN:-}" \
+  -e CIVITAI_TOKEN="${CIVITAI_TOKEN:-}" \
   -e WORKFLOW_PATH="${WORKFLOW_PATH:-workflow.json}" \
   -e WORKFLOW_IMG2IMG_PATH="${WORKFLOW_IMG2IMG_PATH:-workflow_img2img.json}" \
   -e WORKFLOW_NODE_MAP_PATH="${WORKFLOW_NODE_MAP_PATH:-workflow_map.json}" \

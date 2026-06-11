@@ -16,6 +16,7 @@ from studio_comfy_api import comfy_image_url, get_history, get_object_info, heal
 from config import APP_PASSWORD, CHECKPOINT_DIR, DIFFUSION_MODEL_DIR, IMAGE_SUFFIXES, LORA_DIR, OUTPUT_DIR, PRESETS_PATH, TEXT_ENCODER_DIR, UI_TITLE, UNET_DIR, UPSCALE_DIR, VAE_DIR
 from metadata import cached_image_info, image_records, list_files, read_favorites, safe_output_path, write_favorites
 from workflow_utils import build_workflow
+from worker_status import build_worker_status
 
 app = Flask(__name__)
 
@@ -170,6 +171,11 @@ def index():
 @app.get("/api/health")
 def health():
     return jsonify(health_status())
+
+
+@app.get("/api/worker/status")
+def worker_status():
+    return jsonify(build_worker_status())
 
 
 @app.get("/api/queue")

@@ -3,14 +3,22 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-SET_NAMES="${1:-${MODEL_SET:-basic}}"
+RAW_ARG="${1:-${MODEL_SET:-basic}}"
+INSTALL_ONLY=0
+SET_NAMES="$RAW_ARG"
+
+if [ "$RAW_ARG" = "--install-only" ] || [ "$RAW_ARG" = "none" ]; then
+  INSTALL_ONLY=1
+  SET_NAMES=""
+fi
+
 VOLUME_ROOT="${VOLUME_ROOT:-}"
 
 echo "Disk layout:"
 df -h
 
 if [ -z "$VOLUME_ROOT" ]; then
-  for candidate in /workspace /root/volume /mnt/data /volume; do
+  for candidate in /workspace /root/volume /runpod-volume /mnt/data /volume; do
     if [ -d "$candidate" ]; then
       VOLUME_ROOT="$candidate"
       break
@@ -44,11 +52,12 @@ mkdir -p \
   "$COMFY_ROOT/models/checkpoints" \
   "$COMFY_ROOT/models/loras" \
   "$COMFY_ROOT/models/loras/flux" \
+  "$COMFY_ROOT/models/vae" \
+  "$COMFY_ROOT/models/controlnet" \
   "$COMFY_ROOT/models/upscale_models" \
   "$COMFY_ROOT/models/unet" \
   "$COMFY_ROOT/models/diffusion_models" \
   "$COMFY_ROOT/models/text_encoders" \
-  "$COMFY_ROOT/models/vae" \
   "$COMFY_ROOT/custom_nodes" \
   "$COMFY_ROOT/output"
 
@@ -69,10 +78,17 @@ if [ -f "$GGUF_NODE_DIR/requirements.txt" ]; then
   pip install -r "$GGUF_NODE_DIR/requirements.txt"
 fi
 
-echo "Downloading model set(s): $SET_NAMES"
-for SET_NAME in ${SET_NAMES//,/ }; do
-  python download_models.py --set "$SET_NAME"
-done
+if [ "$INSTALL_ONLY" = "1" ] || [ -z "$SET_NAMES" ]; then
+  echo "Skipping model downloads (install-only / MODEL_SET=none)"
+else
+  echo "Downloading model set(s): $SET_NAMES"
+  for SET_NAME in ${SET_NAMES//,/ }; do
+    if [ "$SET_NAME" = "none" ]; then
+      continue
+    fi
+    python download_models.py --set "$SET_NAME"
+  done
+fi
 
 echo "Bootstrap complete."
 echo "Start ComfyUI:"
