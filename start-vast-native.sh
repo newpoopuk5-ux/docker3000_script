@@ -28,12 +28,24 @@ echo "FLASK_PORT=$FLASK_PORT COMFY_PORT=$COMFY_PORT"
 echo "AUTOSTART_MODE=$AUTOSTART_MODE"
 
 VENV_DIR="$VOLUME_ROOT/venv"
-if [ ! -d "$VENV_DIR" ]; then
+VENV_ACTIVATE="$VENV_DIR/bin/activate"
+VENV_PYTHON="$VENV_DIR/bin/python"
+
+if [ ! -f "$VENV_ACTIVATE" ] || [ ! -x "$VENV_PYTHON" ]; then
   echo "Creating venv at $VENV_DIR"
-  python3 -m venv "$VENV_DIR"
+  rm -rf "$VENV_DIR"
+  if ! python3 -m venv "$VENV_DIR"; then
+    echo "ERROR: python3 -m venv failed."
+    echo "On Debian/Ubuntu try: apt-get update && apt-get install -y python3-venv"
+    exit 1
+  fi
+fi
+if [ ! -f "$VENV_ACTIVATE" ]; then
+  echo "ERROR: venv incomplete — missing $VENV_ACTIVATE"
+  exit 1
 fi
 # shellcheck disable=SC1091
-source "$VENV_DIR/bin/activate"
+source "$VENV_ACTIVATE"
 
 python -m pip install --upgrade pip
 pip install -r "$SCRIPT_DIR/requirements.txt"

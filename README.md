@@ -34,7 +34,7 @@ bash start-vast-native.sh
 
 This script:
 
-- creates `/workspace/venv` and installs `requirements.txt`
+- creates or repairs `/workspace/venv` (removes a broken empty `venv/` folder) and installs `requirements.txt`
 - runs `bootstrap.sh --install-only` (ComfyUI at `/workspace/ComfyUI`, no model downloads)
 - starts Flask on port **3000** in the foreground
 - leaves ComfyUI stopped when `AUTOSTART_MODE=none` (start later from Muse **Start Comfy mode**)
