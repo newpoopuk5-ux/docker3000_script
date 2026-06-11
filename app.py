@@ -499,4 +499,5 @@ def generate():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("UI_PORT", "3000")), debug=False)
+    port = int(os.environ.get("FLASK_PORT") or os.environ.get("UI_PORT") or "3000")
+    app.run(host="0.0.0.0", port=port, debug=False)

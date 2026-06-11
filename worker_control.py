@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from studio_comfy_api import health_status
+from worker_bootstrap import ensure_comfy_installed, python_bin
 
 MODE_NAMES = ("none", "comfy")
 
@@ -102,15 +103,22 @@ def start_comfy() -> dict:
 
     comfy_root = _comfy_root()
     if not (comfy_root / "main.py").exists():
-        return {"ok": False, "error": f"ComfyUI is not installed at {comfy_root}. Run bootstrap first."}
+        prep = ensure_comfy_installed()
+        if not prep.get("ok"):
+            return {
+                "ok": False,
+                "error": prep.get("error") or f"ComfyUI is not installed at {comfy_root}",
+                "bootstrap": prep,
+            }
 
     log_path = _volume_root() / "comfyui.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     _mode_file().parent.mkdir(parents=True, exist_ok=True)
 
+    py = python_bin()
     with open(log_path, "ab", buffering=0) as log:
         proc = subprocess.Popen(
-            ["python", "main.py", "--listen", "0.0.0.0", "--port", str(_comfy_port())],
+            [py, "main.py", "--listen", "0.0.0.0", "--port", str(_comfy_port())],
             cwd=str(comfy_root),
             stdout=log,
             stderr=subprocess.STDOUT,

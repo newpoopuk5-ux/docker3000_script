@@ -2,9 +2,11 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import Callable, Optional
 from urllib.parse import urlparse, parse_qs
 import requests
 import zipfile
@@ -125,32 +127,73 @@ def write_civitai_sidecar(target: Path, meta: dict):
 def file_ok(path: Path) -> bool:
     return path.exists() and path.stat().st_size > 1024 * 1024
 
-def download_url(url: str, target: Path):
+
+def _have_aria2() -> bool:
+    return shutil.which("aria2c") is not None
+
+
+def download_url_requests(url: str, target: Path, progress: Optional[Callable[[str], None]] = None):
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if progress:
+        progress(f"downloading {target.name} via requests")
+    headers = {}
+    if CIVITAI_TOKEN and "civitai." in url:
+        headers["Authorization"] = f"Bearer {CIVITAI_TOKEN}"
+    with requests.get(url, stream=True, timeout=120, headers=headers) as resp:
+        resp.raise_for_status()
+        with open(target, "wb") as handle:
+            for chunk in resp.iter_content(chunk_size=1024 * 1024):
+                if chunk:
+                    handle.write(chunk)
+
+
+def download_url(url: str, target: Path, progress: Optional[Callable[[str], None]] = None):
     target.parent.mkdir(parents=True, exist_ok=True)
     if file_ok(target):
         print(f"SKIP exists: {target}")
         return
     url = add_token(url)
-    run(["aria2c", "-x", "8", "-s", "8", url, "-d", str(target.parent), "-o", target.name])
+    if _have_aria2():
+        if progress:
+            progress(f"downloading {target.name} via aria2")
+        run(["aria2c", "-x", "8", "-s", "8", url, "-d", str(target.parent), "-o", target.name])
+        return
+    download_url_requests(url, target, progress=progress)
 
-def hf_download(repo_id: str, repo_path: str, target: Path):
+
+def hf_download(repo_id: str, repo_path: str, target: Path, progress: Optional[Callable[[str], None]] = None):
     target.parent.mkdir(parents=True, exist_ok=True)
     if file_ok(target):
         print(f"SKIP exists: {target}")
         return
-    cmd = ["huggingface-cli", "download", repo_id, repo_path, "--local-dir", str(target.parent), "--local-dir-use-symlinks", "False"]
-    if HF_TOKEN:
-        cmd += ["--token", HF_TOKEN]
-    run(cmd)
-    downloaded = target.parent / repo_path
-    flat_downloaded = target.parent / Path(repo_path).name
-    if downloaded.exists() and downloaded != target:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        downloaded.rename(target)
-    elif flat_downloaded.exists() and flat_downloaded != target:
-        flat_downloaded.rename(target)
+    if progress:
+        progress(f"downloading {target.name} from Hugging Face")
+    cli = shutil.which("huggingface-cli")
+    if cli:
+        cmd = [cli, "download", repo_id, repo_path, "--local-dir", str(target.parent), "--local-dir-use-symlinks", "False"]
+        if HF_TOKEN:
+            cmd += ["--token", HF_TOKEN]
+        run(cmd)
+        downloaded = target.parent / repo_path
+        flat_downloaded = target.parent / Path(repo_path).name
+        if downloaded.exists() and downloaded != target:
+            downloaded.rename(target)
+        elif flat_downloaded.exists() and flat_downloaded != target:
+            flat_downloaded.rename(target)
+        return
+    from huggingface_hub import hf_hub_download
+    fetched = hf_hub_download(
+        repo_id=repo_id,
+        filename=repo_path,
+        local_dir=str(target.parent),
+        token=HF_TOKEN or None,
+    )
+    fetched_path = Path(fetched)
+    if fetched_path.resolve() != target.resolve() and fetched_path.is_file():
+        fetched_path.rename(target)
 
-def download_item(item: dict, folder_key: str):
+
+def download_item(item: dict, folder_key: str, progress: Optional[Callable[[str], None]] = None):
     source = item.get("source", "direct")
 
     civitai_meta = None
@@ -177,9 +220,9 @@ def download_item(item: dict, folder_key: str):
         target = TARGET_DIRS[folder_key] / item["name"]
 
     if source in ("direct", "civitai", "url"):
-        download_url(item["url"], target)
+        download_url(item["url"], target, progress=progress)
     elif source in ("hf", "huggingface", "huggingface_hub"):
-        hf_download(item["repo_id"], item.get("repo_path", item["name"]), target)
+        hf_download(item["repo_id"], item.get("repo_path", item["name"]), target, progress=progress)
     else:
         raise RuntimeError(f"Unsupported source in {item}: {source}")
 

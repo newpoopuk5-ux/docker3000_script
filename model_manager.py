@@ -15,7 +15,7 @@ from config import (
     UPSCALE_DIR,
     VAE_DIR,
 )
-from download_models import download_item
+from download_models import TARGET_DIRS, download_item
 from metadata import list_files
 
 MODELS_JSON = Path(os.environ.get("MODELS_JSON", "models.json"))
@@ -41,6 +41,11 @@ ALLOWED_DELETE_DIRS: dict[str, Path] = {
     "upscale_models": UPSCALE_DIR,
     "text_encoders": TEXT_ENCODER_DIR,
     "diffusion_models": DIFFUSION_MODEL_DIR,
+}
+
+SCAN_DIRS: dict[str, Path] = {
+    **ALLOWED_DELETE_DIRS,
+    "unet": TARGET_DIRS["flux_gguf_unet"],
 }
 
 CATALOG_GROUPS = [
@@ -76,12 +81,19 @@ def _relative_within(base: Path, path: Path) -> str | None:
     return rel.as_posix()
 
 
+def _install_base_for_folder_key(folder_key: str):
+    if folder_key in TARGET_DIRS:
+        return TARGET_DIRS[folder_key]
+    delete_key = CATALOG_FOLDER_TO_DELETE_KEY.get(folder_key, folder_key)
+    return ALLOWED_DELETE_DIRS.get(delete_key)
+
+
 def _installed_entries() -> list[dict]:
     entries: list[dict] = []
-    for folder_key, base in ALLOWED_DELETE_DIRS.items():
+    for folder_key, base in SCAN_DIRS.items():
         if not base.exists():
             continue
-        recursive = folder_key in ("loras", "text_encoders", "diffusion_models")
+        recursive = folder_key in ("loras", "text_encoders", "diffusion_models", "unet")
         names = list_files(base, _model_extensions(), recursive=recursive)
         for name in names:
             target = base / name
@@ -114,23 +126,44 @@ def _target_name_for_item(folder_key: str, item: dict) -> str:
 
 
 def _is_installed(folder_key: str, item: dict) -> bool:
-    delete_key = CATALOG_FOLDER_TO_DELETE_KEY.get(folder_key, folder_key)
-    base = ALLOWED_DELETE_DIRS.get(delete_key)
-    if not base:
-        return False
     if item.get("target"):
         target = Path(str(item["target"]))
         if target.is_file() and target.stat().st_size > 1024 * 1024:
             return True
+    base = _install_base_for_folder_key(folder_key)
+    if not base:
+        return False
     name = _target_name_for_item(folder_key, item)
     candidate = base / name
     if candidate.is_file() and candidate.stat().st_size > 1024 * 1024:
         return True
-    if delete_key == "loras":
-        nested = base / "flux" / name
+    if folder_key in ("loras", "flux_loras"):
+        nested = (TARGET_DIRS.get("flux_loras") or base) / name
         if nested.is_file() and nested.stat().st_size > 1024 * 1024:
             return True
     return False
+
+
+def _catalog_rows_for_set(cfg: dict, set_name: str) -> list[dict]:
+    rows: list[dict] = []
+    selected = (cfg.get("sets") or {}).get(set_name) or {}
+    for group_key, folder_key in CATALOG_GROUPS:
+        for index, item in enumerate(selected.get(group_key, []) or []):
+            if not isinstance(item, dict):
+                continue
+            cid = _catalog_item_id(set_name, folder_key, item, index)
+            delete_key = CATALOG_FOLDER_TO_DELETE_KEY.get(folder_key, folder_key)
+            rows.append({
+                "id": cid,
+                "set": set_name,
+                "group": group_key,
+                "folder": delete_key,
+                "name": _target_name_for_item(folder_key, item),
+                "source": item.get("source", "direct"),
+                "installed": _is_installed(folder_key, item),
+                "recommended": True,
+            })
+    return rows
 
 
 def load_catalog(set_name: str | None = None) -> dict:
@@ -145,31 +178,25 @@ def load_catalog(set_name: str | None = None) -> dict:
         for key, value in (cfg.get("sets") or {}).items()
     }
     active_set = set_name or (os.environ.get("MODEL_SET") or "basic")
-    if active_set not in cfg.get("sets", {}):
-        active_set = next(iter(cfg.get("sets", {}).keys()), "basic")
-
-    catalog: list[dict] = []
-    selected = cfg["sets"][active_set]
-    for group_key, folder_key in CATALOG_GROUPS:
-        for index, item in enumerate(selected.get(group_key, []) or []):
-            if not isinstance(item, dict):
-                continue
-            cid = _catalog_item_id(active_set, folder_key, item, index)
-            delete_key = CATALOG_FOLDER_TO_DELETE_KEY.get(folder_key, folder_key)
-            catalog.append({
-                "id": cid,
-                "set": active_set,
-                "group": group_key,
-                "folder": delete_key,
-                "name": _target_name_for_item(folder_key, item),
-                "source": item.get("source", "direct"),
-                "installed": _is_installed(folder_key, item),
-                "recommended": True,
-            })
+    merge_all = active_set in ("*", "__all__")
+    if merge_all:
+        active_set = "__all__"
+        catalog: list[dict] = []
+        seen: set[str] = set()
+        for name in cfg.get("sets", {}):
+            for row in _catalog_rows_for_set(cfg, name):
+                if row["id"] in seen:
+                    continue
+                seen.add(row["id"])
+                catalog.append(row)
+    else:
+        if active_set not in cfg.get("sets", {}):
+            active_set = next(iter(cfg.get("sets", {}).keys()), "basic")
+        catalog = _catalog_rows_for_set(cfg, active_set)
 
     installed = _installed_entries()
-    installed_ids = {row["id"] for row in installed}
     missing = [row for row in catalog if not row["installed"]]
+    installed_catalog = [row for row in catalog if row["installed"]]
 
     presets = {}
     if PRESETS_PATH.is_file():
@@ -185,6 +212,7 @@ def load_catalog(set_name: str | None = None) -> dict:
         "sets": sets_info,
         "catalog": catalog,
         "installed": installed,
+        "installed_catalog": installed_catalog,
         "missing": missing,
         "presets": presets,
     }
@@ -210,32 +238,28 @@ def _find_catalog_item(catalog_id: str) -> tuple[str, str, dict] | None:
     return None
 
 
-def _run_download_job(job_id: str, catalog_id: str) -> None:
+def _update_job(job_id: str, **fields) -> None:
     with _DOWNLOAD_LOCK:
         job = _DOWNLOAD_JOBS.get(job_id)
-        if not job:
-            return
-        job["status"] = "running"
-        job["started_at"] = time.time()
+        if job:
+            job.update(fields)
+
+
+def _run_download_job(job_id: str, catalog_id: str) -> None:
+    _update_job(job_id, status="running", started_at=time.time(), progress="starting")
+
+    def progress(msg: str) -> None:
+        _update_job(job_id, progress=msg)
 
     try:
         found = _find_catalog_item(catalog_id)
         if not found:
             raise RuntimeError(f"Unknown catalog id: {catalog_id}")
         _set_name, folder_key, item = found
-        download_item(item, folder_key)
-        with _DOWNLOAD_LOCK:
-            job = _DOWNLOAD_JOBS[job_id]
-            job["status"] = "done"
-            job["finished_at"] = time.time()
-            job["ok"] = True
+        download_item(item, folder_key, progress=progress)
+        _update_job(job_id, status="done", finished_at=time.time(), ok=True, progress="done")
     except Exception as e:
-        with _DOWNLOAD_LOCK:
-            job = _DOWNLOAD_JOBS[job_id]
-            job["status"] = "error"
-            job["finished_at"] = time.time()
-            job["ok"] = False
-            job["error"] = str(e)
+        _update_job(job_id, status="error", finished_at=time.time(), ok=False, error=str(e), progress="error")
 
 
 def start_download(catalog_id: str) -> dict:
@@ -256,6 +280,7 @@ def start_download(catalog_id: str) -> dict:
             "status": "queued",
             "ok": None,
             "error": None,
+            "progress": "queued",
             "created_at": time.time(),
         }
     thread = threading.Thread(target=_run_download_job, args=(job_id, catalog_id), daemon=True)

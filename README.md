@@ -24,6 +24,25 @@ It does not include Muse React, Muse Express, `chatbot.db`, images, models, LoRA
 
 Worker status (no secrets): `GET http://VAST_HOST:3000/api/worker/status`
 
+## Native Vast startup (no Docker)
+
+Most Vast **Interactive shell server, SSH** templates do **not** include `docker`. Use:
+
+```bash
+bash start-vast-native.sh
+```
+
+This script:
+
+- creates `/workspace/venv` and installs `requirements.txt`
+- runs `bootstrap.sh --install-only` (ComfyUI at `/workspace/ComfyUI`, no model downloads)
+- starts Flask on port **3000** in the foreground
+- leaves ComfyUI stopped when `AUTOSTART_MODE=none` (start later from Muse **Start Comfy mode**)
+
+Recommended Vast on-start script — see Muse `docs/COMFY_WORKER.md` for the full template (image, ports, env).
+
+`auto-start.sh` + `docker-run.sh` remain for Docker hosts.
+
 ## Clean startup (default)
 
 New `.env.example` defaults boot quickly without ComfyUI or model downloads:
