@@ -1,9 +1,29 @@
 import os
+import re
 import shutil
 import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
+
+
+def load_etc_environment() -> None:
+    path = Path("/etc/environment")
+    if not path.is_file():
+        return
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
 
 
 def volume_root() -> Path:
@@ -36,11 +56,32 @@ def public_host() -> str:
 
 
 def mapped_port(internal_port: int) -> int:
+    load_etc_environment()
     for key in (f"VAST_TCP_PORT_{internal_port}", f"PORT_{internal_port}"):
         raw = (os.environ.get(key) or "").strip()
         if raw.isdigit():
             return int(raw)
     return internal_port
+
+
+def vast_port_mapping_warning(flask_internal: int, comfy_internal: int) -> str:
+    load_etc_environment()
+    flask_external = mapped_port(flask_internal)
+    comfy_external = mapped_port(comfy_internal)
+    vast_keys = [k for k in os.environ if re.match(r"^VAST_TCP_PORT_\d+$", k)]
+    if vast_keys and (flask_external != flask_internal or comfy_external != comfy_internal):
+        return ""
+    if not vast_keys and public_host() not in ("YOUR_VAST_IP", "127.0.0.1", "localhost"):
+        return (
+            "WARN: VAST_TCP_PORT_* not found — URLs below use internal ports and will NOT work from your PC. "
+            "Copy Open / direct ports from the Vast instance page, or run: env | grep VAST_TCP_PORT"
+        )
+    if flask_external == flask_internal or comfy_external == comfy_internal:
+        return (
+            "WARN: external port equals internal port — on Vast this is usually wrong from outside the instance. "
+            "Use mapped ports from the Vast UI (e.g. 34346 not 3000)."
+        )
+    return ""
 
 
 def muse_urls() -> tuple[str, str]:
@@ -119,8 +160,12 @@ def gather_checks(probe_services: bool = False) -> list[tuple[bool | None, str, 
 
 
 def format_banner(probe_services: bool = False, title: str = "Muse worker startup summary") -> str:
+    load_etc_environment()
     flask_url, comfy_url = muse_urls()
     host = public_host()
+    flask_internal = int(os.environ.get("FLASK_PORT") or os.environ.get("UI_PORT") or "3000")
+    comfy_internal = int(os.environ.get("COMFY_PORT") or "8188")
+    port_warn = vast_port_mapping_warning(flask_internal, comfy_internal)
     lines = [
         "",
         "=" * 72,
@@ -140,7 +185,8 @@ def format_banner(probe_services: bool = False, title: str = "Muse worker startu
         f"Comfy  {comfy_url}",
         "-" * 72,
         f"Host detected: {host}",
-        f"Internal ports: Flask {os.environ.get('FLASK_PORT', '3000')} · Comfy {os.environ.get('COMFY_PORT', '8188')}",
+        f"Internal ports: Flask {flask_internal} · Comfy {comfy_internal}",
+        *( [port_warn] if port_warn else [] ),
         "If copy-paste fails, add http:// before host:port in Muse.",
         "",
         "Worker status (on instance):",

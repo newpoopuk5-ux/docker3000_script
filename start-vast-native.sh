@@ -18,6 +18,13 @@ export WORKER_CONTROL="${WORKER_CONTROL:-1}"
 export APP_DIR="$SCRIPT_DIR"
 export PYTHONUNBUFFERED=1
 
+if [ -f /etc/environment ]; then
+  set -a
+  # shellcheck disable=SC1091
+  source /etc/environment 2>/dev/null || true
+  set +a
+fi
+
 mkdir -p "$VOLUME_ROOT/.muse-worker"
 printf '%s' "$AUTOSTART_MODE" > "$VOLUME_ROOT/.muse-worker/mode"
 
@@ -89,6 +96,13 @@ if [ "$AUTOSTART_MODE" = "comfy" ]; then
 fi
 
 python "$SCRIPT_DIR/worker_startup_banner.py" || true
+
+flask_probe_code="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:${FLASK_PORT}/api/health" 2>/dev/null || echo "000")"
+if [ "$flask_probe_code" = "200" ] || [ "$flask_probe_code" = "401" ]; then
+  echo "Flask already listening on 0.0.0.0:${FLASK_PORT} (HTTP ${flask_probe_code}) — skip second start."
+  echo "Re-print Muse URLs: python worker_startup_banner.py --probe"
+  exit 0
+fi
 
 echo "Starting Flask on 0.0.0.0:$FLASK_PORT"
 exec python -u app.py
