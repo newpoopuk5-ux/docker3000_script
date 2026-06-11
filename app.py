@@ -17,6 +17,8 @@ from config import APP_PASSWORD, CHECKPOINT_DIR, DIFFUSION_MODEL_DIR, IMAGE_SUFF
 from metadata import cached_image_info, image_records, list_files, read_favorites, safe_output_path, write_favorites
 from workflow_utils import build_workflow
 from worker_status import build_worker_status
+from worker_control import control_supported, set_mode_comfy, set_mode_none
+from model_manager import delete_model, list_downloads, load_catalog, manager_supported, start_download
 
 app = Flask(__name__)
 
@@ -176,6 +178,48 @@ def health():
 @app.get("/api/worker/status")
 def worker_status():
     return jsonify(build_worker_status())
+
+
+@app.post("/api/mode/comfy")
+def mode_comfy():
+    return jsonify(set_mode_comfy())
+
+
+@app.post("/api/mode/none")
+def mode_none():
+    return jsonify(set_mode_none())
+
+
+@app.get("/api/models")
+def models_overview():
+    set_name = (request.args.get("set") or "").strip() or None
+    payload = load_catalog(set_name)
+    payload["control_supported"] = control_supported()
+    payload["manager_supported"] = manager_supported()
+    return jsonify(payload)
+
+
+@app.post("/api/models/download")
+def models_download():
+    body = request.json or {}
+    catalog_id = (body.get("id") or body.get("catalog_id") or "").strip()
+    if not catalog_id:
+        return jsonify({"ok": False, "error": "id is required"}), 400
+    result = start_download(catalog_id)
+    status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
+    return jsonify(result), status
+
+
+@app.delete("/api/models/<path:model_id>")
+def models_delete(model_id):
+    result = delete_model(model_id)
+    status = 200 if result.get("ok") else 400
+    return jsonify(result), status
+
+
+@app.get("/api/models/downloads")
+def models_downloads():
+    return jsonify(list_downloads())
 
 
 @app.get("/api/queue")
