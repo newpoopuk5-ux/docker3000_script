@@ -44,6 +44,21 @@ ARIA2_PROGRESS_RX = re.compile(
 )
 
 
+def redact_download_secrets(text: str) -> str:
+    out = str(text or "")
+    if CIVITAI_TOKEN:
+        out = out.replace(CIVITAI_TOKEN, "[redacted]")
+    if HF_TOKEN:
+        out = out.replace(HF_TOKEN, "[redacted]")
+    out = re.sub(r"([?&]token=)[^&\s\"']+", r"\1[redacted]", out, flags=re.IGNORECASE)
+    out = re.sub(r"Bearer\s+\S+", "Bearer [redacted]", out, flags=re.IGNORECASE)
+    return out
+
+
+def _safe_log_line(text: str) -> None:
+    print(redact_download_secrets(text))
+
+
 def _emit_progress(progress: Optional[Callable[..., None]], msg: str, **stats) -> None:
     if not progress:
         return
@@ -90,16 +105,39 @@ def _handle_aria2_chunk(chunk: str, progress: Optional[Callable[..., None]]) -> 
         )
 
 
+def _civitai_request_headers(url: str) -> dict[str, str]:
+    headers = {
+        "User-Agent": "muse-worker/1.0 (compatible; requests)",
+        "Accept": "*/*",
+    }
+    if CIVITAI_TOKEN and "civitai." in (url or ""):
+        headers["Authorization"] = f"Bearer {CIVITAI_TOKEN}"
+    return headers
+
+
+def _remove_partial_target(target: Path) -> None:
+    try:
+        if target.exists() and not file_ok(target):
+            target.unlink()
+    except OSError:
+        pass
+
+
 def download_url_aria2(url: str, target: Path, progress: Optional[Callable[..., None]] = None):
     cmd = [
         "aria2c", "-x", "8", "-s", "8",
         "--summary-interval=1",
         "--console-log-level=notice",
+        "--max-redirect=10",
+        "--timeout=120",
+        "--file-allocation=none",
         url,
         "-d", str(target.parent),
         "-o", target.name,
     ]
-    print("+", " ".join(str(x) for x in cmd))
+    if CIVITAI_TOKEN and "civitai." in url:
+        cmd[1:1] = [f"--header=Authorization: Bearer {CIVITAI_TOKEN}"]
+    _safe_log_line("+ " + " ".join(str(x) for x in cmd))
     proc = subprocess.Popen(
         cmd,
         stdout=subprocess.PIPE,
@@ -151,9 +189,8 @@ def extract_civitai_version_id(url: str):
 
 
 def civitai_lookup(version_id: int) -> dict:
-    headers = {"Authorization": f"Bearer {CIVITAI_TOKEN}"} if CIVITAI_TOKEN else {}
-    r = requests.get(f"https://civitai.com/api/v1/model-versions/{version_id}",
-                     headers=headers, timeout=20)
+    url = f"https://civitai.com/api/v1/model-versions/{version_id}"
+    r = requests.get(url, headers=_civitai_request_headers(url), timeout=20)
     r.raise_for_status()
     return r.json()
 
@@ -234,10 +271,10 @@ def _have_aria2() -> bool:
 def download_url_requests(url: str, target: Path, progress: Optional[Callable[..., None]] = None):
     target.parent.mkdir(parents=True, exist_ok=True)
     _emit_progress(progress, f"downloading {target.name} via requests")
-    headers = {}
-    if CIVITAI_TOKEN and "civitai." in url:
-        headers["Authorization"] = f"Bearer {CIVITAI_TOKEN}"
-    with requests.get(url, stream=True, timeout=120, headers=headers) as resp:
+    headers = _civitai_request_headers(url)
+    session = requests.Session()
+    session.headers.update(headers)
+    with session.get(url, stream=True, timeout=(30, 600), allow_redirects=True) as resp:
         resp.raise_for_status()
         total = int(resp.headers.get("content-length") or 0)
         downloaded = 0
@@ -250,28 +287,38 @@ def download_url_requests(url: str, target: Path, progress: Optional[Callable[..
                 handle.write(chunk)
                 downloaded += len(chunk)
                 now = time.time()
-                if not progress or total <= 0 or now - last_emit < 1.0:
+                if not progress or now - last_emit < 1.0:
                     continue
                 last_emit = now
-                pct = min(100, int(downloaded * 100 / total))
-                elapsed = max(now - started, 0.1)
-                speed_bps = downloaded / elapsed
-                remaining = max(total - downloaded, 0)
-                eta_sec = int(remaining / speed_bps) if speed_bps > 0 else 0
-                done = _human_bytes(downloaded)
-                total_h = _human_bytes(total)
-                speed = f"{_human_bytes(int(speed_bps))}/s"
-                eta = f"{eta_sec}s" if eta_sec < 3600 else f"{eta_sec // 60}m"
-                msg = f"{done}/{total_h} ({pct}%) DL:{speed} ETA:{eta}"
-                _emit_progress(
-                    progress,
-                    msg,
-                    progress_pct=pct,
-                    progress_done=done,
-                    progress_total=total_h,
-                    progress_speed=speed,
-                    progress_eta=eta,
-                )
+                if total > 0:
+                    pct = min(100, int(downloaded * 100 / total))
+                    elapsed = max(now - started, 0.1)
+                    speed_bps = downloaded / elapsed
+                    remaining = max(total - downloaded, 0)
+                    eta_sec = int(remaining / speed_bps) if speed_bps > 0 else 0
+                    done = _human_bytes(downloaded)
+                    total_h = _human_bytes(total)
+                    speed = f"{_human_bytes(int(speed_bps))}/s"
+                    eta = f"{eta_sec}s" if eta_sec < 3600 else f"{eta_sec // 60}m"
+                    msg = f"{done}/{total_h} ({pct}%) DL:{speed} ETA:{eta}"
+                    _emit_progress(
+                        progress,
+                        msg,
+                        progress_pct=pct,
+                        progress_done=done,
+                        progress_total=total_h,
+                        progress_speed=speed,
+                        progress_eta=eta,
+                    )
+                else:
+                    done = _human_bytes(downloaded)
+                    msg = f"{done}/? DL:streaming"
+                    _emit_progress(
+                        progress,
+                        msg,
+                        progress_done=done,
+                        progress_total="?",
+                    )
 
 
 def download_url(url: str, target: Path, progress: Optional[Callable[..., None]] = None):
@@ -280,11 +327,35 @@ def download_url(url: str, target: Path, progress: Optional[Callable[..., None]]
         print(f"SKIP exists: {target}")
         return
     url = add_token(url)
+    aria2_error: str | None = None
     if _have_aria2():
         _emit_progress(progress, f"downloading {target.name} via aria2")
-        download_url_aria2(url, target, progress=progress)
-        return
-    download_url_requests(url, target, progress=progress)
+        try:
+            download_url_aria2(url, target, progress=progress)
+            if file_ok(target):
+                return
+            aria2_error = "aria2 finished but output file is missing or too small"
+        except subprocess.CalledProcessError as e:
+            aria2_error = f"aria2 failed (exit {e.returncode})"
+        except OSError as e:
+            aria2_error = f"aria2 failed ({redact_download_secrets(str(e))})"
+        _remove_partial_target(target)
+        _emit_progress(progress, f"aria2 failed, retrying {target.name} via requests")
+
+    try:
+        download_url_requests(url, target, progress=progress)
+    except Exception as e:
+        _remove_partial_target(target)
+        parts: list[str] = []
+        if aria2_error:
+            parts.append(aria2_error)
+        parts.append(f"requests failed ({redact_download_secrets(str(e))})")
+        raise RuntimeError(f"Download failed for {target.name}: " + "; ".join(parts)) from e
+
+    if not file_ok(target):
+        parts = [aria2_error] if aria2_error else []
+        parts.append("requests finished but output file is missing or too small")
+        raise RuntimeError(f"Download failed for {target.name}: " + "; ".join(p for p in parts if p))
 
 
 def hf_download(repo_id: str, repo_path: str, target: Path, progress: Optional[Callable[..., None]] = None):

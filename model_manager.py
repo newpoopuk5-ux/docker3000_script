@@ -15,7 +15,7 @@ from config import (
     UPSCALE_DIR,
     VAE_DIR,
 )
-from download_models import TARGET_DIRS, download_item
+from download_models import TARGET_DIRS, download_item, redact_download_secrets
 from metadata import list_files
 
 MODELS_JSON = Path(os.environ.get("MODELS_JSON", "models.json"))
@@ -296,7 +296,10 @@ def _run_download_job(job_id: str, catalog_id: str) -> None:
         download_item(item, folder_key, progress=progress)
         _update_job(job_id, status="done", finished_at=time.time(), ok=True, progress="done")
     except Exception as e:
-        _update_job(job_id, status="error", finished_at=time.time(), ok=False, error=str(e), progress="error")
+        err = redact_download_secrets(str(e))
+        if not err.startswith("Download failed"):
+            err = f"Download failed: {err}"
+        _update_job(job_id, status="error", finished_at=time.time(), ok=False, error=err, progress="error")
 
 
 def start_download(catalog_id: str) -> dict:
