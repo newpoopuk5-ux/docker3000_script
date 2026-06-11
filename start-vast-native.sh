@@ -31,13 +31,35 @@ VENV_DIR="$VOLUME_ROOT/venv"
 VENV_ACTIVATE="$VENV_DIR/bin/activate"
 VENV_PYTHON="$VENV_DIR/bin/python"
 
+install_python_venv_package() {
+  command -v apt-get >/dev/null 2>&1 || return 1
+  local py_minor=""
+  py_minor="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || true)"
+  echo "Installing python venv support via apt..."
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update -qq
+  if [ -n "$py_minor" ]; then
+    apt-get install -y "python${py_minor}-venv" python3-venv || apt-get install -y python3-venv
+  else
+    apt-get install -y python3-venv
+  fi
+}
+
+create_venv() {
+  rm -rf "$VENV_DIR"
+  python3 -m venv "$VENV_DIR"
+}
+
 if [ ! -f "$VENV_ACTIVATE" ] || [ ! -x "$VENV_PYTHON" ]; then
   echo "Creating venv at $VENV_DIR"
-  rm -rf "$VENV_DIR"
-  if ! python3 -m venv "$VENV_DIR"; then
-    echo "ERROR: python3 -m venv failed."
-    echo "On Debian/Ubuntu try: apt-get update && apt-get install -y python3-venv"
-    exit 1
+  if ! create_venv; then
+    echo "WARN: python3 -m venv failed — trying apt install python3-venv..."
+    install_python_venv_package || true
+    if ! create_venv; then
+      echo "ERROR: python3 -m venv still failed."
+      echo "Run manually: apt-get update && apt-get install -y python3.12-venv"
+      exit 1
+    fi
   fi
 fi
 if [ ! -f "$VENV_ACTIVATE" ]; then
