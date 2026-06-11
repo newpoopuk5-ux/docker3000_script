@@ -88,5 +88,7 @@ if [ "$AUTOSTART_MODE" = "comfy" ]; then
   fi
 fi
 
+python "$SCRIPT_DIR/worker_startup_banner.py" || true
+
 echo "Starting Flask on 0.0.0.0:$FLASK_PORT"
 exec python -u app.py

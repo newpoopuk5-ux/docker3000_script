@@ -500,5 +500,16 @@ def generate():
 
 
 if __name__ == "__main__":
+    import threading
+    import time
+
+    from worker_startup_banner import print_banner
+
     port = int(os.environ.get("FLASK_PORT") or os.environ.get("UI_PORT") or "3000")
+
+    def _print_ready_banner() -> None:
+        time.sleep(2.0)
+        print_banner(probe_services=True, title="Muse worker ready — copy URLs into Muse")
+
+    threading.Thread(target=_print_ready_banner, daemon=True).start()
     app.run(host="0.0.0.0", port=port, debug=False)
