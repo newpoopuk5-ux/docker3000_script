@@ -64,6 +64,21 @@ CATALOG_GROUPS = [
 _DOWNLOAD_LOCK = threading.Lock()
 _DOWNLOAD_JOBS: dict[str, dict] = {}
 
+DEFAULT_CATALOG_SET = "basic_no_flux"
+
+
+def is_flux_set(name: str) -> bool:
+    return str(name or "").strip().lower().startswith("flux_")
+
+
+def recommended_set_name(cfg: dict) -> str:
+    name = str(cfg.get("recommended_set") or DEFAULT_CATALOG_SET).strip()
+    if name in (cfg.get("sets") or {}):
+        return name
+    if DEFAULT_CATALOG_SET in (cfg.get("sets") or {}):
+        return DEFAULT_CATALOG_SET
+    return next(iter((cfg.get("sets") or {}).keys()), DEFAULT_CATALOG_SET)
+
 
 def manager_supported() -> bool:
     return MODELS_JSON.is_file()
@@ -166,24 +181,33 @@ def _catalog_rows_for_set(cfg: dict, set_name: str) -> list[dict]:
     return rows
 
 
-def load_catalog(set_name: str | None = None) -> dict:
+def load_catalog(set_name: str | None = None, include_flux: bool = False) -> dict:
     if not MODELS_JSON.is_file():
         return {"ok": False, "supported": False, "error": "models.json not found", "sets": {}, "catalog": []}
 
     with open(MODELS_JSON, "r", encoding="utf-8") as f:
         cfg = json.load(f)
 
-    sets_info = {
-        key: {"description": (value or {}).get("description", "")}
-        for key, value in (cfg.get("sets") or {}).items()
-    }
-    active_set = set_name or (os.environ.get("MODEL_SET") or "basic")
+    recommended = recommended_set_name(cfg)
+    sets_info = {}
+    for key, value in (cfg.get("sets") or {}).items():
+        experimental = is_flux_set(key)
+        sets_info[key] = {
+            "description": (value or {}).get("description", ""),
+            "experimental": experimental,
+            "recommended": key == recommended,
+            "hidden_by_default": experimental,
+        }
+
+    active_set = set_name or (os.environ.get("MODEL_SET") or recommended)
     merge_all = active_set in ("*", "__all__")
     if merge_all:
         active_set = "__all__"
         catalog: list[dict] = []
         seen: set[str] = set()
         for name in cfg.get("sets", {}):
+            if not include_flux and is_flux_set(name):
+                continue
             for row in _catalog_rows_for_set(cfg, name):
                 if row["id"] in seen:
                     continue
@@ -191,7 +215,7 @@ def load_catalog(set_name: str | None = None) -> dict:
                 catalog.append(row)
     else:
         if active_set not in cfg.get("sets", {}):
-            active_set = next(iter(cfg.get("sets", {}).keys()), "basic")
+            active_set = recommended
         catalog = _catalog_rows_for_set(cfg, active_set)
 
     installed = _installed_entries()
@@ -208,7 +232,9 @@ def load_catalog(set_name: str | None = None) -> dict:
     return {
         "ok": True,
         "supported": True,
+        "recommended_set": recommended,
         "active_set": active_set,
+        "include_flux": include_flux,
         "sets": sets_info,
         "catalog": catalog,
         "installed": installed,

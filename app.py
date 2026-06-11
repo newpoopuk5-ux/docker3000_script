@@ -193,7 +193,8 @@ def mode_none():
 @app.get("/api/models")
 def models_overview():
     set_name = (request.args.get("set") or "").strip() or None
-    payload = load_catalog(set_name)
+    include_flux = str(request.args.get("include_flux") or "").strip().lower() in ("1", "true", "yes")
+    payload = load_catalog(set_name, include_flux=include_flux)
     payload["control_supported"] = control_supported()
     payload["manager_supported"] = manager_supported()
     return jsonify(payload)
