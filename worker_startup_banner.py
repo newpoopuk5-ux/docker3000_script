@@ -73,12 +73,12 @@ def vast_port_mapping_warning(flask_internal: int, comfy_internal: int) -> str:
         return ""
     if not vast_keys and public_host() not in ("YOUR_VAST_IP", "127.0.0.1", "localhost"):
         return (
-            "WARN: VAST_TCP_PORT_* not found — URLs below use internal ports and will NOT work from your PC. "
+            "WARN: VAST_TCP_PORT_* not found - URLs below use internal ports and will NOT work from your PC. "
             "Copy Open / direct ports from the Vast instance page, or run: env | grep VAST_TCP_PORT"
         )
     if flask_external == flask_internal or comfy_external == comfy_internal:
         return (
-            "WARN: external port equals internal port — on Vast this is usually wrong from outside the instance. "
+            "WARN: external port equals internal port - on Vast this is usually wrong from outside the instance. "
             "Use mapped ports from the Vast UI (e.g. 34346 not 3000)."
         )
     return ""
@@ -112,7 +112,7 @@ def _line(ok: bool | None, label: str, detail: str = "") -> str:
         mark = "NO "
     else:
         mark = "-- "
-    suffix = f" — {detail}" if detail else ""
+    suffix = f" - {detail}" if detail else ""
     return f"  [{mark}] {label}{suffix}"
 
 
@@ -154,7 +154,7 @@ def gather_checks(probe_services: bool = False) -> list[tuple[bool | None, str, 
         if comfy_running:
             rows.append((True, f"ComfyUI :{comfy_port}", "online"))
         else:
-            rows.append((None, f"ComfyUI :{comfy_port}", "start from Muse → Start Comfy mode"))
+            rows.append((None, f"ComfyUI :{comfy_port}", "start from Muse -> Start Comfy mode"))
 
     return rows
 
@@ -179,13 +179,13 @@ def format_banner(probe_services: bool = False, title: str = "Muse worker startu
 
     lines.extend([
         "",
-        "Copy into Muse → More → Cloud GPU (Cloud mode)",
+        "Copy into Muse -> More -> Cloud GPU (Cloud mode)",
         "-" * 72,
         f"Flask  {flask_url}",
         f"Comfy  {comfy_url}",
         "-" * 72,
         f"Host detected: {host}",
-        f"Internal ports: Flask {flask_internal} · Comfy {comfy_internal}",
+        f"Internal ports: Flask {flask_internal} / Comfy {comfy_internal}",
         *( [port_warn] if port_warn else [] ),
         "If copy-paste fails, add http:// before host:port in Muse.",
         "",
@@ -199,7 +199,12 @@ def format_banner(probe_services: bool = False, title: str = "Muse worker startu
 
 
 def print_banner(probe_services: bool = False, title: str = "Muse worker startup summary") -> None:
-    sys.stdout.write(format_banner(probe_services=probe_services, title=title))
+    text = format_banner(probe_services=probe_services, title=title)
+    try:
+        sys.stdout.write(text)
+    except UnicodeEncodeError:
+        encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+        sys.stdout.write(text.encode(encoding, errors="replace").decode(encoding))
     sys.stdout.flush()
 
 

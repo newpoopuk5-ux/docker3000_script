@@ -509,7 +509,7 @@ if __name__ == "__main__":
 
     def _print_ready_banner() -> None:
         time.sleep(2.0)
-        print_banner(probe_services=True, title="Muse worker ready — copy URLs into Muse")
+        print_banner(probe_services=True, title="Muse worker ready - copy URLs into Muse")
 
     threading.Thread(target=_print_ready_banner, daemon=True).start()
     app.run(host="0.0.0.0", port=port, debug=False)
