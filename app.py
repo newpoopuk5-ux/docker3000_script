@@ -4,6 +4,7 @@ import json
 import os
 import sys
 import time
+import requests
 from datetime import datetime
 from pathlib import Path
 
@@ -129,7 +130,7 @@ def image_payload_from_comfy_image(image):
     return {
         "filename": filename,
         "image_url": image_url,
-        "download_url": f"/download_output/{filename}" if saved.exists() else image_url,
+        "download_url": f"/download_output/{filename}?subfolder={subfolder}&type={image_type}",
         "modified": modified,
         "modified_text": datetime.fromtimestamp(modified).strftime("%Y-%m-%d %H:%M:%S"),
         "size": size,
@@ -569,9 +570,21 @@ def local_output(filename):
 @app.get("/download_output/<path:filename>")
 def download_output(filename):
     path = safe_output_path(filename)
-    if not path or not path.exists() or path.suffix.lower() not in IMAGE_SUFFIXES:
-        return Response("not found", status=404)
-    return send_file(path, as_attachment=True, download_name=path.name)
+    if path and path.exists() and path.suffix.lower() in IMAGE_SUFFIXES:
+        return send_file(path, as_attachment=True, download_name=path.name)
+        
+    subfolder = request.args.get("subfolder", "")
+    image_type = request.args.get("type", "output")
+    url = comfy_image_url(filename, subfolder=subfolder, image_type=image_type)
+    
+    try:
+        r = requests.get(url, stream=True, timeout=30)
+        if r.status_code == 200:
+            return Response(r.iter_content(chunk_size=8192), content_type=r.headers.get("content-type"))
+    except Exception:
+        pass
+
+    return Response("not found", status=404)
 
 
 @app.post("/api/favorite/<path:filename>")
