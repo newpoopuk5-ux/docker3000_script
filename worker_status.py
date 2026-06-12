@@ -8,6 +8,7 @@ from llm_install import llama_server_bin
 from llm_manager import load_profiles, manager_supported as llm_manager_supported
 from llm_runner import llm_health
 from studio_comfy_api import health_status
+from worker_startup_banner import mapped_port, muse_llm_urls, muse_urls, public_host
 
 WORKER_API_REVISION = 5
 
@@ -77,6 +78,28 @@ def _safe_env_summary() -> dict:
     }
 
 
+def build_muse_external_urls() -> dict:
+    flask_url, comfy_url = muse_urls()
+    llm_urls = muse_llm_urls()
+    flask_internal = int(os.environ.get("FLASK_PORT") or os.environ.get("UI_PORT") or "3000")
+    comfy_internal = int(os.environ.get("COMFY_PORT") or "8188")
+    llm_internal = int(os.environ.get("LLM_PORT") or "8080")
+    return {
+        "host": public_host(),
+        "flask_url": flask_url,
+        "comfy_url": comfy_url,
+        "llm_openai_base_url": llm_urls.get("external_openai_base_url") or "",
+        "ports": {
+            "flask_internal": flask_internal,
+            "flask_external": mapped_port(flask_internal),
+            "comfy_internal": comfy_internal,
+            "comfy_external": mapped_port(comfy_internal),
+            "llm_internal": llm_internal,
+            "llm_external": mapped_port(llm_internal),
+        },
+    }
+
+
 def build_worker_status() -> dict:
     mode = _read_mode()
     volume_root = _volume_root()
@@ -85,6 +108,7 @@ def build_worker_status() -> dict:
     llm_status = llm_health()
     llm_online = bool(llm_status.get("llm_ok"))
     llm_catalog = load_profiles()
+    muse_external = build_muse_external_urls()
 
     return {
         "ok": True,
@@ -94,10 +118,14 @@ def build_worker_status() -> dict:
             "flask": {
                 "online": True,
                 "port": int(os.environ.get("UI_PORT") or "3000"),
+                "external_port": muse_external["ports"]["flask_external"],
+                "external_url": muse_external["flask_url"],
             },
             "comfy": {
                 "online": comfy_online,
                 "port": int(os.environ.get("COMFY_PORT") or "8188"),
+                "external_port": muse_external["ports"]["comfy_external"],
+                "external_url": muse_external["comfy_url"],
                 "url": comfy_health.get("comfy_url"),
                 "detail": comfy_health.get("detail"),
             },
@@ -135,4 +163,5 @@ def build_worker_status() -> dict:
             "catalog": llm_catalog,
         },
         "env": _safe_env_summary(),
+        "muse_external": muse_external,
     }
