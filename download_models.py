@@ -5,6 +5,7 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 import time
 from pathlib import Path
 from typing import Callable, Optional
@@ -12,9 +13,44 @@ from urllib.parse import urlparse, parse_qs
 import requests
 import zipfile
 
-COMFY_ROOT = Path(os.environ.get("COMFY_ROOT", "/workspace/ComfyUI"))
+from config import COMFY_ROOT
 CIVITAI_TOKEN = os.environ.get("CIVITAI_TOKEN", "")
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
+ARIA2_CONNECTIONS = max(1, min(32, int(os.environ.get("ARIA2_CONNECTIONS", "16") or 16)))
+
+
+class DownloadCancelled(Exception):
+    pass
+
+
+def _check_cancel(cancel_event: threading.Event | None) -> None:
+    if cancel_event is not None and cancel_event.is_set():
+        raise DownloadCancelled()
+
+
+def _abort_if_cancelled(
+    cancel_event: threading.Event | None,
+    proc: subprocess.Popen | None = None,
+    target: Path | None = None,
+) -> None:
+    if cancel_event is not None and cancel_event.is_set():
+        _stop_proc(proc)
+        if target is not None:
+            _remove_partial_target(target)
+        raise DownloadCancelled()
+
+
+def _stop_proc(proc: subprocess.Popen | None) -> None:
+    if proc is None or proc.poll() is not None:
+        return
+    try:
+        proc.terminate()
+        proc.wait(timeout=3)
+    except Exception:
+        try:
+            proc.kill()
+        except Exception:
+            pass
 
 TARGET_DIRS = {
     "checkpoints": COMFY_ROOT / "models" / "checkpoints",
@@ -66,6 +102,63 @@ def _emit_progress(progress: Optional[Callable[..., None]], msg: str, **stats) -
         progress(msg, **stats)
     except TypeError:
         progress(msg)
+
+
+def _head_content_length(url: str) -> int:
+    token_url = add_token(url)
+    headers = _civitai_request_headers(url)
+    try:
+        resp = requests.head(token_url, headers=headers, allow_redirects=True, timeout=20)
+        if resp.status_code >= 400:
+            with requests.get(token_url, headers=headers, stream=True, timeout=20, allow_redirects=True) as stream:
+                stream.raise_for_status()
+                return int(stream.headers.get("content-length") or 0)
+        return int(resp.headers.get("content-length") or 0)
+    except Exception:
+        return 0
+
+
+def _emit_byte_progress(
+    progress: Optional[Callable[..., None]],
+    downloaded: int,
+    total: int,
+    started: float,
+    *,
+    connections: str | int | None = None,
+) -> None:
+    if not progress:
+        return
+    elapsed = max(time.time() - started, 0.1)
+    speed_bps = downloaded / elapsed
+    done = _human_bytes(downloaded)
+    speed = f"{_human_bytes(int(speed_bps))}/s"
+    if total > 0:
+        pct = min(100, int(downloaded * 100 / total))
+        total_h = _human_bytes(total)
+        remaining = max(total - downloaded, 0)
+        eta_sec = int(remaining / speed_bps) if speed_bps > 0 else 0
+        eta = f"{eta_sec}s" if eta_sec < 3600 else f"{eta_sec // 60}m"
+        cn = connections if connections is not None else "?"
+        msg = f"{done}/{total_h} ({pct}%) CN:{cn} DL:{speed} ETA:{eta}"
+        _emit_progress(
+            progress,
+            msg,
+            progress_pct=pct,
+            progress_done=done,
+            progress_total=total_h,
+            progress_speed=speed,
+            progress_eta=eta,
+            progress_connections=cn,
+        )
+        return
+    msg = f"{done}/? DL:{speed}"
+    _emit_progress(
+        progress,
+        msg,
+        progress_done=done,
+        progress_total="?",
+        progress_speed=speed,
+    )
 
 
 def _human_bytes(num: int) -> str:
@@ -123,9 +216,66 @@ def _remove_partial_target(target: Path) -> None:
         pass
 
 
-def download_url_aria2(url: str, target: Path, progress: Optional[Callable[..., None]] = None):
+def _winget_aria2_paths() -> list[Path]:
+    local = Path(os.environ.get("LOCALAPPDATA", ""))
+    paths: list[Path] = []
+    link = local / "Microsoft" / "WinGet" / "Links" / "aria2c.exe"
+    if link.is_file():
+        paths.append(link)
+    pkg_root = local / "Microsoft" / "WinGet" / "Packages"
+    if pkg_root.is_dir():
+        for pkg_dir in sorted(pkg_root.glob("aria2.aria2_*")):
+            direct = pkg_dir / "aria2c.exe"
+            if direct.is_file():
+                paths.append(direct)
+            for nested in sorted(pkg_dir.rglob("aria2c.exe")):
+                if nested.is_file():
+                    paths.append(nested)
+    deduped: list[Path] = []
+    seen: set[str] = set()
+    for path in paths:
+        key = str(path.resolve()).lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(path)
+    return deduped
+
+
+def _resolve_aria2() -> str | None:
+    env_path = (os.environ.get("ARIA2C_PATH") or os.environ.get("ARIA2_PATH") or "").strip()
+    if env_path and Path(env_path).is_file():
+        return str(Path(env_path).resolve())
+    found = shutil.which("aria2c")
+    if found:
+        return found
+    if sys.platform != "win32":
+        return None
+    for candidate in (
+        Path(os.environ.get("ProgramFiles", r"C:\Program Files")) / "aria2" / "aria2c.exe",
+        Path(os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)")) / "aria2" / "aria2c.exe",
+        *_winget_aria2_paths(),
+    ):
+        if candidate.is_file():
+            return str(candidate.resolve())
+    return None
+
+
+def aria2_available() -> bool:
+    return _resolve_aria2() is not None
+
+
+def download_url_aria2(
+    url: str,
+    target: Path,
+    progress: Optional[Callable[..., None]] = None,
+    cancel_event: threading.Event | None = None,
+    proc_cb: Callable[[subprocess.Popen], None] | None = None,
+):
+    aria2_bin = _resolve_aria2() or "aria2c"
+    splits = str(ARIA2_CONNECTIONS)
     cmd = [
-        "aria2c", "-x", "8", "-s", "8",
+        aria2_bin, "-x", splits, "-s", splits,
         "--summary-interval=1",
         "--console-log-level=notice",
         "--max-redirect=10",
@@ -144,12 +294,21 @@ def download_url_aria2(url: str, target: Path, progress: Optional[Callable[..., 
         stderr=subprocess.STDOUT,
         text=True,
     )
+    if proc_cb:
+        proc_cb(proc)
     carry = ""
     if proc.stdout is not None:
         while True:
-            piece = proc.stdout.read(512)
-            if not piece:
-                break
+            _abort_if_cancelled(cancel_event, proc, target)
+            if proc.poll() is not None:
+                piece = proc.stdout.read(512)
+                if not piece:
+                    break
+            else:
+                piece = proc.stdout.read(512)
+                if not piece:
+                    time.sleep(0.2)
+                    continue
             carry += piece
             while True:
                 split_at = -1
@@ -164,7 +323,12 @@ def download_url_aria2(url: str, target: Path, progress: Optional[Callable[..., 
                 _handle_aria2_chunk(line, progress)
         if carry.strip():
             _handle_aria2_chunk(carry, progress)
+    _check_cancel(cancel_event)
     code = proc.wait()
+    if cancel_event is not None and cancel_event.is_set():
+        _stop_proc(proc)
+        _remove_partial_target(target)
+        raise DownloadCancelled()
     if code != 0:
         raise subprocess.CalledProcessError(code, cmd)
 
@@ -186,6 +350,91 @@ def extract_civitai_version_id(url: str):
         if group:
             return int(group)
     return None
+
+
+def extract_civitai_file_id(url: str):
+    qs = parse_qs(urlparse(url or "").query)
+    raw = (qs.get("fileId") or qs.get("fileid") or [None])[0]
+    if raw and str(raw).isdigit():
+        return int(raw)
+    return None
+
+
+def resolve_civitai_file(meta: dict, file_id: int | None = None) -> dict:
+    files = meta.get("files") or []
+    if not files:
+        return {}
+    if file_id is not None:
+        match = next((f for f in files if f.get("id") == file_id), None)
+        if match:
+            return match
+    return next((f for f in files if f.get("primary")), files[0])
+
+
+def folder_key_for_path(target_dir: Path) -> str:
+    target = target_dir.resolve()
+    for key, root in TARGET_DIRS.items():
+        root_resolved = root.resolve()
+        if target == root_resolved or root_resolved in target.parents:
+            return key
+    embeddings = (COMFY_ROOT / "models" / "embeddings").resolve()
+    if embeddings in target.parents or target.parent == embeddings:
+        return "auto"
+    return "checkpoints"
+
+
+def civitai_target_path(url: str) -> tuple[Path, dict, dict]:
+    version_id = extract_civitai_version_id(url)
+    if not version_id:
+        raise ValueError("Could not parse Civitai model version from URL.")
+    file_id = extract_civitai_file_id(url)
+    meta = civitai_lookup(version_id)
+    file_entry = resolve_civitai_file(meta, file_id)
+    if not file_entry:
+        raise ValueError("No files found for this Civitai version.")
+    target_dir = auto_target_dir(meta, file_entry)
+    filename = file_entry.get("name") or f"civitai_{version_id}.safetensors"
+    return target_dir / filename, meta, file_entry
+
+
+def preview_civitai_url(url: str) -> dict:
+    url = (url or "").strip()
+    if "civitai." not in url:
+        return {"ok": False, "error": "Only Civitai URLs are supported for custom download."}
+    try:
+        target, meta, file_entry = civitai_target_path(url)
+    except Exception as e:
+        return {"ok": False, "error": redact_download_secrets(str(e))}
+    model_info = meta.get("model") or {}
+    model_name = (model_info.get("name") or "").strip()
+    version_name = (meta.get("name") or "").strip()
+    display_parts = [part for part in (model_name, version_name) if part]
+    size_kb = file_entry.get("sizeKB")
+    size_bytes = int(size_kb * 1024) if isinstance(size_kb, (int, float)) else file_entry.get("size")
+    return {
+        "ok": True,
+        "url": url,
+        "model_name": model_name,
+        "version_name": version_name,
+        "display_name": " · ".join(display_parts) or (file_entry.get("name") or "Civitai model"),
+        "filename": file_entry.get("name"),
+        "file_size_bytes": size_bytes,
+        "model_type": model_info.get("type"),
+        "base_model": meta.get("baseModel"),
+        "folder": folder_key_for_path(target.parent),
+        "target_path": str(target),
+        "civitai_version_id": meta.get("id") or extract_civitai_version_id(url),
+        "civitai_file_id": extract_civitai_file_id(url),
+        "already_installed": file_ok(target),
+    }
+
+
+def build_item_from_url(url: str) -> dict:
+    return {
+        "source": "civitai",
+        "url": (url or "").strip(),
+        "target_auto": True,
+    }
 
 
 def civitai_lookup(version_id: int) -> dict:
@@ -214,14 +463,14 @@ def variant_from_basemodel(base_model: str) -> str:
     return "unknown"
 
 
-def auto_target_dir(meta: dict) -> Path:
+def auto_target_dir(meta: dict, file_entry: dict | None = None) -> Path:
     """Choose the right ComfyUI models subfolder from Civitai version metadata."""
     model_type = ((meta.get("model") or {}).get("type") or "").lower()
     base = (meta.get("baseModel") or "").lower()
-    files = meta.get("files") or []
-    primary = next((f for f in files if f.get("primary")), files[0] if files else {})
-    fmt = (primary.get("metadata") or {}).get("format", "").lower()
-    fname = (primary.get("name") or "").lower()
+    if file_entry is None:
+        file_entry = resolve_civitai_file(meta)
+    fmt = (file_entry.get("metadata") or {}).get("format", "").lower()
+    fname = (file_entry.get("name") or "").lower()
 
     if model_type == "lora" or model_type == "locon":
         return TARGET_DIRS["flux_loras"] if "flux" in base else TARGET_DIRS["loras"]
@@ -265,10 +514,66 @@ def file_ok(path: Path) -> bool:
 
 
 def _have_aria2() -> bool:
-    return shutil.which("aria2c") is not None
+    return aria2_available()
 
 
-def download_url_requests(url: str, target: Path, progress: Optional[Callable[..., None]] = None):
+def _have_curl() -> bool:
+    return shutil.which("curl") is not None
+
+
+def download_url_curl(
+    url: str,
+    target: Path,
+    progress: Optional[Callable[..., None]] = None,
+    cancel_event: threading.Event | None = None,
+    proc_cb: Callable[[subprocess.Popen], None] | None = None,
+):
+    target.parent.mkdir(parents=True, exist_ok=True)
+    curl = shutil.which("curl") or "curl"
+    total = _head_content_length(url)
+    started = time.time()
+    last_emit = 0.0
+    _emit_progress(progress, f"downloading {target.name} via curl")
+    cmd = [
+        curl, "-fL", "--retry", "3", "--retry-delay", "2",
+        "--connect-timeout", "30", "--max-time", "0",
+        "-o", str(target),
+    ]
+    if CIVITAI_TOKEN and "civitai." in url:
+        cmd.extend(["-H", f"Authorization: Bearer {CIVITAI_TOKEN}"])
+    cmd.append(url)
+    _safe_log_line("+ " + " ".join(redact_download_secrets(str(x)) for x in cmd))
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    if proc_cb:
+        proc_cb(proc)
+    while proc.poll() is None:
+        _abort_if_cancelled(cancel_event, proc, target)
+        now = time.time()
+        if progress and now - last_emit >= 1.0:
+            last_emit = now
+            downloaded = target.stat().st_size if target.exists() else 0
+            _emit_byte_progress(progress, downloaded, total, started, connections=1)
+        time.sleep(0.25)
+    if proc.stdout is not None:
+        proc.stdout.read()
+    _check_cancel(cancel_event)
+    code = proc.wait()
+    if code == 0 and progress:
+        downloaded = target.stat().st_size if target.exists() else 0
+        _emit_byte_progress(progress, downloaded, total or downloaded, started, connections=1)
+    if cancel_event is not None and cancel_event.is_set():
+        _remove_partial_target(target)
+        raise DownloadCancelled()
+    if code != 0:
+        raise subprocess.CalledProcessError(code, cmd)
+
+
+def download_url_requests(
+    url: str,
+    target: Path,
+    progress: Optional[Callable[..., None]] = None,
+    cancel_event: threading.Event | None = None,
+):
     target.parent.mkdir(parents=True, exist_ok=True)
     _emit_progress(progress, f"downloading {target.name} via requests")
     headers = _civitai_request_headers(url)
@@ -282,6 +587,7 @@ def download_url_requests(url: str, target: Path, progress: Optional[Callable[..
         last_emit = 0.0
         with open(target, "wb") as handle:
             for chunk in resp.iter_content(chunk_size=1024 * 1024):
+                _check_cancel(cancel_event)
                 if not chunk:
                     continue
                 handle.write(chunk)
@@ -290,75 +596,86 @@ def download_url_requests(url: str, target: Path, progress: Optional[Callable[..
                 if not progress or now - last_emit < 1.0:
                     continue
                 last_emit = now
-                if total > 0:
-                    pct = min(100, int(downloaded * 100 / total))
-                    elapsed = max(now - started, 0.1)
-                    speed_bps = downloaded / elapsed
-                    remaining = max(total - downloaded, 0)
-                    eta_sec = int(remaining / speed_bps) if speed_bps > 0 else 0
-                    done = _human_bytes(downloaded)
-                    total_h = _human_bytes(total)
-                    speed = f"{_human_bytes(int(speed_bps))}/s"
-                    eta = f"{eta_sec}s" if eta_sec < 3600 else f"{eta_sec // 60}m"
-                    msg = f"{done}/{total_h} ({pct}%) DL:{speed} ETA:{eta}"
-                    _emit_progress(
-                        progress,
-                        msg,
-                        progress_pct=pct,
-                        progress_done=done,
-                        progress_total=total_h,
-                        progress_speed=speed,
-                        progress_eta=eta,
-                    )
-                else:
-                    done = _human_bytes(downloaded)
-                    msg = f"{done}/? DL:streaming"
-                    _emit_progress(
-                        progress,
-                        msg,
-                        progress_done=done,
-                        progress_total="?",
-                    )
+                _emit_byte_progress(progress, downloaded, total, started, connections=1)
 
 
-def download_url(url: str, target: Path, progress: Optional[Callable[..., None]] = None):
+def download_url(
+    url: str,
+    target: Path,
+    progress: Optional[Callable[..., None]] = None,
+    cancel_event: threading.Event | None = None,
+    proc_cb: Callable[[subprocess.Popen], None] | None = None,
+):
     target.parent.mkdir(parents=True, exist_ok=True)
     if file_ok(target):
         print(f"SKIP exists: {target}")
         return
     url = add_token(url)
+    dl_kwargs = {"progress": progress, "cancel_event": cancel_event, "proc_cb": proc_cb}
     aria2_error: str | None = None
     if _have_aria2():
         _emit_progress(progress, f"downloading {target.name} via aria2")
         try:
-            download_url_aria2(url, target, progress=progress)
+            download_url_aria2(url, target, **dl_kwargs)
             if file_ok(target):
                 return
             aria2_error = "aria2 finished but output file is missing or too small"
         except subprocess.CalledProcessError as e:
             aria2_error = f"aria2 failed (exit {e.returncode})"
+        except DownloadCancelled:
+            _remove_partial_target(target)
+            raise
         except OSError as e:
             aria2_error = f"aria2 failed ({redact_download_secrets(str(e))})"
         _remove_partial_target(target)
-        _emit_progress(progress, f"aria2 failed, retrying {target.name} via requests")
+        _emit_progress(progress, f"aria2 failed, retrying {target.name} via curl")
+
+    curl_error: str | None = None
+    if _have_curl():
+        try:
+            download_url_curl(url, target, **dl_kwargs)
+            if file_ok(target):
+                return
+            curl_error = "curl finished but output file is missing or too small"
+        except subprocess.CalledProcessError as e:
+            curl_error = f"curl failed (exit {e.returncode})"
+        except DownloadCancelled:
+            _remove_partial_target(target)
+            raise
+        except OSError as e:
+            curl_error = f"curl failed ({redact_download_secrets(str(e))})"
+        _remove_partial_target(target)
+        _emit_progress(progress, f"curl failed, retrying {target.name} via requests (slow)")
 
     try:
-        download_url_requests(url, target, progress=progress)
+        download_url_requests(url, target, progress=progress, cancel_event=cancel_event)
+    except DownloadCancelled:
+        _remove_partial_target(target)
+        raise
     except Exception as e:
         _remove_partial_target(target)
         parts: list[str] = []
         if aria2_error:
             parts.append(aria2_error)
+        if curl_error:
+            parts.append(curl_error)
         parts.append(f"requests failed ({redact_download_secrets(str(e))})")
         raise RuntimeError(f"Download failed for {target.name}: " + "; ".join(parts)) from e
 
     if not file_ok(target):
-        parts = [aria2_error] if aria2_error else []
+        parts = [p for p in (aria2_error, curl_error) if p]
         parts.append("requests finished but output file is missing or too small")
-        raise RuntimeError(f"Download failed for {target.name}: " + "; ".join(p for p in parts if p))
+        raise RuntimeError(f"Download failed for {target.name}: " + "; ".join(parts))
 
 
-def hf_download(repo_id: str, repo_path: str, target: Path, progress: Optional[Callable[..., None]] = None):
+def hf_download(
+    repo_id: str,
+    repo_path: str,
+    target: Path,
+    progress: Optional[Callable[..., None]] = None,
+    cancel_event: threading.Event | None = None,
+    proc_cb: Callable[[subprocess.Popen], None] | None = None,
+):
     target.parent.mkdir(parents=True, exist_ok=True)
     if file_ok(target):
         print(f"SKIP exists: {target}")
@@ -366,10 +683,19 @@ def hf_download(repo_id: str, repo_path: str, target: Path, progress: Optional[C
     _emit_progress(progress, f"downloading {target.name} from Hugging Face")
     cli = shutil.which("huggingface-cli")
     if cli:
+        _check_cancel(cancel_event)
         cmd = [cli, "download", repo_id, repo_path, "--local-dir", str(target.parent), "--local-dir-use-symlinks", "False"]
         if HF_TOKEN:
             cmd += ["--token", HF_TOKEN]
-        run(cmd)
+        proc = subprocess.Popen(cmd)
+        if proc_cb:
+            proc_cb(proc)
+        while proc.poll() is None:
+            _check_cancel(cancel_event)
+            time.sleep(0.25)
+        _check_cancel(cancel_event)
+        if proc.returncode != 0:
+            raise subprocess.CalledProcessError(proc.returncode or 1, cmd)
         downloaded = target.parent / repo_path
         flat_downloaded = target.parent / Path(repo_path).name
         if downloaded.exists() and downloaded != target:
@@ -389,7 +715,13 @@ def hf_download(repo_id: str, repo_path: str, target: Path, progress: Optional[C
         fetched_path.rename(target)
 
 
-def download_item(item: dict, folder_key: str, progress: Optional[Callable[..., None]] = None):
+def download_item(
+    item: dict,
+    folder_key: str,
+    progress: Optional[Callable[..., None]] = None,
+    cancel_event: threading.Event | None = None,
+    proc_cb: Callable[[subprocess.Popen], None] | None = None,
+):
     source = item.get("source", "direct")
 
     civitai_meta = None
@@ -400,11 +732,11 @@ def download_item(item: dict, folder_key: str, progress: Optional[Callable[..., 
         if version_id:
             try:
                 civitai_meta = civitai_lookup(version_id)
-                files = civitai_meta.get("files") or []
-                primary = next((f for f in files if f.get("primary")), files[0] if files else {})
+                file_id = item.get("civitai_file_id") or extract_civitai_file_id(item.get("url") or "")
+                primary = resolve_civitai_file(civitai_meta, file_id)
                 auto_name = primary.get("name")
                 if item.get("target_auto") or folder_key == "auto":
-                    auto_dir = auto_target_dir(civitai_meta)
+                    auto_dir = auto_target_dir(civitai_meta, primary)
             except Exception as e:
                 print(f"  ! Civitai lookup failed for version {version_id}: {e}")
 
@@ -415,10 +747,11 @@ def download_item(item: dict, folder_key: str, progress: Optional[Callable[..., 
     else:
         target = TARGET_DIRS[folder_key] / item["name"]
 
+    dl_kwargs = {"progress": progress, "cancel_event": cancel_event, "proc_cb": proc_cb}
     if source in ("direct", "civitai", "url"):
-        download_url(item["url"], target, progress=progress)
+        download_url(item["url"], target, **dl_kwargs)
     elif source in ("hf", "huggingface", "huggingface_hub"):
-        hf_download(item["repo_id"], item.get("repo_path", item["name"]), target, progress=progress)
+        hf_download(item["repo_id"], item.get("repo_path", item["name"]), target, **dl_kwargs)
     else:
         raise RuntimeError(f"Unsupported source in {item}: {source}")
 

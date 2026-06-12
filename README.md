@@ -1,6 +1,16 @@
 # docker3000_script
 
-Clean Vast/RunPod worker startup bundle for Muse. This repo includes the Flask bridge on port **3000**, plus scripts to install/start ComfyUI on port **8188**.
+**Canonical copy lives inside Muse:** `muse_Chatbot-1.0/docker3000_script/` — `npm run dev` runs this folder.
+
+The public repo [newpoopuk5-ux/docker3000_script](https://github.com/newpoopuk5-ux/docker3000_script) is a **mirror for Vast/RunPod** (`git clone` on the worker). After worker changes in Muse, sync with:
+
+```bash
+node scripts/sync-docker3000-public.mjs   # from Muse repo root
+```
+
+---
+
+Clean Vast/RunPod worker startup bundle for Muse. Flask bridge on port **3000**, plus scripts to install/start ComfyUI on port **8188**.
 
 This repo intentionally contains only worker-side files:
 
@@ -20,7 +30,7 @@ It does not include Muse React, Muse Express, `chatbot.db`, images, models, LoRA
 | Port | Service | Muse setting |
 |------|---------|--------------|
 | **3000** | Flask bridge | `COMFY_STUDIO_URL=http://VAST_HOST:3000` |
-| **8188** | ComfyUI (when `AUTOSTART_MODE=comfy`) | `COMFY_URL=http://VAST_HOST:8188` with `COMFY_BACKEND_MODE=hybrid` |
+| **8188** | ComfyUI (when `AUTOSTART_MODE=comfy`) | `COMFY_URL=http://VAST_HOST:8188` (Express probes Comfy directly) |
 
 Worker status (no secrets): `GET http://VAST_HOST:3000/api/worker/status`
 
@@ -79,20 +89,11 @@ First run with `BOOTSTRAP=1` installs ComfyUI, Python deps, GGUF custom node, an
 
 ## Muse PC settings
 
-Expose ports **3000** and **8188** from Vast when using hybrid mode:
+Expose ports **3000** and **8188** from Vast (Muse hybrid routing is fixed — both are required for queue/job status):
 
 ```env
-COMFY_BACKEND_MODE=hybrid
 COMFY_STUDIO_URL=http://VAST_HOST:3000
 COMFY_URL=http://VAST_HOST:8188
-COMFY_OUTPUT_DIR=C:\ComfyUI_windows_portable\ComfyUI\output
-```
-
-If you expose only port **3000**:
-
-```env
-COMFY_BACKEND_MODE=flask
-COMFY_STUDIO_URL=http://VAST_HOST:3000
 COMFY_OUTPUT_DIR=C:\ComfyUI_windows_portable\ComfyUI\output
 ```
 

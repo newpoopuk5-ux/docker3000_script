@@ -2,7 +2,11 @@ import os
 import shutil
 from pathlib import Path
 
+from download_models import aria2_available
+from model_manager import manager_supported
 from studio_comfy_api import health_status
+
+WORKER_API_REVISION = 3
 
 MODE_FILE = Path("/workspace/.muse-worker/mode")
 
@@ -91,6 +95,13 @@ def build_worker_status() -> dict:
         "tokens": {
             "hf_token_configured": _token_configured("HF_TOKEN"),
             "civitai_token_configured": _token_configured("CIVITAI_TOKEN"),
+            "aria2_available": aria2_available(),
+        },
+        "features": {
+            "api_revision": WORKER_API_REVISION,
+            "model_manager": manager_supported(),
+            "model_download": manager_supported(),
+            "download_cancel": True,
         },
         "env": _safe_env_summary(),
     }

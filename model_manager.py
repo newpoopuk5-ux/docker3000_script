@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import threading
 import time
 import uuid
@@ -15,7 +16,14 @@ from config import (
     UPSCALE_DIR,
     VAE_DIR,
 )
-from download_models import TARGET_DIRS, download_item, redact_download_secrets
+from download_models import (
+    TARGET_DIRS,
+    DownloadCancelled,
+    build_item_from_url,
+    download_item,
+    preview_civitai_url,
+    redact_download_secrets,
+)
 from metadata import list_files
 
 MODELS_JSON = Path(os.environ.get("MODELS_JSON", "models.json"))
@@ -63,6 +71,8 @@ CATALOG_GROUPS = [
 
 _DOWNLOAD_LOCK = threading.Lock()
 _DOWNLOAD_JOBS: dict[str, dict] = {}
+_JOB_CANCEL: dict[str, threading.Event] = {}
+_JOB_PROCS: dict[str, subprocess.Popen | None] = {}
 
 DEFAULT_CATALOG_SET = "basic_no_flux"
 
@@ -271,10 +281,67 @@ def _update_job(job_id: str, **fields) -> None:
             job.update(fields)
 
 
-def _run_download_job(job_id: str, catalog_id: str) -> None:
-    _update_job(job_id, status="running", started_at=time.time(), progress="starting")
+def _job_cancel_event(job_id: str) -> threading.Event:
+    with _DOWNLOAD_LOCK:
+        ev = _JOB_CANCEL.get(job_id)
+        if ev is None:
+            ev = threading.Event()
+            _JOB_CANCEL[job_id] = ev
+        return ev
+
+
+def _register_job_proc(job_id: str, proc: subprocess.Popen) -> None:
+    with _DOWNLOAD_LOCK:
+        _JOB_PROCS[job_id] = proc
+
+
+def _clear_job_handles(job_id: str) -> None:
+    with _DOWNLOAD_LOCK:
+        _JOB_CANCEL.pop(job_id, None)
+        _JOB_PROCS.pop(job_id, None)
+
+
+def _kill_job_proc(job_id: str) -> None:
+    with _DOWNLOAD_LOCK:
+        proc = _JOB_PROCS.get(job_id)
+    if proc is None or proc.poll() is not None:
+        return
+    try:
+        proc.terminate()
+        proc.wait(timeout=3)
+    except Exception:
+        try:
+            proc.kill()
+        except Exception:
+            pass
+
+
+def _mark_job_cancelled(job_id: str) -> None:
+    _update_job(
+        job_id,
+        status="cancelled",
+        finished_at=time.time(),
+        ok=False,
+        error="Cancelled by user",
+        progress="cancelled",
+    )
+    _clear_job_handles(job_id)
+
+
+def _download_kwargs(job_id: str) -> dict:
+    cancel = _job_cancel_event(job_id)
+    return {
+        "cancel_event": cancel,
+        "proc_cb": lambda proc: _register_job_proc(job_id, proc),
+    }
+
+
+def _job_progress(job_id: str):
+    cancel = _job_cancel_event(job_id)
 
     def progress(msg: str, **stats) -> None:
+        if cancel.is_set():
+            raise DownloadCancelled()
         fields: dict = {"progress": msg}
         for key in (
             "progress_pct",
@@ -288,18 +355,114 @@ def _run_download_job(job_id: str, catalog_id: str) -> None:
                 fields[key] = stats[key]
         _update_job(job_id, **fields)
 
+    return progress
+
+
+def _run_url_download_job(job_id: str, url: str, display_name: str) -> None:
+    kwargs = _download_kwargs(job_id)
+    if kwargs["cancel_event"].is_set():
+        _mark_job_cancelled(job_id)
+        return
+    _update_job(job_id, status="running", started_at=time.time(), progress="starting")
+    progress = _job_progress(job_id)
+
+    try:
+        item = build_item_from_url(url)
+        download_item(item, "auto", progress=progress, **kwargs)
+        if kwargs["cancel_event"].is_set():
+            _mark_job_cancelled(job_id)
+            return
+        _update_job(job_id, status="done", finished_at=time.time(), ok=True, progress="done")
+    except DownloadCancelled:
+        _mark_job_cancelled(job_id)
+    except Exception as e:
+        err = redact_download_secrets(str(e))
+        if not err.startswith("Download failed"):
+            err = f"Download failed: {err}"
+        _update_job(
+            job_id,
+            status="error",
+            finished_at=time.time(),
+            ok=False,
+            error=err,
+            progress="error",
+        )
+    finally:
+        _clear_job_handles(job_id)
+
+
+def _run_download_job(job_id: str, catalog_id: str) -> None:
+    kwargs = _download_kwargs(job_id)
+    if kwargs["cancel_event"].is_set():
+        _mark_job_cancelled(job_id)
+        return
+    _update_job(job_id, status="running", started_at=time.time(), progress="starting")
+    progress = _job_progress(job_id)
+
     try:
         found = _find_catalog_item(catalog_id)
         if not found:
             raise RuntimeError(f"Unknown catalog id: {catalog_id}")
         _set_name, folder_key, item = found
-        download_item(item, folder_key, progress=progress)
+        download_item(item, folder_key, progress=progress, **kwargs)
+        if kwargs["cancel_event"].is_set():
+            _mark_job_cancelled(job_id)
+            return
         _update_job(job_id, status="done", finished_at=time.time(), ok=True, progress="done")
+    except DownloadCancelled:
+        _mark_job_cancelled(job_id)
     except Exception as e:
         err = redact_download_secrets(str(e))
         if not err.startswith("Download failed"):
             err = f"Download failed: {err}"
         _update_job(job_id, status="error", finished_at=time.time(), ok=False, error=err, progress="error")
+    finally:
+        _clear_job_handles(job_id)
+
+
+def preview_url(url: str) -> dict:
+    if not manager_supported():
+        return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
+    return preview_civitai_url(url)
+
+
+def start_url_download(url: str) -> dict:
+    if not manager_supported():
+        return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
+    preview = preview_civitai_url(url)
+    if not preview.get("ok"):
+        return preview
+    if preview.get("already_installed"):
+        return {
+            "ok": True,
+            "already_installed": True,
+            "display_name": preview.get("display_name"),
+            "source_url": url,
+        }
+
+    display_name = str(preview.get("display_name") or preview.get("filename") or "Civitai model")
+    job_id = uuid.uuid4().hex
+    with _DOWNLOAD_LOCK:
+        _DOWNLOAD_JOBS[job_id] = {
+            "id": job_id,
+            "catalog_id": f"url:{display_name}",
+            "display_name": display_name,
+            "source_url": url,
+            "status": "queued",
+            "ok": None,
+            "error": None,
+            "progress": "queued",
+            "created_at": time.time(),
+        }
+    thread = threading.Thread(target=_run_url_download_job, args=(job_id, url, display_name), daemon=True)
+    thread.start()
+    return {
+        "ok": True,
+        "job_id": job_id,
+        "display_name": display_name,
+        "source_url": url,
+        "status": "queued",
+    }
 
 
 def start_download(catalog_id: str) -> dict:
@@ -333,6 +496,25 @@ def list_downloads() -> dict:
         jobs = list(_DOWNLOAD_JOBS.values())
     jobs.sort(key=lambda row: row.get("created_at", 0), reverse=True)
     return {"ok": True, "jobs": jobs[:50]}
+
+
+def cancel_download(job_id: str) -> dict:
+    job_id = (job_id or "").strip()
+    if not job_id:
+        return {"ok": False, "error": "job id is required"}
+    with _DOWNLOAD_LOCK:
+        job = _DOWNLOAD_JOBS.get(job_id)
+        if not job:
+            return {"ok": False, "error": f"Unknown job: {job_id}"}
+        status = str(job.get("status") or "")
+        if status not in ("queued", "running"):
+            return {"ok": False, "error": f"Job is not active ({status})"}
+    cancel = _job_cancel_event(job_id)
+    cancel.set()
+    _kill_job_proc(job_id)
+    if status == "queued":
+        _mark_job_cancelled(job_id)
+    return {"ok": True, "job_id": job_id, "status": "cancelled"}
 
 
 def _safe_delete_path(folder_key: str, relative_path: str) -> Path:

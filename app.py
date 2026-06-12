@@ -18,7 +18,16 @@ from metadata import cached_image_info, image_records, list_files, read_favorite
 from workflow_utils import build_workflow
 from worker_status import build_worker_status
 from worker_control import control_supported, set_mode_comfy, set_mode_none
-from model_manager import delete_model, list_downloads, load_catalog, manager_supported, start_download
+from model_manager import (
+    cancel_download,
+    delete_model,
+    list_downloads,
+    load_catalog,
+    manager_supported,
+    preview_url,
+    start_download,
+    start_url_download,
+)
 
 app = Flask(__name__)
 
@@ -200,12 +209,28 @@ def models_overview():
     return jsonify(payload)
 
 
+@app.post("/api/models/preview-url")
+def models_preview_url():
+    body = request.json or {}
+    url = (body.get("url") or "").strip()
+    if not url:
+        return jsonify({"ok": False, "error": "url is required"}), 400
+    result = preview_url(url)
+    status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
+    return jsonify(result), status
+
+
 @app.post("/api/models/download")
 def models_download():
     body = request.json or {}
+    url = (body.get("url") or "").strip()
+    if url:
+        result = start_url_download(url)
+        status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
+        return jsonify(result), status
     catalog_id = (body.get("id") or body.get("catalog_id") or "").strip()
     if not catalog_id:
-        return jsonify({"ok": False, "error": "id is required"}), 400
+        return jsonify({"ok": False, "error": "id or url is required"}), 400
     result = start_download(catalog_id)
     status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
     return jsonify(result), status
@@ -221,6 +246,13 @@ def models_delete(model_id):
 @app.get("/api/models/downloads")
 def models_downloads():
     return jsonify(list_downloads())
+
+
+@app.post("/api/models/downloads/<job_id>/cancel")
+def models_download_cancel(job_id):
+    result = cancel_download(job_id)
+    status = 200 if result.get("ok") else 400
+    return jsonify(result), status
 
 
 @app.get("/api/queue")
