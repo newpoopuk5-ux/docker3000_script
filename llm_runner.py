@@ -101,7 +101,7 @@ def llm_health() -> dict:
     detail = "offline"
     for path in ("/health", "/v1/models"):
         try:
-            with urllib.request.urlopen(f"{base}{path}", timeout=3) as resp:
+            with urllib.request.urlopen(f"{base}{path}", timeout=2) as resp:
                 ok = 200 <= resp.status < 300
                 detail = "ok" if ok else f"status {resp.status}"
                 if ok:
@@ -156,8 +156,19 @@ def start_llm(
     custom_filename: str | None = None,
     ctx_size: int | None = None,
 ) -> dict:
-    if llm_health().get("llm_ok"):
-        return {"ok": True, "already_running": True, **llm_health()}
+    health = llm_health()
+    if health.get("llm_ok"):
+        from llm_manager import _catalog_raw, resolve_ctx_size
+
+        cfg = _catalog_raw()
+        meta = (cfg.get("profiles") or {}).get(profile_id) or {}
+        requested_ctx = resolve_ctx_size(meta, requested=ctx_size)
+        active = active_profile()
+        same_profile = str(active.get("id") or "") == str(profile_id)
+        same_ctx = int(active.get("ctx_size") or 0) == int(requested_ctx)
+        if same_profile and same_ctx:
+            return {"ok": True, "already_running": True, **health}
+        stop_llm()
 
     install = ensure_llama_runtime()
     if not install.get("ok"):

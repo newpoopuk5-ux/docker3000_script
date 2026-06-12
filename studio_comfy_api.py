@@ -8,7 +8,7 @@ def health_status():
     comfy_ok = False
     detail = "unknown"
     try:
-        r = requests.get(f"{COMFY_URL}/system_stats", timeout=5)
+        r = requests.get(f"{COMFY_URL}/system_stats", timeout=2)
         comfy_ok = r.ok
         detail = "ok" if comfy_ok else f"status {r.status_code}"
     except Exception as e:

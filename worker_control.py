@@ -179,8 +179,9 @@ def set_mode_comfy() -> dict:
     if not control_supported():
         return unsupported_payload("comfy")
     stop_llm()
-    _write_mode("comfy")
     start_result = start_comfy()
+    if start_result.get("ok"):
+        _write_mode("comfy")
     mode = _mode_file().read_text(encoding="utf-8").strip() if _mode_file().is_file() else "comfy"
     return {
         "ok": bool(start_result.get("ok")),

@@ -685,6 +685,102 @@ def _normalize_hf_target(target: Path, repo_path: str) -> None:
         return
 
 
+def _hf_file_total_bytes(repo_id: str, repo_path: str) -> int:
+    try:
+        from huggingface_hub import get_hf_file_metadata
+
+        meta = get_hf_file_metadata(
+            repo_id=repo_id,
+            filename=repo_path,
+            repo_type="model",
+            token=HF_TOKEN or None,
+        )
+        return int(getattr(meta, "size", 0) or 0)
+    except Exception:
+        try:
+            from huggingface_hub import hf_hub_url
+
+            url = hf_hub_url(repo_id=repo_id, filename=repo_path, repo_type="model")
+            if HF_TOKEN:
+                sep = "&" if "?" in url else "?"
+                url = f"{url}{sep}token={HF_TOKEN}"
+            return _head_content_length(url)
+        except Exception:
+            return 0
+
+
+def _poll_hf_partial_bytes(target: Path, repo_path: str) -> int:
+    rel_name = Path(repo_path).name
+    candidates = [
+        target,
+        target.parent / repo_path,
+        target.parent / rel_name,
+    ]
+    best = 0
+    seen: set[str] = set()
+    for path in candidates:
+        for variant in (path, Path(f"{path}.incomplete")):
+            key = str(variant)
+            if key in seen:
+                continue
+            seen.add(key)
+            try:
+                if variant.is_file():
+                    best = max(best, variant.stat().st_size)
+            except OSError:
+                pass
+    try:
+        for path in target.parent.rglob("*.incomplete"):
+            if path.is_file():
+                best = max(best, path.stat().st_size)
+    except OSError:
+        pass
+    return best
+
+
+def _watch_hf_download_progress(
+    progress: Optional[Callable[..., None]],
+    target: Path,
+    repo_path: str,
+    total: int,
+    cancel_event: threading.Event | None,
+    *,
+    thread: threading.Thread | None = None,
+    proc: subprocess.Popen | None = None,
+) -> None:
+    started = time.time()
+    last_emit = 0.0
+    while True:
+        _check_cancel(cancel_event)
+        alive = thread.is_alive() if thread is not None else proc is not None and proc.poll() is None
+        if not alive:
+            break
+        now = time.time()
+        if progress and now - last_emit >= 1.0:
+            last_emit = now
+            downloaded = _poll_hf_partial_bytes(target, repo_path)
+            _emit_byte_progress(progress, downloaded, total, started, connections=1)
+        time.sleep(0.25)
+    if progress:
+        downloaded = _poll_hf_partial_bytes(target, repo_path)
+        if downloaded > 0:
+            _emit_byte_progress(progress, downloaded, total or downloaded, started, connections=1)
+
+
+def _hf_hub_download_worker(repo_id: str, repo_path: str, target: Path, out: dict) -> None:
+    try:
+        from huggingface_hub import hf_hub_download
+
+        out["fetched"] = hf_hub_download(
+            repo_id=repo_id,
+            filename=repo_path,
+            local_dir=str(target.parent),
+            token=HF_TOKEN or None,
+        )
+    except Exception as e:
+        out["error"] = e
+
+
 def hf_download(
     repo_id: str,
     repo_path: str,
@@ -699,22 +795,36 @@ def hf_download(
         return
     _emit_progress(progress, f"downloading {target.name} from Hugging Face")
     errors: list[str] = []
+    total = _hf_file_total_bytes(repo_id, repo_path)
 
     _check_cancel(cancel_event)
     try:
-        from huggingface_hub import hf_hub_download
-
-        fetched = hf_hub_download(
-            repo_id=repo_id,
-            filename=repo_path,
-            local_dir=str(target.parent),
-            token=HF_TOKEN or None,
+        hub_out: dict = {}
+        worker = threading.Thread(
+            target=_hf_hub_download_worker,
+            args=(repo_id, repo_path, target, hub_out),
+            daemon=True,
         )
-        fetched_path = Path(fetched)
-        if fetched_path.is_file() and fetched_path.resolve() != target.resolve():
-            if target.exists():
-                target.unlink()
-            fetched_path.rename(target)
+        worker.start()
+        _watch_hf_download_progress(
+            progress,
+            target,
+            repo_path,
+            total,
+            cancel_event,
+            thread=worker,
+        )
+        worker.join()
+        _check_cancel(cancel_event)
+        if hub_out.get("error") is not None:
+            raise hub_out["error"]
+        fetched = hub_out.get("fetched")
+        if fetched:
+            fetched_path = Path(fetched)
+            if fetched_path.is_file() and fetched_path.resolve() != target.resolve():
+                if target.exists():
+                    target.unlink()
+                fetched_path.rename(target)
         _normalize_hf_target(target, repo_path)
         if file_ok(target):
             return
@@ -738,9 +848,14 @@ def hf_download(
         )
         if proc_cb:
             proc_cb(proc)
-        while proc.poll() is None:
-            _check_cancel(cancel_event)
-            time.sleep(0.25)
+        _watch_hf_download_progress(
+            progress,
+            target,
+            repo_path,
+            total,
+            cancel_event,
+            proc=proc,
+        )
         _check_cancel(cancel_event)
         stdout = (proc.stdout.read() if proc.stdout else "") or ""
         stderr = (proc.stderr.read() if proc.stderr else "") or ""

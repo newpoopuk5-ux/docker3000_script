@@ -125,7 +125,7 @@ def load_profiles() -> dict:
             "ctx_size": meta.get("ctx_size"),
             "ctx_size_max": ctx_bounds(meta)[1],
             "port": meta.get("port") or int(os.environ.get("LLM_PORT") or "8080"),
-            "installed": profile_id in installed,
+            "installed": resolve_profile(profile_id) is not None,
             "model_path": model_path,
             "size_bytes": _size_bytes(path_obj),
             "filename": meta.get("filename"),

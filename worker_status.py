@@ -12,26 +12,6 @@ from worker_startup_banner import mapped_port, muse_llm_urls, muse_urls, public_
 
 WORKER_API_REVISION = 5
 
-MODE_FILE = Path("/workspace/.muse-worker/mode")
-
-
-def _read_mode() -> str:
-    env_mode = (os.environ.get("WORKER_MODE") or os.environ.get("AUTOSTART_MODE") or "").strip().lower()
-    if env_mode in ("none", "comfy", "llm"):
-        return env_mode
-    try:
-        if MODE_FILE.is_file():
-            mode = MODE_FILE.read_text(encoding="utf-8").strip().lower()
-            if mode in ("none", "comfy", "llm"):
-                return mode
-    except OSError:
-        pass
-    llm = llm_health()
-    if llm.get("llm_ok"):
-        return "llm"
-    comfy = health_status()
-    return "comfy" if comfy.get("comfy_ok") else "none"
-
 
 def _volume_root() -> str:
     explicit = (os.environ.get("VOLUME_ROOT") or "").strip()
@@ -42,6 +22,39 @@ def _volume_root() -> str:
     if path.name == "ComfyUI":
         return str(path.parent)
     return "/workspace"
+
+
+def _mode_file() -> Path:
+    return Path(_volume_root()) / ".muse-worker" / "mode"
+
+
+def _service_online(mode: str) -> bool:
+    if mode == "llm":
+        return bool(llm_health().get("llm_ok"))
+    if mode == "comfy":
+        return bool(health_status().get("comfy_ok"))
+    if mode == "none":
+        return not llm_health().get("llm_ok") and not health_status().get("comfy_ok")
+    return False
+
+
+def _read_mode() -> str:
+    env_mode = (os.environ.get("WORKER_MODE") or os.environ.get("AUTOSTART_MODE") or "").strip().lower()
+    if env_mode in ("none", "comfy", "llm") and _service_online(env_mode):
+        return env_mode
+    mode_file = _mode_file()
+    try:
+        if mode_file.is_file():
+            mode = mode_file.read_text(encoding="utf-8").strip().lower()
+            if mode in ("none", "comfy", "llm") and _service_online(mode):
+                return mode
+    except OSError:
+        pass
+    llm = llm_health()
+    if llm.get("llm_ok"):
+        return "llm"
+    comfy = health_status()
+    return "comfy" if comfy.get("comfy_ok") else "none"
 
 
 def _disk_usage(path: str) -> dict:
