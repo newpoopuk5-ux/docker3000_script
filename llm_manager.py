@@ -69,26 +69,38 @@ def _size_bytes(path: Path | None) -> int | None:
     return None
 
 
+def _profile_model_file(profile_id: str, meta: dict) -> Path | None:
+    if meta.get("custom"):
+        custom_dir = profile_storage_dir(profile_id, meta)
+        if custom_dir.is_dir():
+            for path in sorted(custom_dir.glob("*.gguf")):
+                if _file_ok(path):
+                    return path
+        return None
+    filename = str(meta.get("filename") or "").strip()
+    if not filename:
+        return None
+    target = profile_storage_dir(profile_id, meta) / filename
+    if _file_ok(target):
+        return target
+    alias_id = str(meta.get("model_alias") or "").strip()
+    if alias_id:
+        alias_meta = (_catalog_raw().get("profiles") or {}).get(alias_id)
+        if alias_meta:
+            alias_target = profile_storage_dir(alias_id, alias_meta) / str(alias_meta.get("filename") or "").strip()
+            if alias_target.name and _file_ok(alias_target):
+                return alias_target
+    return None
+
+
 def list_installed() -> dict[str, str]:
-    base = llm_models_dir()
-    if not base.is_dir():
+    if not llm_models_dir().is_dir():
         return {}
     out: dict[str, str] = {}
     cfg = _catalog_raw()
     for profile_id, meta in (cfg.get("profiles") or {}).items():
-        if meta.get("custom"):
-            custom_dir = profile_storage_dir(profile_id, meta)
-            if custom_dir.is_dir():
-                for path in sorted(custom_dir.glob("*.gguf")):
-                    if _file_ok(path):
-                        out[profile_id] = str(path)
-                        break
-            continue
-        filename = str(meta.get("filename") or "").strip()
-        if not filename:
-            continue
-        target = profile_storage_dir(profile_id, meta) / filename
-        if _file_ok(target):
+        target = _profile_model_file(profile_id, meta)
+        if target:
             out[profile_id] = str(target)
     return out
 
@@ -111,6 +123,7 @@ def load_profiles() -> dict:
             "gpu_warning": meta.get("gpu_warning") or "",
             "custom": bool(meta.get("custom")),
             "ctx_size": meta.get("ctx_size"),
+            "ctx_size_max": ctx_bounds(meta)[1],
             "port": meta.get("port") or int(os.environ.get("LLM_PORT") or "8080"),
             "installed": profile_id in installed,
             "model_path": model_path,
@@ -152,22 +165,66 @@ def resolve_profile(profile_id: str, custom_filename: str | None = None) -> dict
             target = ggufs[-1] if ggufs else None
         if not target or not _file_ok(target):
             return None
-        return _profile_runtime(profile_id, meta, str(target))
+        return _profile_runtime(profile_id, meta, str(target), requested_ctx=None)
+    target = _profile_model_file(profile_id, meta)
+    if not target:
+        return None
+    return _profile_runtime(profile_id, meta, str(target), requested_ctx=None)
+
+
+def ctx_bounds(meta: dict | None) -> tuple[int, int]:
+    default = 8192
+    if meta and meta.get("ctx_size") is not None:
+        try:
+            default = max(1024, int(meta["ctx_size"]))
+        except (TypeError, ValueError):
+            pass
+    if meta and meta.get("custom"):
+        env_cap = 0
+        for key in ("LLAMA_CTX_SIZE", "LLM_CTX_SIZE"):
+            raw = (os.environ.get(key) or "").strip()
+            if raw:
+                try:
+                    env_cap = max(env_cap, int(raw))
+                except ValueError:
+                    pass
+        max_ctx = max(default, env_cap or int(meta.get("ctx_size_max") or 131072))
+        return default, max(1024, max_ctx)
+    max_ctx = default
+    if meta and meta.get("ctx_size_max") is not None:
+        try:
+            max_ctx = max(default, int(meta["ctx_size_max"]))
+        except (TypeError, ValueError):
+            pass
+    return default, max_ctx
+
+
+def resolve_ctx_size(meta: dict | None = None, requested: int | None = None) -> int:
+    default, _max_ctx = ctx_bounds(meta)
+    if requested is None:
+        return default
     try:
-        target = profile_model_path(profile_id, meta)
-    except ValueError:
-        return None
-    if not _file_ok(target):
-        return None
-    return _profile_runtime(profile_id, meta, str(target))
+        value = int(requested)
+    except (TypeError, ValueError):
+        return default
+    return max(1024, value)
 
 
-def _profile_runtime(profile_id: str, meta: dict, model_path: str) -> dict:
+def _profile_runtime(
+    profile_id: str,
+    meta: dict,
+    model_path: str,
+    requested_ctx: int | None = None,
+) -> dict:
+    default, max_ctx = ctx_bounds(meta)
+    resolved = resolve_ctx_size(meta, requested_ctx)
     return {
         "id": profile_id,
         "display_name": meta.get("display_name") or profile_id,
         "model_path": model_path,
-        "ctx_size": int(meta.get("ctx_size") or os.environ.get("LLM_CTX_SIZE") or 8192),
+        "ctx_size": resolved,
+        "ctx_size_default": default,
+        "ctx_size_max": max_ctx,
         "n_gpu_layers": int(
             meta.get("n_gpu_layers")
             if meta.get("n_gpu_layers") is not None

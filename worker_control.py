@@ -219,7 +219,11 @@ def set_mode_none() -> dict:
     }
 
 
-def set_mode_llm(profile_id: str | None = None, custom_filename: str | None = None) -> dict:
+def set_mode_llm(
+    profile_id: str | None = None,
+    custom_filename: str | None = None,
+    ctx_size: int | None = None,
+) -> dict:
     if not control_supported():
         return unsupported_payload("llm")
     stop_comfy()
@@ -227,7 +231,7 @@ def set_mode_llm(profile_id: str | None = None, custom_filename: str | None = No
     resolved_profile_id = (profile_id or os.environ.get("LLM_PROFILE") or catalog.get("recommended_profile") or "").strip()
     if not resolved_profile_id:
         return {"ok": False, "supported": True, "error": "LLM profile id is required"}
-    start_result = start_llm(resolved_profile_id, custom_filename=custom_filename)
+    start_result = start_llm(resolved_profile_id, custom_filename=custom_filename, ctx_size=ctx_size)
     if start_result.get("ok"):
         _write_mode("llm")
     mode = _mode_file().read_text(encoding="utf-8").strip() if _mode_file().is_file() else "llm"

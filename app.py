@@ -213,7 +213,14 @@ def mode_llm():
     body = request.json or {}
     profile_id = (body.get("profile_id") or body.get("id") or "").strip() or None
     custom_filename = (body.get("custom_filename") or body.get("filename") or "").strip() or None
-    return jsonify(set_mode_llm(profile_id=profile_id, custom_filename=custom_filename))
+    ctx_raw = body.get("ctx_size")
+    ctx_size = None
+    if ctx_raw is not None and str(ctx_raw).strip() != "":
+        try:
+            ctx_size = int(ctx_raw)
+        except (TypeError, ValueError):
+            return jsonify({"ok": False, "error": "ctx_size must be an integer"}), 400
+    return jsonify(set_mode_llm(profile_id=profile_id, custom_filename=custom_filename, ctx_size=ctx_size))
 
 
 @app.get("/api/llm/status")

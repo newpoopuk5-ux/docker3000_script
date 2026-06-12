@@ -72,6 +72,7 @@ def _save_active_profile(profile: dict) -> None:
                 "display_name": profile.get("display_name"),
                 "model_path": profile.get("model_path"),
                 "hf_model": profile.get("hf_model"),
+                "ctx_size": profile.get("ctx_size"),
             },
             ensure_ascii=False,
             indent=2,
@@ -128,6 +129,7 @@ def llm_health() -> dict:
         "models_dir": str(llm_models_dir()),
         "llama_root": str(volume_root() / "llama.cpp"),
         "active_profile": active_profile(),
+        "ctx_size": active_profile().get("ctx_size"),
         "binary": str(binary or ""),
         "binary_installed": bool(binary),
         "llm_api_key_configured": llm_api_key_configured(),
@@ -149,7 +151,11 @@ def _extra_args() -> list[str]:
     return shlex.split(raw)
 
 
-def start_llm(profile_id: str, custom_filename: str | None = None) -> dict:
+def start_llm(
+    profile_id: str,
+    custom_filename: str | None = None,
+    ctx_size: int | None = None,
+) -> dict:
     if llm_health().get("llm_ok"):
         return {"ok": True, "already_running": True, **llm_health()}
 
@@ -157,8 +163,8 @@ def start_llm(profile_id: str, custom_filename: str | None = None) -> dict:
     if not install.get("ok"):
         return {"ok": False, "error": install.get("error") or "llama.cpp is not installed", "install": install}
 
-    profile = resolve_profile(profile_id, custom_filename=custom_filename)
-    if not profile:
+    base_profile = resolve_profile(profile_id, custom_filename=custom_filename)
+    if not base_profile:
         return {
             "ok": False,
             "error": (
@@ -166,6 +172,17 @@ def start_llm(profile_id: str, custom_filename: str | None = None) -> dict:
                 f"(stored under {llm_models_dir()})."
             ),
         }
+
+    from llm_manager import _catalog_raw, _profile_runtime, resolve_ctx_size
+
+    cfg = _catalog_raw()
+    meta = (cfg.get("profiles") or {}).get(profile_id) or {}
+    profile = _profile_runtime(
+        profile_id,
+        meta,
+        base_profile["model_path"],
+        requested_ctx=ctx_size,
+    )
 
     binary = llama_server_bin()
     if not binary:
@@ -186,7 +203,7 @@ def start_llm(profile_id: str, custom_filename: str | None = None) -> dict:
         "--port",
         str(port),
         "-c",
-        str(profile.get("ctx_size") or int(os.environ.get("LLM_CTX_SIZE") or 8192)),
+        str(profile.get("ctx_size") or resolve_ctx_size(meta)),
         "-ngl",
         str(ngl),
     ]
