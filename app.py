@@ -40,6 +40,64 @@ from model_manager import (
 
 app = Flask(__name__)
 
+
+def update_env_file(key, value):
+    env_path = "/workspace/.env"
+    if not os.path.exists("/workspace"):
+        env_path = os.path.join(os.path.dirname(__file__), ".env")
+    lines = []
+    updated = False
+    if os.path.exists(env_path):
+        try:
+            with open(env_path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+        except Exception:
+            pass
+    new_lines = []
+    for line in lines:
+        if line.strip().startswith(f"{key}="):
+            new_lines.append(f"{key}={value}\n")
+            updated = True
+        else:
+            new_lines.append(line)
+    if not updated:
+        if new_lines and not new_lines[-1].endswith("\n"):
+            new_lines[-1] += "\n"
+        new_lines.append(f"{key}={value}\n")
+    try:
+        with open(env_path, "w", encoding="utf-8") as f:
+            f.writelines(new_lines)
+    except Exception as e:
+        print(f"Error writing to env file {env_path}: {e}")
+
+
+@app.before_request
+def check_headers_for_tokens():
+    hf = request.headers.get("X-HF-Token")
+    if hf:
+        hf_val = hf.strip()
+        if os.environ.get("HF_TOKEN") != hf_val:
+            os.environ["HF_TOKEN"] = hf_val
+            update_env_file("HF_TOKEN", hf_val)
+            try:
+                import download_models
+                download_models.HF_TOKEN = hf_val
+            except Exception:
+                pass
+
+    civitai = request.headers.get("X-Civitai-Token")
+    if civitai:
+        civitai_val = civitai.strip()
+        if os.environ.get("CIVITAI_TOKEN") != civitai_val:
+            os.environ["CIVITAI_TOKEN"] = civitai_val
+            update_env_file("CIVITAI_TOKEN", civitai_val)
+            try:
+                import download_models
+                download_models.CIVITAI_TOKEN = civitai_val
+            except Exception:
+                pass
+
+
 JOB_LOOKUP = {}
 JOB_LOOKUP_TTL_SECONDS = 60 * 60
 
