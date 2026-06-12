@@ -228,6 +228,33 @@ def _hf_repo_and_file(url: str) -> tuple[str, str] | None:
     return repo_id, filename
 
 
+def _hf_download_profile(meta: dict, target: Path, progress, cancel) -> None:
+    repo_path = str(meta.get("repo_path") or meta.get("filename") or "").strip()
+    repo_ids: list[str] = []
+    primary = str(meta.get("repo_id") or "").strip()
+    if primary:
+        repo_ids.append(primary)
+    for alt in meta.get("alt_repo_ids") or []:
+        alt_id = str(alt or "").strip()
+        if alt_id and alt_id not in repo_ids:
+            repo_ids.append(alt_id)
+    if not repo_ids:
+        raise RuntimeError("Profile missing repo_id")
+
+    last_error: Exception | None = None
+    for repo_id in repo_ids:
+        try:
+            hf_download(repo_id, repo_path, target, progress=progress, cancel_event=cancel)
+            return
+        except DownloadCancelled:
+            raise
+        except Exception as e:
+            last_error = e
+    if last_error:
+        raise last_error
+    raise RuntimeError("Hugging Face download failed")
+
+
 def _run_profile_download(job_id: str, profile_id: str) -> None:
     cancel = _job_cancel_event(job_id)
     _update_job(job_id, status="running", progress="preparing")
@@ -256,7 +283,7 @@ def _run_profile_download(job_id: str, profile_id: str) -> None:
             return
 
         _update_job(job_id, progress=f"downloading {filename}")
-        hf_download(repo_id, repo_path, target, progress=_progress_cb(job_id), cancel_event=cancel)
+        _hf_download_profile(meta, target, progress=_progress_cb(job_id), cancel=cancel)
         if not _file_ok(target):
             raise RuntimeError("Download finished but GGUF is missing or too small")
         _update_job(job_id, status="done", ok=True, progress="complete", model_path=str(target))

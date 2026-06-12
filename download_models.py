@@ -668,6 +668,23 @@ def download_url(
         raise RuntimeError(f"Download failed for {target.name}: " + "; ".join(parts))
 
 
+def _normalize_hf_target(target: Path, repo_path: str) -> None:
+    candidates = (
+        target,
+        target.parent / repo_path,
+        target.parent / Path(repo_path).name,
+    )
+    for candidate in candidates:
+        if not candidate.is_file() or not file_ok(candidate):
+            continue
+        if candidate.resolve() == target.resolve():
+            return
+        if target.exists():
+            target.unlink()
+        candidate.rename(target)
+        return
+
+
 def hf_download(
     repo_id: str,
     repo_path: str,
@@ -681,38 +698,65 @@ def hf_download(
         print(f"SKIP exists: {target}")
         return
     _emit_progress(progress, f"downloading {target.name} from Hugging Face")
-    cli = shutil.which("huggingface-cli")
+    errors: list[str] = []
+
+    _check_cancel(cancel_event)
+    try:
+        from huggingface_hub import hf_hub_download
+
+        fetched = hf_hub_download(
+            repo_id=repo_id,
+            filename=repo_path,
+            local_dir=str(target.parent),
+            token=HF_TOKEN or None,
+        )
+        fetched_path = Path(fetched)
+        if fetched_path.is_file() and fetched_path.resolve() != target.resolve():
+            if target.exists():
+                target.unlink()
+            fetched_path.rename(target)
+        _normalize_hf_target(target, repo_path)
+        if file_ok(target):
+            return
+        errors.append("huggingface_hub finished but output file is missing or too small")
+    except DownloadCancelled:
+        raise
+    except Exception as e:
+        errors.append(f"huggingface_hub: {redact_download_secrets(str(e))}")
+
+    cli = shutil.which("hf") or shutil.which("huggingface-cli")
     if cli:
         _check_cancel(cancel_event)
-        cmd = [cli, "download", repo_id, repo_path, "--local-dir", str(target.parent), "--local-dir-use-symlinks", "False"]
+        cmd = [cli, "download", repo_id, repo_path, "--local-dir", str(target.parent)]
         if HF_TOKEN:
             cmd += ["--token", HF_TOKEN]
-        proc = subprocess.Popen(cmd)
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
         if proc_cb:
             proc_cb(proc)
         while proc.poll() is None:
             _check_cancel(cancel_event)
             time.sleep(0.25)
         _check_cancel(cancel_event)
-        if proc.returncode != 0:
-            raise subprocess.CalledProcessError(proc.returncode or 1, cmd)
-        downloaded = target.parent / repo_path
-        flat_downloaded = target.parent / Path(repo_path).name
-        if downloaded.exists() and downloaded != target:
-            downloaded.rename(target)
-        elif flat_downloaded.exists() and flat_downloaded != target:
-            flat_downloaded.rename(target)
-        return
-    from huggingface_hub import hf_hub_download
-    fetched = hf_hub_download(
-        repo_id=repo_id,
-        filename=repo_path,
-        local_dir=str(target.parent),
-        token=HF_TOKEN or None,
+        stdout = (proc.stdout.read() if proc.stdout else "") or ""
+        stderr = (proc.stderr.read() if proc.stderr else "") or ""
+        if proc.returncode == 0:
+            _normalize_hf_target(target, repo_path)
+            if file_ok(target):
+                return
+            errors.append("hf cli finished but output file is missing or too small")
+        else:
+            detail = redact_download_secrets((stderr or stdout).strip()) or f"exit {proc.returncode}"
+            errors.append(f"hf cli: {detail}")
+
+    hint = "Check HF_TOKEN in /workspace/.env, free disk space, and network."
+    raise RuntimeError(
+        f"Hugging Face download failed for {repo_id}/{repo_path}: " + "; ".join(errors) + f" {hint}"
     )
-    fetched_path = Path(fetched)
-    if fetched_path.resolve() != target.resolve() and fetched_path.is_file():
-        fetched_path.rename(target)
 
 
 def download_item(
