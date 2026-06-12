@@ -104,8 +104,11 @@ def build_worker_status() -> dict:
             "llm": {
                 "online": llm_online,
                 "port": llm_status.get("llm_port") or int(os.environ.get("LLM_PORT") or "8080"),
+                "external_port": llm_status.get("external_llm_port"),
                 "url": llm_status.get("llm_url"),
+                "external_url": llm_status.get("external_llm_url"),
                 "openai_base_url": llm_status.get("openai_base_url"),
+                "external_openai_base_url": llm_status.get("external_openai_base_url"),
                 "detail": llm_status.get("detail"),
                 "active_profile": llm_status.get("active_profile") or {},
                 "binary_installed": bool(llama_server_bin()),

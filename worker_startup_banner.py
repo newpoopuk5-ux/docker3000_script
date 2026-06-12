@@ -93,6 +93,19 @@ def muse_urls() -> tuple[str, str]:
     return flask_url, comfy_url
 
 
+def muse_llm_urls() -> dict:
+    host = public_host()
+    llm_internal = int(os.environ.get("LLM_PORT") or "8080")
+    llm_external = mapped_port(llm_internal)
+    base = f"http://{host}:{llm_external}"
+    return {
+        "external_llm_port": llm_external,
+        "external_llm_url": base,
+        "external_openai_base_url": f"{base}/v1",
+        "llm_internal_port": llm_internal,
+    }
+
+
 def _probe(url: str, path: str, timeout: float = 2.5) -> tuple[bool, str]:
     target = f"{url.rstrip('/')}{path}"
     try:
@@ -162,9 +175,11 @@ def gather_checks(probe_services: bool = False) -> list[tuple[bool | None, str, 
 def format_banner(probe_services: bool = False, title: str = "Muse worker startup summary") -> str:
     load_etc_environment()
     flask_url, comfy_url = muse_urls()
+    llm_urls = muse_llm_urls()
     host = public_host()
     flask_internal = int(os.environ.get("FLASK_PORT") or os.environ.get("UI_PORT") or "3000")
     comfy_internal = int(os.environ.get("COMFY_PORT") or "8188")
+    llm_internal = int(llm_urls.get("llm_internal_port") or os.environ.get("LLM_PORT") or "8080")
     port_warn = vast_port_mapping_warning(flask_internal, comfy_internal)
     lines = [
         "",
@@ -183,9 +198,10 @@ def format_banner(probe_services: bool = False, title: str = "Muse worker startu
         "-" * 72,
         f"Flask  {flask_url}",
         f"Comfy  {comfy_url}",
+        f"LLM    {llm_urls['external_openai_base_url']}",
         "-" * 72,
         f"Host detected: {host}",
-        f"Internal ports: Flask {flask_internal} / Comfy {comfy_internal}",
+        f"Internal ports: Flask {flask_internal} / Comfy {comfy_internal} / LLM {llm_internal}",
         *( [port_warn] if port_warn else [] ),
         "If copy-paste fails, add http:// before host:port in Muse.",
         "",

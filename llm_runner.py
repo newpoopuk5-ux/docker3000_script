@@ -13,6 +13,7 @@ from typing import Optional
 from llm_install import llama_server_bin, volume_root
 from llm_manager import llm_models_dir, resolve_profile
 from worker_bootstrap import ensure_llama_runtime
+from worker_startup_banner import muse_llm_urls
 
 
 def llm_port() -> int:
@@ -113,11 +114,15 @@ def llm_health() -> dict:
         except Exception as e:
             detail = str(e)
     binary = llama_server_bin()
+    external = muse_llm_urls()
     return {
         "llm_ok": ok,
         "llm_url": base,
         "llm_port": port,
         "openai_base_url": f"{base}/v1",
+        "external_llm_port": external.get("external_llm_port"),
+        "external_llm_url": external.get("external_llm_url"),
+        "external_openai_base_url": external.get("external_openai_base_url"),
         "detail": detail,
         "pid": _read_pid(),
         "models_dir": str(llm_models_dir()),
