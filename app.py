@@ -17,7 +17,16 @@ from config import APP_PASSWORD, CHECKPOINT_DIR, DIFFUSION_MODEL_DIR, IMAGE_SUFF
 from metadata import cached_image_info, image_records, list_files, read_favorites, safe_output_path, write_favorites
 from workflow_utils import build_workflow
 from worker_status import build_worker_status
-from worker_control import control_supported, set_mode_comfy, set_mode_none
+from worker_control import control_supported, set_mode_comfy, set_mode_llm, set_mode_none
+from llm_manager import (
+    cancel_download as llm_cancel_download,
+    delete_model as llm_delete_model,
+    list_downloads as llm_list_downloads,
+    load_profiles,
+    start_profile_download,
+    start_url_download,
+)
+from llm_runner import llm_health, stop_llm, test_llm
 from model_manager import (
     cancel_download,
     delete_model,
@@ -197,6 +206,80 @@ def mode_comfy():
 @app.post("/api/mode/none")
 def mode_none():
     return jsonify(set_mode_none())
+
+
+@app.post("/api/mode/llm")
+def mode_llm():
+    body = request.json or {}
+    profile_id = (body.get("profile_id") or body.get("id") or "").strip() or None
+    custom_filename = (body.get("custom_filename") or body.get("filename") or "").strip() or None
+    return jsonify(set_mode_llm(profile_id=profile_id, custom_filename=custom_filename))
+
+
+@app.get("/api/llm/status")
+def llm_status():
+    return jsonify({"ok": True, **llm_health()})
+
+
+@app.get("/api/llm/profiles")
+def llm_profiles():
+    return jsonify(load_profiles())
+
+
+@app.get("/api/llm/models")
+def llm_models_alias():
+    return jsonify(load_profiles())
+
+
+@app.post("/api/llm/download")
+def llm_download():
+    body = request.json or {}
+    url = (body.get("url") or "").strip()
+    profile_id = (body.get("profile_id") or body.get("id") or "").strip()
+    if url:
+        result = start_url_download(url)
+    elif profile_id:
+        result = start_profile_download(profile_id)
+    else:
+        return jsonify({"ok": False, "error": "profile_id or url is required"}), 400
+    status = 200 if result.get("ok") else 400
+    return jsonify(result), status
+
+
+@app.post("/api/llm/models/download")
+def llm_models_download_alias():
+    return llm_download()
+
+
+@app.get("/api/llm/downloads")
+def llm_downloads():
+    return jsonify(llm_list_downloads())
+
+
+@app.post("/api/llm/downloads/<job_id>/cancel")
+def llm_download_cancel(job_id):
+    result = llm_cancel_download(job_id)
+    status = 200 if result.get("ok") else 400
+    return jsonify(result), status
+
+
+@app.post("/api/llm/stop")
+def llm_stop():
+    from worker_control import stop_llm_mode
+
+    return jsonify(stop_llm_mode())
+
+
+@app.post("/api/llm/test")
+def llm_test():
+    return jsonify(test_llm())
+
+
+@app.delete("/api/llm/models/<profile_id>")
+def llm_delete(profile_id):
+    result = llm_delete_model(profile_id)
+    status = 200 if result.get("ok") else 400
+    return jsonify(result), status
 
 
 @app.get("/api/models")

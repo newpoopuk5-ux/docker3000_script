@@ -48,6 +48,8 @@ else
   echo "ComfyUI already exists: $COMFY_ROOT"
 fi
 
+mkdir -p "$VOLUME_ROOT/models/llm"
+
 mkdir -p \
   "$COMFY_ROOT/models/checkpoints" \
   "$COMFY_ROOT/models/loras" \
