@@ -9,8 +9,6 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from download_models import DownloadCancelled, download_url, hf_download, redact_download_secrets
-from llm_install import ensure_llama_installed
-
 LLM_MODELS_JSON = Path(os.environ.get("LLM_MODELS_JSON", "llm_models.json"))
 
 _DOWNLOAD_LOCK = threading.Lock()
@@ -234,11 +232,6 @@ def _run_profile_download(job_id: str, profile_id: str) -> None:
     cancel = _job_cancel_event(job_id)
     _update_job(job_id, status="running", progress="preparing")
     try:
-        install = ensure_llama_installed()
-        if not install.get("ok"):
-            _update_job(job_id, status="failed", ok=False, error=install.get("error") or "llama.cpp install failed")
-            return
-
         cfg = _catalog_raw()
         meta = (cfg.get("profiles") or {}).get(profile_id)
         if not meta:
@@ -279,11 +272,6 @@ def _run_url_download(job_id: str, url: str) -> None:
     cancel = _job_cancel_event(job_id)
     _update_job(job_id, status="running", progress="preparing")
     try:
-        install = ensure_llama_installed()
-        if not install.get("ok"):
-            _update_job(job_id, status="failed", ok=False, error=install.get("error") or "llama.cpp install failed")
-            return
-
         custom_dir = llm_models_dir() / "custom"
         custom_dir.mkdir(parents=True, exist_ok=True)
         resolved = _hf_repo_and_file(url)

@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
 
 RAW_ARG="${1:-${MODEL_SET:-basic}}"
 INSTALL_ONLY=0
@@ -80,6 +81,17 @@ if [ -f "$GGUF_NODE_DIR/requirements.txt" ]; then
   pip install -r "$GGUF_NODE_DIR/requirements.txt"
 fi
 
+echo "=== llama.cpp (llama-server) ==="
+if command -v nvidia-smi >/dev/null 2>&1; then
+  if bash "$SCRIPT_DIR/install-llama-cpp.sh"; then
+    echo "llama-server ready under $VOLUME_ROOT/llama.cpp"
+  else
+    echo "WARN: llama.cpp build failed — Start LLM in Muse will retry the build."
+  fi
+else
+  echo "WARN: nvidia-smi not found — skipping llama.cpp build (GPU worker required for LLM)."
+fi
+
 if [ "$INSTALL_ONLY" = "1" ] || [ -z "$SET_NAMES" ]; then
   echo "Skipping model downloads (install-only / MODEL_SET=none)"
 else
@@ -93,8 +105,10 @@ else
 fi
 
 echo "Bootstrap complete."
-echo "Start ComfyUI:"
+echo "Start ComfyUI (Muse: Start Comfy mode):"
 echo "cd \"$COMFY_ROOT\" && python main.py --listen 0.0.0.0 --port 8188"
+echo "Start LLM (Muse: Start LLM after GGUF download):"
+echo "$VOLUME_ROOT/llama.cpp/build/bin/llama-server -m <gguf> --host 0.0.0.0 --port 8080"
 echo ""
 echo "Then run the app container:"
 echo "export VOLUME_ROOT=\"$VOLUME_ROOT\""

@@ -62,7 +62,11 @@ def run_install_only(timeout_sec: int = 3600) -> dict:
 
     if not comfy_installed():
         return {"ok": False, "error": f"ComfyUI still missing at {comfy_root()}"}
-    return {"ok": True, "comfy_root": str(comfy_root())}
+    return {
+        "ok": True,
+        "comfy_root": str(comfy_root()),
+        "llama_installed": llama_installed(),
+    }
 
 
 def ensure_comfy_installed() -> dict:
@@ -72,3 +76,30 @@ def ensure_comfy_installed() -> dict:
     if result.get("ok"):
         result["prepared"] = True
     return result
+
+
+def llama_installed() -> bool:
+    from llm_install import llama_server_bin
+
+    return bool(llama_server_bin())
+
+
+def ensure_llama_runtime(timeout_sec: int = 7200) -> dict:
+    from llm_install import ensure_llama_installed, llama_server_bin
+
+    binary = llama_server_bin()
+    if binary:
+        return {"ok": True, "already_installed": True, "binary": str(binary)}
+
+    result = ensure_llama_installed()
+    if result.get("ok"):
+        return result
+
+    prep = run_install_only(timeout_sec=timeout_sec)
+    binary = llama_server_bin()
+    if binary:
+        return {"ok": True, "prepared": True, "binary": str(binary), "bootstrap": prep}
+
+    if not result.get("ok"):
+        return result
+    return {"ok": False, "error": "llama-server binary missing after bootstrap"}

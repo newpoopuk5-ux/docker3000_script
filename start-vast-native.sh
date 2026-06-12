@@ -70,7 +70,7 @@ source "$VENV_ACTIVATE"
 python -m pip install --upgrade pip
 pip install -r "$SCRIPT_DIR/requirements.txt"
 
-echo "Running bootstrap.sh --install-only (ComfyUI folders, no model downloads)"
+echo "Running bootstrap.sh --install-only (ComfyUI + llama.cpp build, no model downloads)"
 bash "$SCRIPT_DIR/bootstrap.sh" --install-only
 
 if [ "$AUTOSTART_MODE" = "comfy" ]; then

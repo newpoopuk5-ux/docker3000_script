@@ -10,8 +10,9 @@ import urllib.request
 from pathlib import Path
 from typing import Optional
 
-from llm_install import ensure_llama_installed, llama_server_bin, volume_root
+from llm_install import llama_server_bin, volume_root
 from llm_manager import llm_models_dir, resolve_profile
+from worker_bootstrap import ensure_llama_runtime
 
 
 def llm_port() -> int:
@@ -147,7 +148,7 @@ def start_llm(profile_id: str, custom_filename: str | None = None) -> dict:
     if llm_health().get("llm_ok"):
         return {"ok": True, "already_running": True, **llm_health()}
 
-    install = ensure_llama_installed()
+    install = ensure_llama_runtime()
     if not install.get("ok"):
         return {"ok": False, "error": install.get("error") or "llama.cpp is not installed", "install": install}
 
