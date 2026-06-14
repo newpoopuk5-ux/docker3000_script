@@ -5,7 +5,9 @@
     "steps": 28,
     "cfg": 6.5,
     "width": 832,
-    "height": 1216
+    "height": 1216,
+    "positive": "",
+    "negative": "worst quality, low quality, score_1, score_2, score_3, artist name"
   },
   "realistic_quality": {
     "sampler_name": "dpmpp_2m_sde_gpu",
@@ -13,7 +15,9 @@
     "steps": 30,
     "cfg": 5.5,
     "width": 1024,
-    "height": 1024
+    "height": 1024,
+    "positive": "",
+    "negative": "worst quality, low quality, score_1, score_2, score_3, artist name"
   },
   "anime_clean": {
     "sampler_name": "dpmpp_2m",
@@ -22,7 +26,9 @@
     "cfg": 6.5,
     "width": 832,
     "height": 1216,
-    "model": "waiIllustriousSDXL_v17.safetensors"
+    "model": "waiIllustriousSDXL_v17.safetensors",
+    "positive": "",
+    "negative": "worst quality, low quality, score_1, score_2, score_3, artist name"
   },
   "miaomiaoHarem_anima12": {
     "sampler_name": "euler",
