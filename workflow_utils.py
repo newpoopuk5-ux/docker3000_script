@@ -476,7 +476,51 @@ def build_sdxl_workflow(data):
         vae_decode_id = require_node(workflow, node_map, "vae_decode")
         workflow[save_id]["inputs"]["images"] = [vae_decode_id, 0]
 
-    return apply_loras(workflow, node_map, normalize_loras(data))
+    custom_vae = data.get("sdxl_vae", "").strip()
+    if custom_vae and custom_vae.lower() not in ("default", "none"):
+        vae_decode_id = require_node(workflow, node_map, "vae_decode")
+        new_vae_id = add_node(workflow, "VAELoader", {"vae_name": custom_vae}, "Custom VAE")
+        workflow[vae_decode_id]["inputs"]["vae"] = [new_vae_id, 0]
+
+    custom_te = data.get("sdxl_text_encoder", "").strip()
+    custom_clip_id = None
+    if custom_te and custom_te.lower() not in ("default", "none"):
+        custom_clip_id = add_node(workflow, "CLIPLoader", {"clip_name": custom_te, "type": "stable_diffusion"}, "Custom Text Encoder")
+        workflow[positive_id]["inputs"]["clip"] = [custom_clip_id, 0]
+        workflow[negative_id]["inputs"]["clip"] = [custom_clip_id, 0]
+
+    loras = normalize_loras(data)
+    if loras:
+        # If custom CLIP, LoRAs must chain from it.
+        # We temporarily modify apply_loras behavior or just handle it here.
+        # Since apply_loras relies on checkpoint_id for clip, we can inject logic.
+        model_link = [checkpoint_id, 0]
+        clip_link = [custom_clip_id, 0] if custom_clip_id else [checkpoint_id, 1]
+        
+        used = {int(k) for k in workflow.keys() if str(k).isdigit()}
+        next_id = max(used) + 1 if used else 100
+        for index, lora in enumerate(loras, start=1):
+            lora_id = str(next_id)
+            next_id += 1
+            workflow[lora_id] = {
+                "inputs": {
+                    "lora_name": lora["name"],
+                    "strength_model": float(lora["strength_model"]),
+                    "strength_clip": float(lora["strength_clip"]),
+                    "model": model_link,
+                    "clip": clip_link,
+                },
+                "class_type": "LoraLoader",
+                "_meta": {"title": f"Load LoRA {index}"},
+            }
+            model_link = [lora_id, 0]
+            clip_link = [lora_id, 1]
+
+        workflow[positive_id]["inputs"]["clip"] = clip_link
+        workflow[negative_id]["inputs"]["clip"] = clip_link
+        workflow[sampler_id]["inputs"]["model"] = model_link
+        
+    return workflow
 
 
 def build_workflow(data):
