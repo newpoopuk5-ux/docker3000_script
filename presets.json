@@ -36,8 +36,8 @@
     "sdxl_vae": "qwen_image_vae.safetensors"
   },
   "Anima Base": {
-    "sampler_name": "er_sde",
-    "scheduler": "simple",
+    "sampler_name": "euler",
+    "scheduler": "normal",
     "steps": 30,
     "cfg": 4.0,
     "width": 1024,
