@@ -228,9 +228,9 @@ def main() -> None:
     parser.add_argument("--rebuild-all", action="store_true", help="Run full build_registry instead")
     args = parser.parse_args()
     if args.rebuild_all:
-        index_payload, entries_payload = rebuild_all(refresh=False)
+        index_payload, entries_payload = rebuild_all(refresh=False, merge_existing=True)
         write_registry(index_payload, entries_payload)
-        print(f"rebuilt registry: {len(index_payload['entries'])} entries")
+        print(f"rebuilt registry (merge existing versions): {len(index_payload['entries'])} entries")
         return
     ref = append_from_url(
         args.url,

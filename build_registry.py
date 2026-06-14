@@ -185,6 +185,119 @@ def _version_file_row(
 MERGE_MULTI_FILE_MODEL_IDS = {934764}
 ANIMA_BUNDLE_REF = "bundle:anima"
 
+LEGACY_HIDDEN_REF_RE = re.compile(r"^civitai:934764:f|^hf:circlestone-labsanima:")
+
+
+def _is_legacy_hidden_ref(ref: str) -> bool:
+    return bool(LEGACY_HIDDEN_REF_RE.match(ref or ""))
+
+
+def _version_sort_key(version: dict) -> tuple[int, str]:
+    vid = version.get("version_id")
+    if isinstance(vid, int):
+        return (vid, "")
+    raw = str(vid or "")
+    if raw.isdigit():
+        return (int(raw), "")
+    return (0, raw)
+
+
+def merge_entry_versions(new_entry: dict, existing_entry: dict | None) -> dict:
+    """Keep all Civitai versions from existing JSON; overlay new rows (bundle multi-file wins on same version_id)."""
+    if not existing_entry:
+        return new_entry
+    if new_entry.get("ref") == ANIMA_BUNDLE_REF:
+        return new_entry
+
+    existing_versions = list(existing_entry.get("versions") or [])
+    new_versions = list(new_entry.get("versions") or [])
+    if not existing_versions:
+        return new_entry
+    if not new_versions:
+        out = dict(new_entry)
+        out["versions"] = existing_versions
+        return out
+
+    by_vid: dict[str, dict] = {}
+    for row in existing_versions:
+        by_vid[str(row.get("version_id"))] = row
+    for row in new_versions:
+        vid = str(row.get("version_id"))
+        prev = by_vid.get(vid)
+        if not prev:
+            by_vid[vid] = row
+            continue
+        n_files = len(row.get("files") or [])
+        p_files = len(prev.get("files") or [])
+        if n_files > p_files:
+            by_vid[vid] = row
+        elif p_files > n_files:
+            by_vid[vid] = prev
+        else:
+            by_vid[vid] = row
+
+    merged_versions = sorted(by_vid.values(), key=_version_sort_key, reverse=True)
+    out = dict(new_entry)
+    out["versions"] = merged_versions
+
+    default_vid = new_entry.get("default_version_id")
+    if default_vid is not None and any(str(v.get("version_id")) == str(default_vid) for v in merged_versions):
+        out["default_version_id"] = default_vid
+    else:
+        out["default_version_id"] = existing_entry.get("default_version_id") or default_vid
+
+    return out
+
+
+def _merge_with_existing_registry(
+    index_entries: dict[str, dict],
+    by_ref: dict[str, dict],
+) -> None:
+    from model_registry import load_entries, load_index
+
+    existing_index = load_index()
+    existing_entries = load_entries()
+    if not existing_index.get("ok") or not existing_entries.get("ok"):
+        return
+
+    existing_by_ref = existing_entries.get("by_ref") or {}
+    existing_index_entries = existing_index.get("entries") or {}
+
+    merged_refs = 0
+    kept_versions = 0
+    orphan_refs = 0
+
+    for ref, new_entry in list(by_ref.items()):
+        existing_entry = existing_by_ref.get(ref)
+        if not existing_entry:
+            continue
+        before = len(existing_entry.get("versions") or [])
+        merged = merge_entry_versions(new_entry, existing_entry)
+        after = len(merged.get("versions") or [])
+        if after > len(new_entry.get("versions") or []):
+            kept_versions += after - len(new_entry.get("versions") or [])
+        by_ref[ref] = merged
+        merged_refs += 1
+        summary = dict(index_entries.get(ref) or {})
+        summary["version_count"] = after
+        if merged.get("default_version_id") is not None:
+            summary["default_version_id"] = merged["default_version_id"]
+        index_entries[ref] = summary
+
+    for ref, existing_entry in existing_by_ref.items():
+        if ref in by_ref or _is_legacy_hidden_ref(ref):
+            continue
+        by_ref[ref] = existing_entry
+        if ref in existing_index_entries:
+            index_entries[ref] = dict(existing_index_entries[ref])
+        orphan_refs += 1
+
+    if merged_refs or orphan_refs or kept_versions:
+        print(
+            f"merge: {merged_refs} refs merged with existing JSON "
+            f"(+{kept_versions} preserved versions), {orphan_refs} append-only refs kept"
+        )
+
 GROUP_TO_FOLDER = {
     "checkpoints": "checkpoints",
     "loras": "loras",
@@ -505,7 +618,7 @@ def _scan_hf_sets(cfg: dict) -> list[dict]:
     return rows
 
 
-def build(*, refresh: bool = False) -> tuple[dict, dict]:
+def build(*, refresh: bool = False, merge_existing: bool = True) -> tuple[dict, dict]:
     roots = json.loads(ROOTS_JSON.read_text(encoding="utf-8"))
     cfg = json.loads(MODELS_JSON.read_text(encoding="utf-8")) if MODELS_JSON.is_file() else {"sets": {}}
 
@@ -737,6 +850,9 @@ def build(*, refresh: bool = False) -> tuple[dict, dict]:
             "refs": recommended_refs,
         }
 
+    if merge_existing and not refresh:
+        _merge_with_existing_registry(index_entries, by_ref)
+
     index_payload = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -768,8 +884,16 @@ def main() -> None:
         action="store_true",
         help="Fetch Civitai API for sizes, previews, and extra versions (slow, PC only)",
     )
+    parser.add_argument(
+        "--no-merge",
+        action="store_true",
+        help="Rewrite entries from roots only — drops extra Civitai versions and append-only refs",
+    )
     args = parser.parse_args()
-    index_payload, entries_payload = build(refresh=bool(args.refresh))
+    index_payload, entries_payload = build(
+        refresh=bool(args.refresh),
+        merge_existing=not bool(args.no_merge),
+    )
     write_registry(index_payload, entries_payload)
     print(
         f"wrote {INDEX_JSON.relative_to(REGISTRY_DIR.parent)}: "

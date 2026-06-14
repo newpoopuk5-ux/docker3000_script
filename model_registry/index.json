@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-14T15:14:26.239952+00:00",
+  "generated_at": "2026-06-14T15:39:11.646886+00:00",
   "source_roots": "civitai_model_roots.json",
   "recommended_category": "recommended",
   "kinds": {
@@ -151,7 +151,7 @@
       "default_version_id": 2288934,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 3,
       "tags": [
         "checkpoint",
         "amanatsu",
@@ -170,7 +170,7 @@
       "default_version_id": 1613008,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 2,
+      "version_count": 11,
       "tags": [
         "checkpoint",
         "animij"
@@ -188,7 +188,7 @@
       "default_version_id": 1081768,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 3,
       "tags": [
         "checkpoint",
         "lust"
@@ -206,7 +206,7 @@
       "default_version_id": 2833750,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 9,
       "tags": [
         "checkpoint",
         "cyberrealistic",
@@ -227,7 +227,7 @@
       "default_version_id": 106922,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 6,
       "tags": [
         "checkpoint",
         "hassaku",
@@ -246,7 +246,7 @@
       "default_version_id": 2615702,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 30,
       "tags": [
         "checkpoint",
         "hassaku",
@@ -265,7 +265,7 @@
       "default_version_id": 575495,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 6,
       "tags": [
         "checkpoint",
         "hassaku",
@@ -302,7 +302,7 @@
       "default_version_id": 782002,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 17,
       "tags": [
         "checkpoint",
         "juggernaut"
@@ -320,7 +320,7 @@
       "default_version_id": 2808677,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 15,
       "tags": [
         "checkpoint",
         "lustify!",
@@ -341,7 +341,7 @@
       "default_version_id": 3020110,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 24,
       "tags": [
         "checkpoint",
         "miaomiao",
@@ -361,7 +361,7 @@
       "default_version_id": 2837020,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 30,
       "tags": [
         "checkpoint",
         "nova",
@@ -380,7 +380,7 @@
       "default_version_id": 290640,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 3,
       "tags": [
         "checkpoint",
         "pony",
@@ -399,7 +399,7 @@
       "default_version_id": 1392706,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 13,
       "tags": [
         "checkpoint",
         "ponynai3"
@@ -435,7 +435,7 @@
       "default_version_id": 1774915,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 2,
+      "version_count": 3,
       "tags": [
         "checkpoint"
       ],
@@ -452,7 +452,7 @@
       "default_version_id": 952743,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 6,
       "tags": [
         "checkpoint",
         "hentai",
@@ -471,7 +471,7 @@
       "default_version_id": 1767402,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 17,
       "tags": [
         "checkpoint",
         "ponyxl"
@@ -489,7 +489,7 @@
       "default_version_id": 2883731,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 17,
       "tags": [
         "checkpoint",
         "illustrious",
@@ -508,7 +508,7 @@
       "default_version_id": 2786084,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 10,
       "tags": [
         "checkpoint",
         "janku",
@@ -531,7 +531,7 @@
       "default_version_id": 1260659,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 3,
       "tags": [
         "lora",
         "armbinder"
@@ -569,7 +569,7 @@
       "default_version_id": 1857241,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 5,
       "tags": [
         "lora",
         "quad",
@@ -589,7 +589,7 @@
       "default_version_id": 1270573,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 2,
       "tags": [
         "lora",
         "reverse",
@@ -648,7 +648,7 @@
       "default_version_id": 1229565,
       "default_base_model": "",
       "preview_remote_url": null,
-      "version_count": 1,
+      "version_count": 4,
       "tags": [
         "lora",
         "マンコ拡張/pussy",

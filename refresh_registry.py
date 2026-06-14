@@ -17,6 +17,19 @@ from model_registry import load_entries, load_index, write_registry_files
 
 LOOKUP_DELAY_SEC = 0.25
 LOOKUP_RETRIES = 4
+BATCH_PAUSE_SEC = 0.5
+
+
+def _progress_line(done: int, total: int, ref: str, label: str, version_count: int) -> str:
+    pct = int(round((done / total) * 100)) if total else 100
+    name = (label or ref).strip()
+    if len(name) > 48:
+        name = f"{name[:46]}…"
+    return f"[{done:3d}/{total}  {pct:3d}%] {ref}  {name}  → {version_count} versions"
+
+
+def _emit(line: str) -> None:
+    print(line, flush=True)
 
 
 def _get_json(url: str) -> dict:
@@ -72,7 +85,7 @@ def refs_for_all_civitai() -> list[str]:
     return refs
 
 
-def refresh_ref(ref: str) -> None:
+def refresh_ref(ref: str, *, quiet: bool = False) -> int:
     ref = ref.strip()
     index = load_index()
     entries = load_entries()
@@ -89,6 +102,8 @@ def refresh_ref(ref: str) -> None:
     model_id = entry.get("model_id")
     if not model_id:
         raise SystemExit("Entry has no model_id")
+
+    label_before = str(entry.get("label") or ref)
 
     full = _get_json(f"https://civitai.com/api/v1/models/{int(model_id)}")
     time.sleep(LOOKUP_DELAY_SEC)
@@ -160,7 +175,68 @@ def refresh_ref(ref: str) -> None:
     entries["generated_at"] = now
     entries["by_ref"] = by_ref
     write_registry_files(index, entries)
-    print(f"refreshed {ref}: {len(version_rows)} versions")
+
+    if quiet:
+        return len(version_rows)
+
+    _emit(f"refreshed {ref}: {len(version_rows)} versions ({label_before})")
+    return len(version_rows)
+
+
+def _refresh_batch(refs: list[str], *, batch_label: str) -> None:
+    total = len(refs)
+    if total == 0:
+        raise SystemExit(f"No entries for {batch_label}")
+
+    _emit(f"Registry refresh — {total} Civitai model(s) [{batch_label}]")
+    _emit("Progress saves after each model (safe to Ctrl+C between entries).")
+    _emit("")
+
+    done = 0
+    version_total = 0
+    failed: list[tuple[str, str]] = []
+    started = time.time()
+
+    for ref in refs:
+        index = load_index()
+        summary = (index.get("entries") or {}).get(ref) or {}
+        label = str(summary.get("label") or ref)
+        try:
+            count = refresh_ref(ref, quiet=True)
+            done += 1
+            version_total += count
+            _emit(_progress_line(done, total, ref, label, count))
+        except SystemExit as e:
+            failed.append((ref, str(e)))
+            done += 1
+            _emit(f"[{done:3d}/{total}  FAIL] {ref}  {label}  → {e}")
+        except Exception as e:
+            failed.append((ref, str(e)))
+            done += 1
+            _emit(f"[{done:3d}/{total}  FAIL] {ref}  {label}  → {e}")
+
+        if done < total:
+            time.sleep(BATCH_PAUSE_SEC)
+
+    elapsed = time.time() - started
+    mins, secs = divmod(int(elapsed), 60)
+    _emit("")
+    if failed:
+        _emit(
+            f"Finished with errors: {done - len(failed)}/{total} ok "
+            f"({int(round(((done - len(failed)) / total) * 100))}%), "
+            f"{version_total} versions, {mins}m {secs}s"
+        )
+        for ref, err in failed:
+            _emit(f"  - {ref}: {err}")
+        raise SystemExit(1)
+
+    _emit(
+        f"Done: {done}/{total} (100%), {version_total} versions total, "
+        f"{mins}m {secs}s"
+    )
+    _emit("")
+    _emit("Next: python build_registry.py   (merge index + bundles; keeps these versions)")
 
 
 def main() -> None:
@@ -172,24 +248,12 @@ def main() -> None:
 
     if args.all:
         refs = refs_for_all_civitai()
-        if not refs:
-            raise SystemExit("No Civitai entries in registry")
-        print(f"refreshing {len(refs)} Civitai entries…")
-        for ref in refs:
-            refresh_ref(ref)
-            time.sleep(0.5)
-        print(f"done: {len(refs)} entries")
+        _refresh_batch(refs, batch_label="--all")
         return
 
     if args.kind:
         refs = refs_for_kind(args.kind.strip())
-        if not refs:
-            raise SystemExit(f"No entries with kind={args.kind!r}")
-        print(f"refreshing {len(refs)} {args.kind} entries…")
-        for ref in refs:
-            refresh_ref(ref)
-            time.sleep(0.5)
-        print(f"done: {len(refs)} entries")
+        _refresh_batch(refs, batch_label=f"kind={args.kind.strip()}")
         return
 
     if not args.ref:
