@@ -169,6 +169,23 @@ def parse_comfy_metadata(meta: dict):
                 result["width"] = inputs.get("width", result["width"])
                 result["height"] = inputs.get("height", result["height"])
 
+            if class_type == "VAELoader":
+                result["vae"] = inputs.get("vae_name", "")
+
+            if class_type == "CLIPLoader":
+                clip_name = inputs.get("clip_name", "")
+                if "t5" in clip_name.lower():
+                    result["t5xxl"] = clip_name
+                else:
+                    result["clip_l"] = clip_name
+
+            if class_type == "DualCLIPLoader":
+                result["clip_l"] = inputs.get("clip_name1", "")
+                result["t5xxl"] = inputs.get("clip_name2", "")
+                
+            if class_type == "UNETLoader":
+                result["model"] = inputs.get("unet_name", result["model"])
+
             if class_type == "CLIPTextEncode":
                 txt = inputs.get("text", "")
                 is_positive = str(node_id) == positive_node_id or "positive" in title
