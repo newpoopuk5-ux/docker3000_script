@@ -5,9 +5,7 @@
     "steps": 28,
     "cfg": 6.5,
     "width": 832,
-    "height": 1216,
-    "positive": "",
-    "negative": "worst quality, low quality, score_1, score_2, score_3, artist name"
+    "height": 1216
   },
   "realistic_quality": {
     "sampler_name": "dpmpp_2m_sde_gpu",
@@ -15,9 +13,7 @@
     "steps": 30,
     "cfg": 5.5,
     "width": 1024,
-    "height": 1024,
-    "positive": "",
-    "negative": "worst quality, low quality, score_1, score_2, score_3, artist name"
+    "height": 1024
   },
   "anime_clean": {
     "sampler_name": "dpmpp_2m",
@@ -26,9 +22,7 @@
     "cfg": 6.5,
     "width": 832,
     "height": 1216,
-    "model": "waiIllustriousSDXL_v17.safetensors",
-    "positive": "",
-    "negative": "lowres, blurry, deformed, bad anatomy, extra limbs, fused fingers, text, watermark, low quality, blue skin, cyan skin, red skin, unnatural skin tone"
+    "model": "waiIllustriousSDXL_v17.safetensors"
   },
   "miaomiaoHarem_anima12": {
     "sampler_name": "euler",
@@ -37,8 +31,6 @@
     "cfg": 5.5,
     "width": 920,
     "height": 1536,
-    "positive": "masterpiece, best quality, score_7, score_9,sensitive,very aesthetic, ultra detailed,pale skin,fair skin,explicit,high contrast,",
-    "negative": "worst quality,low quality,score_1,score_2,score_3,artist name,simple background,lowres,(bad),text,error,fewer,extra,missing,worst quality,jpeg artifacts,low quality,watermark,unfinished,displeasing,oldest,early,signature,artistic error,username,scan,[abstract],english text,shiny hair,extra toes,",
     "sdxl_te": "miaomiaoHarem_anima12_txt.safetensors",
     "sdxl_vae": "qwen_image_vae.safetensors",
     "model": "miaomiaoHarem_anima12.safetensors"
@@ -50,8 +42,6 @@
     "cfg": 4.0,
     "width": 1024,
     "height": 1024,
-    "positive": "masterpiece, best quality, score_7 ",
-    "negative": "worst quality, low quality, score_1, score_2, score_3, artist name",
     "sdxl_te": "qwen_3_06b_base.safetensors",
     "sdxl_vae": "qwen_image_vae.safetensors",
     "model": "anima-base-v1.0.safetensors"
