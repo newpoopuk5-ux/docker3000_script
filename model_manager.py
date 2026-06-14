@@ -18,11 +18,21 @@ from config import (
 )
 from download_models import (
     TARGET_DIRS,
+    CIVITAI_PREVIEW_LIMIT,
     DownloadCancelled,
     build_item_from_url,
+    civitai_lookup,
+    civitai_preview_cache_ready,
+    download_civitai_previews_to_cache,
     download_item,
+    extract_civitai_version_id,
+    fallback_cached_preview_filename,
     preview_civitai_url,
+    preview_civitai_version,
+    primary_cached_preview_filename,
     redact_download_secrets,
+    _resolve_preview_file,
+    CIVITAI_PRIMARY_PREVIEW_SLOT,
 )
 from metadata import list_files
 
@@ -73,8 +83,20 @@ _DOWNLOAD_LOCK = threading.Lock()
 _DOWNLOAD_JOBS: dict[str, dict] = {}
 _JOB_CANCEL: dict[str, threading.Event] = {}
 _JOB_PROCS: dict[str, subprocess.Popen | None] = {}
+_PREFETCH_LOCK = threading.Lock()
+_PREFETCH_RUNNING = False
+_PREFETCH_STATS: dict = {
+    "total": 0,
+    "cached": 0,
+    "pending": 0,
+    "fetched": 0,
+    "failed": 0,
+    "finished": True,
+}
+CIVITAI_PREFETCH_BATCH_SIZE = max(1, min(100, int(os.environ.get("CIVITAI_PREFETCH_BATCH_SIZE", "50") or 50)))
+CIVITAI_PREFETCH_BATCH_DELAY_SEC = max(0.0, float(os.environ.get("CIVITAI_PREFETCH_BATCH_DELAY_SEC", "0") or 0))
 
-DEFAULT_CATALOG_SET = "basic_no_flux"
+DEFAULT_CATALOG_SET = "anime_starter"
 
 
 def is_flux_set(name: str) -> bool:
@@ -113,7 +135,72 @@ def _install_base_for_folder_key(folder_key: str):
     return ALLOWED_DELETE_DIRS.get(delete_key)
 
 
-def _installed_entries() -> list[dict]:
+def model_adjacent_preview_path(folder_key: str, model_name: str) -> Path | None:
+    base = SCAN_DIRS.get(folder_key) or ALLOWED_DELETE_DIRS.get(folder_key)
+    if not base or not model_name:
+        return None
+    target = base / model_name
+    if not target.is_file():
+        return None
+    preview_dir = target.parent / f"{target.stem}.previews"
+    return _resolve_preview_file(preview_dir, CIVITAI_PRIMARY_PREVIEW_SLOT, model_name)
+
+
+def _build_filename_civitai_index(cfg: dict) -> dict[str, dict]:
+    index: dict[str, dict] = {}
+    for set_name in (cfg.get("sets") or {}):
+        selected = (cfg.get("sets") or {}).get(set_name) or {}
+        for group_key, folder_key in CATALOG_GROUPS:
+            for item in selected.get(group_key, []) or []:
+                if not isinstance(item, dict):
+                    continue
+                name = _target_name_for_item(folder_key, item)
+                url = (item.get("url") or "").strip()
+                if "civitai." not in url:
+                    continue
+                version_id = extract_civitai_version_id(url)
+                if not version_id:
+                    continue
+                vid = int(version_id)
+                primary = primary_cached_preview_filename(vid)
+                fallback = fallback_cached_preview_filename(vid)
+                existing = index.get(name)
+                if existing and existing.get("preview_thumb_file") and not primary:
+                    continue
+                index[name] = {
+                    "civitai_version_id": vid,
+                    "preview_thumb_file": primary,
+                    "preview_fallback_file": fallback,
+                    "url": url,
+                }
+    return index
+
+
+def _enrich_installed_entry(entry: dict, civitai_index: dict[str, dict]) -> None:
+    name = entry.get("name") or ""
+    info = civitai_index.get(name)
+    if info:
+        entry["civitai_version_id"] = info.get("civitai_version_id")
+        if info.get("url"):
+            entry["url"] = info["url"]
+        thumb = info.get("preview_thumb_file")
+        vid = info.get("civitai_version_id")
+        if not thumb and vid:
+            thumb = primary_cached_preview_filename(int(vid))
+        if thumb:
+            entry["preview_thumb_file"] = thumb
+        fb = info.get("preview_fallback_file")
+        if not fb and vid:
+            fb = fallback_cached_preview_filename(int(vid))
+        if fb:
+            entry["preview_fallback_file"] = fb
+    if entry.get("preview_thumb_file"):
+        return
+    if model_adjacent_preview_path(entry.get("folder") or "", name):
+        entry["has_local_preview"] = True
+
+
+def _installed_entries(civitai_index: dict[str, dict] | None = None) -> list[dict]:
     entries: list[dict] = []
     for folder_key, base in SCAN_DIRS.items():
         if not base.exists():
@@ -124,14 +211,17 @@ def _installed_entries() -> list[dict]:
             target = base / name
             if not target.is_file():
                 continue
-            entries.append({
+            entry = {
                 "id": f"{folder_key}:{name}",
                 "folder": folder_key,
                 "name": name,
                 "path": name,
                 "size_bytes": target.stat().st_size,
                 "installed": True,
-            })
+            }
+            if civitai_index is not None:
+                _enrich_installed_entry(entry, civitai_index)
+            entries.append(entry)
     return entries
 
 
@@ -169,6 +259,195 @@ def _is_installed(folder_key: str, item: dict) -> bool:
     return False
 
 
+def _apply_preview_fields(row: dict, version_id: int) -> None:
+    row["civitai_version_id"] = int(version_id)
+    primary = primary_cached_preview_filename(int(version_id))
+    fallback = fallback_cached_preview_filename(int(version_id))
+    if primary:
+        row["preview_thumb_file"] = primary
+    if fallback:
+        row["preview_fallback_file"] = fallback
+
+
+def _enrich_catalog_row_preview(row: dict) -> None:
+    url = (row.get("url") or "").strip()
+    if "civitai." not in url:
+        return
+    version_id = extract_civitai_version_id(url)
+    if not version_id:
+        return
+    _apply_preview_fields(row, int(version_id))
+
+
+def collect_civitai_catalog_items(cfg: dict, include_flux: bool = False) -> list[dict]:
+    items: list[dict] = []
+    seen: set[int] = set()
+    for set_name in (cfg.get("sets") or {}):
+        if not include_flux and is_flux_set(set_name):
+            continue
+        selected = (cfg.get("sets") or {}).get(set_name) or {}
+        for group_key, _folder_key in CATALOG_GROUPS:
+            for item in selected.get(group_key, []) or []:
+                if not isinstance(item, dict):
+                    continue
+                url = (item.get("url") or "").strip()
+                if "civitai." not in url:
+                    continue
+                version_id = extract_civitai_version_id(url)
+                if not version_id:
+                    continue
+                vid = int(version_id)
+                if vid in seen:
+                    continue
+                seen.add(vid)
+                items.append({
+                    "url": url,
+                    "version_id": vid,
+                    "name": item.get("name") or f"civitai_{vid}",
+                })
+    return items
+
+
+def civitai_prefetch_status() -> dict:
+    with _PREFETCH_LOCK:
+        return {
+            "ok": True,
+            "running": _PREFETCH_RUNNING,
+            **_PREFETCH_STATS,
+        }
+
+
+def _collect_prefetch_items(include_flux: bool = True) -> list[dict]:
+    try:
+        from model_registry import collect_registry_preview_items
+
+        registry_items = collect_registry_preview_items(include_flux=include_flux)
+        if registry_items:
+            return registry_items
+    except Exception as e:
+        print(f"registry preview prefetch fallback: {e}")
+    if not MODELS_JSON.is_file():
+        return []
+    with open(MODELS_JSON, "r", encoding="utf-8") as f:
+        cfg = json.load(f)
+    return collect_civitai_catalog_items(cfg, include_flux=include_flux)
+
+
+def ensure_civitai_prefetch_started(include_flux: bool = True) -> dict:
+    if not manager_supported():
+        return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
+    items = _collect_prefetch_items(include_flux=include_flux)
+    pending_count = sum(
+        1 for item in items if not civitai_preview_cache_ready(int(item["version_id"]), item.get("name"))
+    )
+    with _PREFETCH_LOCK:
+        _PREFETCH_STATS.update({
+            "total": len(items),
+            "cached": len(items) - pending_count,
+            "pending": pending_count,
+            "finished": pending_count == 0 and not _PREFETCH_RUNNING,
+        })
+        stats = dict(_PREFETCH_STATS)
+    if pending_count == 0:
+        return {"ok": True, "status": "complete", **stats}
+    return prefetch_civitai_catalog_previews(include_flux=include_flux)
+
+
+def prefetch_civitai_catalog_previews(include_flux: bool = False) -> dict:
+    global _PREFETCH_RUNNING
+    if not manager_supported():
+        return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
+
+    with _PREFETCH_LOCK:
+        if _PREFETCH_RUNNING:
+            return {"ok": True, "status": "already_running", **_PREFETCH_STATS}
+        _PREFETCH_RUNNING = True
+        _PREFETCH_STATS["finished"] = False
+
+    def run() -> None:
+        global _PREFETCH_RUNNING
+        fetched = 0
+        skipped = 0
+        failed = 0
+        try:
+            all_items = _collect_prefetch_items(include_flux=include_flux)
+            pending: list[dict] = []
+            for item in all_items:
+                version_id = int(item["version_id"])
+                if civitai_preview_cache_ready(version_id, item.get("name")):
+                    skipped += 1
+                else:
+                    pending.append(item)
+
+            with _PREFETCH_LOCK:
+                _PREFETCH_STATS.update({
+                    "total": len(all_items),
+                    "cached": skipped,
+                    "pending": len(pending),
+                    "fetched": 0,
+                    "failed": 0,
+                    "finished": False,
+                })
+
+            batch_size = CIVITAI_PREFETCH_BATCH_SIZE
+            for batch_start in range(0, len(pending), batch_size):
+                batch = pending[batch_start : batch_start + batch_size]
+                for item in batch:
+                    version_id = int(item["version_id"])
+                    try:
+                        meta = civitai_lookup(version_id)
+                        saved = download_civitai_previews_to_cache(
+                            meta,
+                            model_name=item.get("name"),
+                            limit=CIVITAI_PREVIEW_LIMIT,
+                        )
+                        if saved and civitai_preview_cache_ready(version_id, item.get("name")):
+                            fetched += 1
+                        elif saved:
+                            fetched += 1
+                        else:
+                            failed += 1
+                    except Exception as e:
+                        failed += 1
+                        print(f"prefetch civitai {version_id} failed: {redact_download_secrets(str(e))}")
+                    with _PREFETCH_LOCK:
+                        done = fetched + failed
+                        _PREFETCH_STATS.update({
+                            "cached": skipped + fetched,
+                            "pending": max(0, len(pending) - done),
+                            "fetched": fetched,
+                            "failed": failed,
+                        })
+                if batch_start + batch_size < len(pending):
+                    time.sleep(CIVITAI_PREFETCH_BATCH_DELAY_SEC)
+            still_missing = sum(
+                1 for item in all_items
+                if not civitai_preview_cache_ready(int(item["version_id"]), item.get("name"))
+            )
+            with _PREFETCH_LOCK:
+                _PREFETCH_STATS.update({
+                    "total": len(all_items),
+                    "cached": len(all_items) - still_missing,
+                    "pending": still_missing,
+                    "fetched": fetched,
+                    "failed": failed,
+                    "finished": True,
+                })
+            print(
+                f"civitai catalog prefetch done: fetched={fetched} skipped={skipped} "
+                f"failed={failed} still_missing={still_missing} batch={batch_size} "
+                f"delay={CIVITAI_PREFETCH_BATCH_DELAY_SEC}s"
+            )
+        finally:
+            with _PREFETCH_LOCK:
+                _PREFETCH_RUNNING = False
+
+    threading.Thread(target=run, daemon=True).start()
+    with _PREFETCH_LOCK:
+        stats = dict(_PREFETCH_STATS)
+    return {"ok": True, "status": "started", **stats}
+
+
 def _catalog_rows_for_set(cfg: dict, set_name: str) -> list[dict]:
     rows: list[dict] = []
     selected = (cfg.get("sets") or {}).get(set_name) or {}
@@ -178,7 +457,7 @@ def _catalog_rows_for_set(cfg: dict, set_name: str) -> list[dict]:
                 continue
             cid = _catalog_item_id(set_name, folder_key, item, index)
             delete_key = CATALOG_FOLDER_TO_DELETE_KEY.get(folder_key, folder_key)
-            rows.append({
+            row = {
                 "id": cid,
                 "set": set_name,
                 "group": group_key,
@@ -187,7 +466,12 @@ def _catalog_rows_for_set(cfg: dict, set_name: str) -> list[dict]:
                 "source": item.get("source", "direct"),
                 "installed": _is_installed(folder_key, item),
                 "recommended": True,
-            })
+            }
+            url = (item.get("url") or "").strip()
+            if url:
+                row["url"] = url
+            _enrich_catalog_row_preview(row)
+            rows.append(row)
     return rows
 
 
@@ -228,9 +512,15 @@ def load_catalog(set_name: str | None = None, include_flux: bool = False) -> dic
             active_set = recommended
         catalog = _catalog_rows_for_set(cfg, active_set)
 
-    installed = _installed_entries()
+    civitai_index = _build_filename_civitai_index(cfg)
+    installed = _installed_entries(civitai_index)
     missing = [row for row in catalog if not row["installed"]]
     installed_catalog = [row for row in catalog if row["installed"]]
+
+    if manager_supported():
+        prefetch = ensure_civitai_prefetch_started(include_flux=True)
+    else:
+        prefetch = civitai_prefetch_status()
 
     presets = {}
     if PRESETS_PATH.is_file():
@@ -251,6 +541,7 @@ def load_catalog(set_name: str | None = None, include_flux: bool = False) -> dic
         "installed_catalog": installed_catalog,
         "missing": missing,
         "presets": presets,
+        "civitai_prefetch": prefetch,
     }
 
 
@@ -358,7 +649,13 @@ def _job_progress(job_id: str):
     return progress
 
 
-def _run_url_download_job(job_id: str, url: str, display_name: str, folder_key: str | None = None) -> None:
+def _run_url_download_job(
+    job_id: str,
+    url: str,
+    display_name: str,
+    folder_key: str | None = None,
+    pretty_filename: str | None = None,
+) -> None:
     kwargs = _download_kwargs(job_id)
     if kwargs["cancel_event"].is_set():
         _mark_job_cancelled(job_id)
@@ -367,7 +664,7 @@ def _run_url_download_job(job_id: str, url: str, display_name: str, folder_key: 
     progress = _job_progress(job_id)
 
     try:
-        item = build_item_from_url(url, folder_key)
+        item = build_item_from_url(url, folder_key, name=pretty_filename)
         download_item(item, "auto", progress=progress, **kwargs)
         if kwargs["cancel_event"].is_set():
             _mark_job_cancelled(job_id)
@@ -426,10 +723,25 @@ def preview_url(url: str, folder_key: str | None = None) -> dict:
     return preview_civitai_url(url, folder_key)
 
 
-def start_url_download(url: str, folder_key: str | None = None) -> dict:
+def preview_version(version_id: int, file_id: int | None = None, folder_key: str | None = None) -> dict:
     if not manager_supported():
         return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
-    preview = preview_civitai_url(url, folder_key)
+    return preview_civitai_version(version_id, file_id, folder_key)
+
+
+def start_url_download(
+    url: str,
+    folder_key: str | None = None,
+    *,
+    version_id: int | None = None,
+    file_id: int | None = None,
+) -> dict:
+    if not manager_supported():
+        return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
+    if version_id is not None:
+        preview = preview_civitai_version(version_id, file_id, folder_key)
+    else:
+        preview = preview_civitai_url(url, folder_key)
     if not preview.get("ok"):
         return preview
     if preview.get("already_installed"):
@@ -437,17 +749,23 @@ def start_url_download(url: str, folder_key: str | None = None) -> dict:
             "ok": True,
             "already_installed": True,
             "display_name": preview.get("display_name"),
-            "source_url": url,
+            "source_url": preview.get("download_url") or url,
         }
 
-    display_name = str(preview.get("display_name") or preview.get("filename") or "Civitai model")
+    display_name = str(preview.get("display_name") or preview.get("pretty_filename") or preview.get("filename") or "Civitai model")
+    download_url = str(preview.get("download_url") or url).strip()
+    pretty_name = str(preview.get("pretty_filename") or "").strip() or None
+    resolved_folder = folder_key
+    if not resolved_folder or resolved_folder == "auto":
+        suggested = str(preview.get("suggested_folder") or "").strip()
+        resolved_folder = suggested if suggested and suggested != "auto" else None
     job_id = uuid.uuid4().hex
     with _DOWNLOAD_LOCK:
         _DOWNLOAD_JOBS[job_id] = {
             "id": job_id,
             "catalog_id": f"url:{display_name}",
             "display_name": display_name,
-            "source_url": url,
+            "source_url": download_url,
             "status": "queued",
             "ok": None,
             "error": None,
@@ -456,7 +774,7 @@ def start_url_download(url: str, folder_key: str | None = None) -> dict:
         }
     thread = threading.Thread(
         target=_run_url_download_job,
-        args=(job_id, url, display_name, folder_key),
+        args=(job_id, download_url, display_name, resolved_folder, pretty_name),
         daemon=True,
     )
     thread.start()
@@ -464,7 +782,7 @@ def start_url_download(url: str, folder_key: str | None = None) -> dict:
         "ok": True,
         "job_id": job_id,
         "display_name": display_name,
-        "source_url": url,
+        "source_url": download_url,
         "status": "queued",
     }
 

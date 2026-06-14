@@ -52,3 +52,5 @@ node_modules/
 *.mp4
 *.mov
 *.gif
+
+civitai_catalog.json

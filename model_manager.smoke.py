@@ -7,10 +7,10 @@ from model_manager import ALLOWED_DELETE_DIRS, _safe_delete_path, load_catalog
 
 payload = load_catalog()
 assert payload.get("ok") is True, "catalog should load"
-assert payload.get("recommended_set") == "basic_no_flux", "recommended_set"
-assert payload.get("active_set") == "basic_no_flux", "default active_set"
-no_flux = load_catalog("sdxl_no_flux")
-assert len(no_flux.get("catalog") or []) >= 4, "sdxl_no_flux catalog"
+assert payload.get("recommended_set") == "anime_starter", "recommended_set"
+assert payload.get("active_set") == "anime_starter", "default active_set"
+starter = load_catalog("anime_starter")
+assert len(starter.get("catalog") or []) >= 7, "anime_starter catalog"
 hidden = load_catalog("*", include_flux=False)
 assert not any((row.get("set") or "").startswith("flux_") for row in hidden.get("catalog") or []), "flux hidden in merge"
 assert isinstance(payload.get("installed"), list), "installed list"

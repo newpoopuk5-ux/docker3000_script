@@ -1,83 +1,8 @@
 {
-  "recommended_set": "basic_no_flux",
+  "recommended_set": "anime_starter",
   "sets": {
-    "basic_no_flux": {
-      "description": "Recommended starter (no Flux): upscaler + Juggernaut XL only",
-      "upscalers": [
-        {
-          "name": "RealESRGAN_x4plus.pth",
-          "source": "direct",
-          "url": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
-        }
-      ],
-      "checkpoints": [
-        {
-          "name": "juggernautXL_juggXlByRundiffusion.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/782002"
-        }
-      ],
-      "loras": [],
-      "private_hf": []
-    },
-    "sdxl_no_flux": {
-      "description": "SDXL pack (no Flux): upscaler + Juggernaut, BigLust, Lustify",
-      "upscalers": [
-        {
-          "name": "RealESRGAN_x4plus.pth",
-          "source": "direct",
-          "url": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
-        }
-      ],
-      "checkpoints": [
-        {
-          "name": "juggernautXL_juggXlByRundiffusion.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/782002"
-        },
-        {
-          "name": "biglust_full_fp16.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16"
-        },
-        {
-          "name": "lustifySDXL_pruned_fp16.safetensors",
-          "source": "direct",
-          "url": "https://civitai.red/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16"
-        }
-      ],
-      "loras": [],
-      "private_hf": []
-    },
-    "anime_no_flux": {
-      "description": "Anime / Illustrious pack (no Flux)",
-      "checkpoints": [
-        {
-          "name": "hassakuXLIllustrious.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/2615702"
-        },
-        {
-          "name": "illustriousXL_v01.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/889818"
-        },
-        {
-          "name": "waiIllustriousSDXL_v17.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/2883731"
-        },
-        {
-          "name": "animij_v20.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/1613008"
-        }
-      ],
-      "loras": [],
-      "private_hf": []
-    },
-    "anima_harem_illustrious_no_flux": {
-      "description": "Anima / Illustrious / Pony: MiaoMiao Harem + TE/VAE, Amanatsu, T-ponynai3",
+    "anime_starter": {
+      "description": "Anime starter: Amanatsu, Hassaku IL v3.4, VXP IL 2.0 RC3, T-ponynai3, WAI ANI Pony v14, WAI Illustrious v17.0, Nova Anime XL IL v18",
       "checkpoints": [
         {
           "name": "amanatsuIllustrious_v2.safetensors",
@@ -85,10 +10,69 @@
           "url": "https://civitai.com/api/download/models/2288934?fileId=2225962"
         },
         {
+          "name": "hassakuXLIllustrious_v34.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2615702?fileId=2503211"
+        },
+        {
+          "name": "vxpIllustrious20_rc3.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1881740?fileId=1781644"
+        },
+        {
           "name": "tPonynai3_v7.safetensors",
           "source": "direct",
           "url": "https://civitai.com/api/download/models/1392706?fileId=1295292"
         },
+        {
+          "name": "waiANIPONYXL_v140.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1767402?fileId=1671379"
+        },
+        {
+          "name": "waiIllustriousSDXL_v170.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2883731?fileId=2763986"
+        },
+        {
+          "name": "novaAnimeXL_ilV180.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2837020?fileId=2723189"
+        }
+      ],
+      "loras": [],
+      "private_hf": []
+    },
+    "anima": {
+      "description": "CircleStone Labs Anima Base (HF split_files): UNET + Qwen TE + VAE — preset Anima Base",
+      "flux_diffusion_models": [
+        {
+          "name": "anima-base-v1.0.safetensors",
+          "source": "hf",
+          "repo_id": "circlestone-labs/Anima",
+          "repo_path": "split_files/diffusion_models/anima-base-v1.0.safetensors"
+        }
+      ],
+      "text_encoders": [
+        {
+          "name": "qwen_3_06b_base.safetensors",
+          "source": "hf",
+          "repo_id": "circlestone-labs/Anima",
+          "repo_path": "split_files/text_encoders/qwen_3_06b_base.safetensors"
+        }
+      ],
+      "vae": [
+        {
+          "name": "qwen_image_vae.safetensors",
+          "source": "hf",
+          "repo_id": "circlestone-labs/Anima",
+          "repo_path": "split_files/vae/qwen_image_vae.safetensors"
+        }
+      ]
+    },
+    "miaomiao": {
+      "description": "MiaoMiao Harem Anima 1.2 (Civitai 934764): diffusion model + TE + VAE — preset miaomiaoHarem_anima12",
+      "flux_diffusion_models": [
         {
           "name": "miaomiaoHarem_anima12.safetensors",
           "source": "direct",
@@ -107,169 +91,6 @@
           "name": "qwen_image_vae.safetensors",
           "source": "direct",
           "url": "https://civitai.com/api/download/models/3020110?fileId=2898940"
-        }
-      ],
-      "loras": [],
-      "private_hf": []
-    },
-    "pony_no_flux": {
-      "description": "Pony pack (no Flux)",
-      "checkpoints": [
-        {
-          "name": "ponyDiffusionV6XL.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/290640"
-        },
-        {
-          "name": "hassakuXLPony.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/575495"
-        },
-        {
-          "name": "waiANIponyXL.safetensors",
-          "source": "direct",
-          "url": "https://civitai.red/api/download/models/1767402?type=Model&format=SafeTensor&size=pruned&fp=fp16"
-        }
-      ],
-      "loras": [],
-      "private_hf": []
-    },
-    "basic": {
-      "description": "Small starter set: upscaler + BigLust + Juggernaut + Lustify",
-      "upscalers": [
-        {
-          "name": "RealESRGAN_x4plus.pth",
-          "source": "direct",
-          "url": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
-        }
-      ],
-      "checkpoints": [
-        {
-          "name": "biglust_full_fp16.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16"
-        },
-        {
-          "name": "juggernautXL_juggXlByRundiffusion.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/782002"
-        },
-        {
-          "name": "lustifySDXL_pruned_fp16.safetensors",
-          "source": "direct",
-          "url": "https://civitai.red/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16"
-        }
-      ],
-      "loras": [],
-      "private_hf": []
-    },
-    "all": {
-      "description": "All checkpoints discussed in chat + upscaler",
-      "upscalers": [
-        {
-          "name": "RealESRGAN_x4plus.pth",
-          "source": "direct",
-          "url": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
-        }
-      ],
-      "checkpoints": [
-        {
-          "name": "hassakuXLIllustrious.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/2615702"
-        },
-        {
-          "name": "hassakuSD15.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/106922"
-        },
-        {
-          "name": "hassakuXLPony.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/575495"
-        },
-        {
-          "name": "vxpILXL_v188_fp16.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/1774915?type=Model&format=SafeTensor&size=pruned&fp=fp16"
-        },
-        {
-          "name": "vxpILXL_source.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/1201891"
-        },
-        {
-          "name": "ponyDiffusionV6XL.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/290640"
-        },
-        {
-          "name": "illustriousXL_v01.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/889818"
-        },
-        {
-          "name": "waiIllustriousSDXL_v17.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/2883731"
-        },
-        {
-          "name": "animij_v10.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/1528632"
-        },
-        {
-          "name": "animij_v20.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/1613008"
-        },
-        {
-          "name": "JANKUtrainedChenkinNoobai_v777.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/2786084"
-        },
-        {
-          "name": "waiANIponyXL.safetensors",
-          "source": "direct",
-          "url": "https://civitai.red/api/download/models/1767402?type=Model&format=SafeTensor&size=pruned&fp=fp16"
-        },
-        {
-          "name": "waiANIHENTAIPONYXL.safetensors",
-          "source": "direct",
-          "url": "https://civitai.red/api/download/models/952743?type=Model&format=SafeTensor&size=pruned&fp=fp16"
-        },
-        {
-          "name": "biglust_full_fp16.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16"
-        },
-        {
-          "name": "juggernautXL_juggXlByRundiffusion.safetensors",
-          "source": "direct",
-          "url": "https://civitai.com/api/download/models/782002"
-        },
-        {
-          "name": "lustifySDXL_pruned_fp16.safetensors",
-          "source": "direct",
-          "url": "https://civitai.red/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16"
-        }
-      ],
-      "loras": [],
-      "private_hf": [
-        {
-          "enabled": false,
-          "repo_id": "YOUR_HF_USERNAME/YOUR_PRIVATE_REPO",
-          "files": [
-            {
-              "repo_path": "loras/my_loras.zip",
-              "target": "/workspace/my_loras.zip",
-              "unzip_to": "/workspace/ComfyUI/models/loras"
-            },
-            {
-              "repo_path": "checkpoints/private_model_1.safetensors",
-              "target": "/workspace/ComfyUI/models/checkpoints/private_model_1.safetensors"
-            }
-          ]
         }
       ]
     },
@@ -446,32 +267,169 @@
       ],
       "flux_loras": []
     },
-    "hf_loras": {
-      "description": "Private LoRAs uploaded to Hugging Face repo lisabew/comfy-loras",
+    "all_models": {
+      "description": "All checkpoints (anime_starter + realistic SDXL + legacy anime/pony extras)",
+      "checkpoints": [
+        {
+          "name": "amanatsuIllustrious_v2.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2288934?fileId=2225962"
+        },
+        {
+          "name": "hassakuXLIllustrious_v34.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2615702?fileId=2503211"
+        },
+        {
+          "name": "vxpIllustrious20_rc3.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1881740?fileId=1781644"
+        },
+        {
+          "name": "tPonynai3_v7.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1392706?fileId=1295292"
+        },
+        {
+          "name": "waiANIPONYXL_v140.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1767402?fileId=1671379"
+        },
+        {
+          "name": "waiIllustriousSDXL_v170.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2883731?fileId=2763986"
+        },
+        {
+          "name": "novaAnimeXL_ilV180.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2837020?fileId=2723189"
+        },
+        {
+          "name": "miaomiaoHarem_anima12.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/3020110?fileId=2908822"
+        },
+        {
+          "name": "juggernautXL_juggXlByRundiffusion.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/782002"
+        },
+        {
+          "name": "biglust_full_fp16.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16"
+        },
+        {
+          "name": "lustifySDXL_pruned_fp16.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        },
+        {
+          "name": "illustriousXL_v01.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/889818"
+        },
+        {
+          "name": "animij_v10.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1528632"
+        },
+        {
+          "name": "animij_v20.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1613008"
+        },
+        {
+          "name": "JANKUtrainedChenkinNoobai_v777.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2786084"
+        },
+        {
+          "name": "hassakuSD15.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/106922"
+        },
+        {
+          "name": "hassakuXLPony.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/575495"
+        },
+        {
+          "name": "ponyDiffusionV6XL.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/290640"
+        },
+        {
+          "name": "waiANIHENTAIPONYXL.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/952743?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        },
+        {
+          "name": "vxpILXL_v188.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1774915?fileId=1675747"
+        },
+        {
+          "name": "cyberrealisticPony_semiRealV5.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2833750?fileId=2721289"
+        },
+        {
+          "name": "realisticVisionV60B1_v51HyperVAE.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/501240?fileId=418901"
+        },
+        {
+          "name": "unholyDesireMixSinister_v80.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2824082?fileId=2710895"
+        }
+      ]
+    },
+    "all_loras": {
+      "description": "All LoRAs — Civitai direct where available; HF mirror for HF-only uploads",
       "loras": [
+        {
+          "name": "Amputee_stumpless_Illu_v3_drawn.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1857241?fileId=1756941"
+        },
+        {
+          "name": "Armbinder_IL.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1260659?fileId=1165775"
+        },
+        {
+          "name": "bondage_armbinder.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2643047?fileId=2535617"
+        },
+        {
+          "name": "Free_use_with_armbinders.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2079214?fileId=1976370"
+        },
+        {
+          "name": "RParmbinderPony.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1270573?fileId=1175559"
+        },
+        {
+          "name": "Sex_slave_training.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/766116?fileId=679980"
+        },
+        {
+          "name": "Sex_slave_training_illustrious.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1766947?fileId=1667707"
+        },
         {
           "name": "armbinder.safetensors",
           "source": "hf",
           "repo_id": "lisabew/comfy-loras",
           "repo_path": "loras/armbinder.safetensors"
-        },
-        {
-          "name": "Armbinder_IL.safetensors",
-          "source": "hf",
-          "repo_id": "lisabew/comfy-loras",
-          "repo_path": "loras/Armbinder_IL.safetensors"
-        },
-        {
-          "name": "bondage_armbinder.safetensors",
-          "source": "hf",
-          "repo_id": "lisabew/comfy-loras",
-          "repo_path": "loras/bondage_armbinder.safetensors"
-        },
-        {
-          "name": "Free_use_with_armbinders.safetensors",
-          "source": "hf",
-          "repo_id": "lisabew/comfy-loras",
-          "repo_path": "loras/Free_use_with_armbinders.safetensors"
         },
         {
           "name": "PONYXL_STYLE_Gagala_ownwaifu.safetensors",
@@ -480,22 +438,76 @@
           "repo_path": "loras/PONYXL_STYLE_Gagala_ownwaifu.safetensors"
         },
         {
+          "name": "pussy spreader_illustrious_V1.0.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1229565?fileId=1134994"
+        },
+        {
           "name": "pussy spreader_noobep_V1.1.safetensors",
           "source": "hf",
           "repo_id": "lisabew/comfy-loras",
           "repo_path": "loras/pussy spreader_noobep_V1.1.safetensors"
         },
         {
-          "name": "RParmbinderPony.safetensors",
+          "name": "pluggag_v1.safetensors",
           "source": "hf",
           "repo_id": "lisabew/comfy-loras",
-          "repo_path": "loras/RParmbinderPony.safetensors"
+          "repo_path": "loras/pluggag_v1.safetensors"
+        }
+      ]
+    },
+    "all_vae": {
+      "description": "All VAE files (Civitai + Hugging Face lisabew/comfy-loras)",
+      "vae": [
+        {
+          "name": "qwen_image_vae.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/3020110?fileId=2898940"
         },
         {
-          "name": "Sex_slave_training.safetensors",
+          "name": "ponyStandardVAE_v10.safetensors",
           "source": "hf",
           "repo_id": "lisabew/comfy-loras",
-          "repo_path": "loras/Sex_slave_training.safetensors"
+          "repo_path": "vae/ponyStandardVAE_v10.safetensors"
+        },
+        {
+          "name": "sdxl_vae.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "vae/sdxl_vae.safetensors"
+        }
+      ]
+    },
+    "all_te": {
+      "description": "All text encoders (Civitai + Hugging Face)",
+      "text_encoders": [
+        {
+          "name": "miaomiaoHarem_anima12_txt.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/3020110?fileId=2898941"
+        },
+        {
+          "name": "qwen_3_06b_base.safetensors",
+          "source": "hf",
+          "repo_id": "lisabew/comfy-loras",
+          "repo_path": "text_encoders/qwen_3_06b_base.safetensors"
+        }
+      ]
+    },
+    "uncategorized": {
+      "description": "Upscalers, legacy variants, and other items without a clear bucket",
+      "upscalers": [
+        {
+          "name": "RealESRGAN_x4plus.pth",
+          "source": "direct",
+          "url": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
+        }
+      ],
+      "checkpoints": [
+        {
+          "name": "vxpILXL_source.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1201891"
         }
       ]
     }

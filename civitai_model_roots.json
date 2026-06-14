@@ -1,0 +1,1125 @@
+{
+  "generated_at": "2026-06-14T11:32:59.460543+00:00",
+  "source": "models.json",
+  "api_calls": 30,
+  "entry_count": 39,
+  "unique_version_count": 30,
+  "unique_model_count": 27,
+  "entries": [
+    {
+      "set": "anime_starter",
+      "group": "checkpoints",
+      "catalog_name": "amanatsuIllustrious_v2.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2288934?fileId=2225962",
+      "version_id": 2288934,
+      "file_id": 2225962,
+      "model_id": 1325426,
+      "model_name": "Amanatsu (Illustrious)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1325426",
+      "version_name": "v2",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1325426?modelVersionId=2288934"
+    },
+    {
+      "set": "anime_starter",
+      "group": "checkpoints",
+      "catalog_name": "hassakuXLIllustrious_v34.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2615702?fileId=2503211",
+      "version_id": 2615702,
+      "file_id": 2503211,
+      "model_id": 140272,
+      "model_name": "Hassaku XL (Illustrious)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/140272",
+      "version_name": "v3.4",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/140272?modelVersionId=2615702"
+    },
+    {
+      "set": "anime_starter",
+      "group": "checkpoints",
+      "catalog_name": "vxpIllustrious20_rc3.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1881740?fileId=1781644",
+      "version_id": 1881740,
+      "file_id": 1781644,
+      "model_id": 1662539,
+      "model_name": "VXP Illustrious 2.0",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1662539",
+      "version_name": "RC3",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1662539?modelVersionId=1881740"
+    },
+    {
+      "set": "anime_starter",
+      "group": "checkpoints",
+      "catalog_name": "tPonynai3_v7.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1392706?fileId=1295292",
+      "version_id": 1392706,
+      "file_id": 1295292,
+      "model_id": 317902,
+      "model_name": "T-ponynai3",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/317902",
+      "version_name": "v7",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/317902?modelVersionId=1392706"
+    },
+    {
+      "set": "anime_starter",
+      "group": "checkpoints",
+      "catalog_name": "waiANIPONYXL_v140.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1767402?fileId=1671379",
+      "version_id": 1767402,
+      "file_id": 1671379,
+      "model_id": 404154,
+      "model_name": "WAI-ANI-PONYXL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/404154",
+      "version_name": "v14.0",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/404154?modelVersionId=1767402"
+    },
+    {
+      "set": "anime_starter",
+      "group": "checkpoints",
+      "catalog_name": "waiIllustriousSDXL_v170.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2883731?fileId=2763986",
+      "version_id": 2883731,
+      "file_id": 2763986,
+      "model_id": 827184,
+      "model_name": "WAI-illustrious-SDXL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/827184",
+      "version_name": "v17.0",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/827184?modelVersionId=2883731"
+    },
+    {
+      "set": "anime_starter",
+      "group": "checkpoints",
+      "catalog_name": "novaAnimeXL_ilV180.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2837020?fileId=2723189",
+      "version_id": 2837020,
+      "file_id": 2723189,
+      "model_id": 376130,
+      "model_name": "Nova Anime XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/376130",
+      "version_name": "IL v18.0",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/376130?modelVersionId=2837020"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "amanatsuIllustrious_v2.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2288934?fileId=2225962",
+      "version_id": 2288934,
+      "file_id": 2225962,
+      "model_id": 1325426,
+      "model_name": "Amanatsu (Illustrious)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1325426",
+      "version_name": "v2",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1325426?modelVersionId=2288934"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "hassakuXLIllustrious_v34.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2615702?fileId=2503211",
+      "version_id": 2615702,
+      "file_id": 2503211,
+      "model_id": 140272,
+      "model_name": "Hassaku XL (Illustrious)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/140272",
+      "version_name": "v3.4",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/140272?modelVersionId=2615702"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "vxpIllustrious20_rc3.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1881740?fileId=1781644",
+      "version_id": 1881740,
+      "file_id": 1781644,
+      "model_id": 1662539,
+      "model_name": "VXP Illustrious 2.0",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1662539",
+      "version_name": "RC3",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1662539?modelVersionId=1881740"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "tPonynai3_v7.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1392706?fileId=1295292",
+      "version_id": 1392706,
+      "file_id": 1295292,
+      "model_id": 317902,
+      "model_name": "T-ponynai3",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/317902",
+      "version_name": "v7",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/317902?modelVersionId=1392706"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "waiANIPONYXL_v140.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1767402?fileId=1671379",
+      "version_id": 1767402,
+      "file_id": 1671379,
+      "model_id": 404154,
+      "model_name": "WAI-ANI-PONYXL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/404154",
+      "version_name": "v14.0",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/404154?modelVersionId=1767402"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "waiIllustriousSDXL_v170.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2883731?fileId=2763986",
+      "version_id": 2883731,
+      "file_id": 2763986,
+      "model_id": 827184,
+      "model_name": "WAI-illustrious-SDXL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/827184",
+      "version_name": "v17.0",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/827184?modelVersionId=2883731"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "novaAnimeXL_ilV180.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2837020?fileId=2723189",
+      "version_id": 2837020,
+      "file_id": 2723189,
+      "model_id": 376130,
+      "model_name": "Nova Anime XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/376130",
+      "version_name": "IL v18.0",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/376130?modelVersionId=2837020"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "miaomiaoHarem_anima12.safetensors",
+      "download_url": "https://civitai.com/api/download/models/3020110?fileId=2908822",
+      "version_id": 3020110,
+      "file_id": 2908822,
+      "model_id": 934764,
+      "model_name": "MiaoMiao Harem",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/934764",
+      "version_name": "Anima_1.2",
+      "base_model": "Anima",
+      "version_page_url": "https://civitai.com/models/934764?modelVersionId=3020110"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "juggernautXL_juggXlByRundiffusion.safetensors",
+      "download_url": "https://civitai.com/api/download/models/782002",
+      "version_id": 782002,
+      "file_id": null,
+      "model_id": 133005,
+      "model_name": "Juggernaut XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/133005",
+      "version_name": "Jugg_XI_by_RunDiffusion",
+      "base_model": "SDXL 1.0",
+      "version_page_url": "https://civitai.com/models/133005?modelVersionId=782002"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "biglust_full_fp16.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16",
+      "version_id": 1081768,
+      "file_id": null,
+      "model_id": 575395,
+      "model_name": "Big Lust",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/575395",
+      "version_name": "v1.6",
+      "base_model": "SDXL 1.0",
+      "version_page_url": "https://civitai.com/models/575395?modelVersionId=1081768"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "lustifySDXL_pruned_fp16.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16",
+      "version_id": 2808677,
+      "file_id": null,
+      "model_id": 573152,
+      "model_name": "LUSTIFY! [SDXL NSFW checkpoint]",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/573152",
+      "version_name": "APEX (V8)",
+      "base_model": "SDXL 1.0",
+      "version_page_url": "https://civitai.com/models/573152?modelVersionId=2808677"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "illustriousXL_v01.safetensors",
+      "download_url": "https://civitai.com/api/download/models/889818",
+      "version_id": 889818,
+      "file_id": null,
+      "model_id": 795765,
+      "model_name": "Illustrious-XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/795765",
+      "version_name": "v0.1",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/795765?modelVersionId=889818"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "animij_v10.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1528632",
+      "version_id": 1528632,
+      "file_id": null,
+      "model_id": 1353314,
+      "model_name": "Animij",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1353314",
+      "version_name": "v1",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1353314?modelVersionId=1528632"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "animij_v20.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1613008",
+      "version_id": 1613008,
+      "file_id": null,
+      "model_id": 1353314,
+      "model_name": "Animij",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1353314",
+      "version_name": "v2",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1353314?modelVersionId=1613008"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "JANKUtrainedChenkinNoobai_v777.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2786084",
+      "version_id": 2786084,
+      "file_id": null,
+      "model_id": 1277670,
+      "model_name": "✨ JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL ✨",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1277670",
+      "version_name": "v7.77",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1277670?modelVersionId=2786084"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "hassakuSD15.safetensors",
+      "download_url": "https://civitai.com/api/download/models/106922",
+      "version_id": 106922,
+      "file_id": null,
+      "model_id": 2583,
+      "model_name": "Hassaku (SD1.5)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/2583",
+      "version_name": "v1.3",
+      "base_model": "SD 1.5",
+      "version_page_url": "https://civitai.com/models/2583?modelVersionId=106922"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "hassakuXLPony.safetensors",
+      "download_url": "https://civitai.com/api/download/models/575495",
+      "version_id": 575495,
+      "file_id": null,
+      "model_id": 376031,
+      "model_name": "Hassaku XL (Pony)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/376031",
+      "version_name": "v1.3(better eyes version)",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/376031?modelVersionId=575495"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "ponyDiffusionV6XL.safetensors",
+      "download_url": "https://civitai.com/api/download/models/290640",
+      "version_id": 290640,
+      "file_id": null,
+      "model_id": 257749,
+      "model_name": "Pony Diffusion V6 XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/257749",
+      "version_name": "V6 (start with this one)",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/257749?modelVersionId=290640"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "waiANIHENTAIPONYXL.safetensors",
+      "download_url": "https://civitai.com/api/download/models/952743?type=Model&format=SafeTensor&size=pruned&fp=fp16",
+      "version_id": 952743,
+      "file_id": null,
+      "model_id": 553648,
+      "model_name": "WAI-ANI-HENTAI-PONYXL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/553648",
+      "version_name": "v6.0",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/553648?modelVersionId=952743"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "vxpILXL_v188.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1774915?fileId=1675747",
+      "version_id": 1774915,
+      "file_id": 1675747,
+      "model_id": 1070739,
+      "model_name": "VXP_IL_XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1070739",
+      "version_name": "v1.88",
+      "base_model": "SDXL 1.0",
+      "version_page_url": "https://civitai.com/models/1070739?modelVersionId=1774915"
+    },
+    {
+      "set": "all_models",
+      "group": "checkpoints",
+      "catalog_name": "cyberrealisticPony_semiRealV5.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2833750?fileId=2721289",
+      "version_id": 2833750,
+      "file_id": 2721289,
+      "model_id": 709404,
+      "model_name": "CyberRealistic Pony Semi-Realistic",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/709404",
+      "version_name": "Semi-Real v5",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/709404?modelVersionId=2833750"
+    },
+    {
+      "set": "all_loras",
+      "group": "loras",
+      "catalog_name": "Amputee_stumpless_Illu_v3_drawn.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1857241?fileId=1756941",
+      "version_id": 1857241,
+      "file_id": 1756941,
+      "model_id": 1451639,
+      "model_name": "Quad Amputee Stumpless",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/1451639",
+      "version_name": "Illustrious V3 Drawn",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1451639?modelVersionId=1857241"
+    },
+    {
+      "set": "all_loras",
+      "group": "loras",
+      "catalog_name": "Armbinder_IL.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1260659?fileId=1165775",
+      "version_id": 1260659,
+      "file_id": 1165775,
+      "model_id": 896369,
+      "model_name": "Armbinder",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/896369",
+      "version_name": "Illustrious",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/896369?modelVersionId=1260659"
+    },
+    {
+      "set": "all_loras",
+      "group": "loras",
+      "catalog_name": "bondage_armbinder.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2643047?fileId=2535617",
+      "version_id": 2643047,
+      "file_id": 2535617,
+      "model_id": 2349919,
+      "model_name": "armbinder bondage",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/2349919",
+      "version_name": "V1",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/2349919?modelVersionId=2643047"
+    },
+    {
+      "set": "all_loras",
+      "group": "loras",
+      "catalog_name": "Free_use_with_armbinders.safetensors",
+      "download_url": "https://civitai.com/api/download/models/2079214?fileId=1976370",
+      "version_id": 2079214,
+      "file_id": 1976370,
+      "model_id": 1837372,
+      "model_name": "Free use with armbinders",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/1837372",
+      "version_name": "V1",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1837372?modelVersionId=2079214"
+    },
+    {
+      "set": "all_loras",
+      "group": "loras",
+      "catalog_name": "RParmbinderPony.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1270573?fileId=1175559",
+      "version_id": 1270573,
+      "file_id": 1175559,
+      "model_id": 787560,
+      "model_name": "Reverse-Prayer Armbinder | 背手祈祷式单手套",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/787560",
+      "version_name": "pony ver",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/787560?modelVersionId=1270573"
+    },
+    {
+      "set": "all_loras",
+      "group": "loras",
+      "catalog_name": "Sex_slave_training.safetensors",
+      "download_url": "https://civitai.com/api/download/models/766116?fileId=679980",
+      "version_id": 766116,
+      "file_id": 679980,
+      "model_id": 684499,
+      "model_name": "Sex Slave Training",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/684499",
+      "version_name": "Pony",
+      "base_model": "Pony",
+      "version_page_url": "https://civitai.com/models/684499?modelVersionId=766116"
+    },
+    {
+      "set": "all_loras",
+      "group": "loras",
+      "catalog_name": "Sex_slave_training_illustrious.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1766947?fileId=1667707",
+      "version_id": 1766947,
+      "file_id": 1667707,
+      "model_id": 684499,
+      "model_name": "Sex Slave Training",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/684499",
+      "version_name": "Ver.IL",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/684499?modelVersionId=1766947"
+    },
+    {
+      "set": "all_loras",
+      "group": "loras",
+      "catalog_name": "pussy spreader_illustrious_V1.0.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1229565?fileId=1134994",
+      "version_id": 1229565,
+      "file_id": 1134994,
+      "model_id": 589918,
+      "model_name": "マンコ拡張/pussy spreader",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/589918",
+      "version_name": "v1.0 ill",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/589918?modelVersionId=1229565"
+    },
+    {
+      "set": "all_vae",
+      "group": "vae",
+      "catalog_name": "qwen_image_vae.safetensors",
+      "download_url": "https://civitai.com/api/download/models/3020110?fileId=2898940",
+      "version_id": 3020110,
+      "file_id": 2898940,
+      "model_id": 934764,
+      "model_name": "MiaoMiao Harem",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/934764",
+      "version_name": "Anima_1.2",
+      "base_model": "Anima",
+      "version_page_url": "https://civitai.com/models/934764?modelVersionId=3020110"
+    },
+    {
+      "set": "all_te",
+      "group": "text_encoders",
+      "catalog_name": "miaomiaoHarem_anima12_txt.safetensors",
+      "download_url": "https://civitai.com/api/download/models/3020110?fileId=2898941",
+      "version_id": 3020110,
+      "file_id": 2898941,
+      "model_id": 934764,
+      "model_name": "MiaoMiao Harem",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/934764",
+      "version_name": "Anima_1.2",
+      "base_model": "Anima",
+      "version_page_url": "https://civitai.com/models/934764?modelVersionId=3020110"
+    },
+    {
+      "set": "uncategorized",
+      "group": "checkpoints",
+      "catalog_name": "vxpILXL_source.safetensors",
+      "download_url": "https://civitai.com/api/download/models/1201891",
+      "version_id": 1201891,
+      "file_id": null,
+      "model_id": 1070739,
+      "model_name": "VXP_IL_XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1070739",
+      "version_name": "v1.2",
+      "base_model": "Illustrious",
+      "version_page_url": "https://civitai.com/models/1070739?modelVersionId=1201891"
+    }
+  ],
+  "models": [
+    {
+      "model_id": 1325426,
+      "model_name": "Amanatsu (Illustrious)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1325426",
+      "catalog_entries": [
+        {
+          "catalog_name": "amanatsuIllustrious_v2.safetensors",
+          "set": "anime_starter",
+          "group": "checkpoints",
+          "version_id": 2288934,
+          "version_name": "v2",
+          "download_url": "https://civitai.com/api/download/models/2288934?fileId=2225962"
+        },
+        {
+          "catalog_name": "amanatsuIllustrious_v2.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 2288934,
+          "version_name": "v2",
+          "download_url": "https://civitai.com/api/download/models/2288934?fileId=2225962"
+        }
+      ]
+    },
+    {
+      "model_id": 1353314,
+      "model_name": "Animij",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1353314",
+      "catalog_entries": [
+        {
+          "catalog_name": "animij_v10.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 1528632,
+          "version_name": "v1",
+          "download_url": "https://civitai.com/api/download/models/1528632"
+        },
+        {
+          "catalog_name": "animij_v20.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 1613008,
+          "version_name": "v2",
+          "download_url": "https://civitai.com/api/download/models/1613008"
+        }
+      ]
+    },
+    {
+      "model_id": 575395,
+      "model_name": "Big Lust",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/575395",
+      "catalog_entries": [
+        {
+          "catalog_name": "biglust_full_fp16.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 1081768,
+          "version_name": "v1.6",
+          "download_url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16"
+        }
+      ]
+    },
+    {
+      "model_id": 709404,
+      "model_name": "CyberRealistic Pony Semi-Realistic",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/709404",
+      "catalog_entries": [
+        {
+          "catalog_name": "cyberrealisticPony_semiRealV5.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 2833750,
+          "version_name": "Semi-Real v5",
+          "download_url": "https://civitai.com/api/download/models/2833750?fileId=2721289"
+        }
+      ]
+    },
+    {
+      "model_id": 2583,
+      "model_name": "Hassaku (SD1.5)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/2583",
+      "catalog_entries": [
+        {
+          "catalog_name": "hassakuSD15.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 106922,
+          "version_name": "v1.3",
+          "download_url": "https://civitai.com/api/download/models/106922"
+        }
+      ]
+    },
+    {
+      "model_id": 140272,
+      "model_name": "Hassaku XL (Illustrious)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/140272",
+      "catalog_entries": [
+        {
+          "catalog_name": "hassakuXLIllustrious_v34.safetensors",
+          "set": "anime_starter",
+          "group": "checkpoints",
+          "version_id": 2615702,
+          "version_name": "v3.4",
+          "download_url": "https://civitai.com/api/download/models/2615702?fileId=2503211"
+        },
+        {
+          "catalog_name": "hassakuXLIllustrious_v34.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 2615702,
+          "version_name": "v3.4",
+          "download_url": "https://civitai.com/api/download/models/2615702?fileId=2503211"
+        }
+      ]
+    },
+    {
+      "model_id": 376031,
+      "model_name": "Hassaku XL (Pony)",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/376031",
+      "catalog_entries": [
+        {
+          "catalog_name": "hassakuXLPony.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 575495,
+          "version_name": "v1.3(better eyes version)",
+          "download_url": "https://civitai.com/api/download/models/575495"
+        }
+      ]
+    },
+    {
+      "model_id": 795765,
+      "model_name": "Illustrious-XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/795765",
+      "catalog_entries": [
+        {
+          "catalog_name": "illustriousXL_v01.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 889818,
+          "version_name": "v0.1",
+          "download_url": "https://civitai.com/api/download/models/889818"
+        }
+      ]
+    },
+    {
+      "model_id": 133005,
+      "model_name": "Juggernaut XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/133005",
+      "catalog_entries": [
+        {
+          "catalog_name": "juggernautXL_juggXlByRundiffusion.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 782002,
+          "version_name": "Jugg_XI_by_RunDiffusion",
+          "download_url": "https://civitai.com/api/download/models/782002"
+        }
+      ]
+    },
+    {
+      "model_id": 573152,
+      "model_name": "LUSTIFY! [SDXL NSFW checkpoint]",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/573152",
+      "catalog_entries": [
+        {
+          "catalog_name": "lustifySDXL_pruned_fp16.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 2808677,
+          "version_name": "APEX (V8)",
+          "download_url": "https://civitai.com/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        }
+      ]
+    },
+    {
+      "model_id": 934764,
+      "model_name": "MiaoMiao Harem",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/934764",
+      "catalog_entries": [
+        {
+          "catalog_name": "miaomiaoHarem_anima12.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 3020110,
+          "version_name": "Anima_1.2",
+          "download_url": "https://civitai.com/api/download/models/3020110?fileId=2908822"
+        },
+        {
+          "catalog_name": "qwen_image_vae.safetensors",
+          "set": "all_vae",
+          "group": "vae",
+          "version_id": 3020110,
+          "version_name": "Anima_1.2",
+          "download_url": "https://civitai.com/api/download/models/3020110?fileId=2898940"
+        },
+        {
+          "catalog_name": "miaomiaoHarem_anima12_txt.safetensors",
+          "set": "all_te",
+          "group": "text_encoders",
+          "version_id": 3020110,
+          "version_name": "Anima_1.2",
+          "download_url": "https://civitai.com/api/download/models/3020110?fileId=2898941"
+        }
+      ]
+    },
+    {
+      "model_id": 376130,
+      "model_name": "Nova Anime XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/376130",
+      "catalog_entries": [
+        {
+          "catalog_name": "novaAnimeXL_ilV180.safetensors",
+          "set": "anime_starter",
+          "group": "checkpoints",
+          "version_id": 2837020,
+          "version_name": "IL v18.0",
+          "download_url": "https://civitai.com/api/download/models/2837020?fileId=2723189"
+        },
+        {
+          "catalog_name": "novaAnimeXL_ilV180.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 2837020,
+          "version_name": "IL v18.0",
+          "download_url": "https://civitai.com/api/download/models/2837020?fileId=2723189"
+        }
+      ]
+    },
+    {
+      "model_id": 257749,
+      "model_name": "Pony Diffusion V6 XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/257749",
+      "catalog_entries": [
+        {
+          "catalog_name": "ponyDiffusionV6XL.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 290640,
+          "version_name": "V6 (start with this one)",
+          "download_url": "https://civitai.com/api/download/models/290640"
+        }
+      ]
+    },
+    {
+      "model_id": 317902,
+      "model_name": "T-ponynai3",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/317902",
+      "catalog_entries": [
+        {
+          "catalog_name": "tPonynai3_v7.safetensors",
+          "set": "anime_starter",
+          "group": "checkpoints",
+          "version_id": 1392706,
+          "version_name": "v7",
+          "download_url": "https://civitai.com/api/download/models/1392706?fileId=1295292"
+        },
+        {
+          "catalog_name": "tPonynai3_v7.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 1392706,
+          "version_name": "v7",
+          "download_url": "https://civitai.com/api/download/models/1392706?fileId=1295292"
+        }
+      ]
+    },
+    {
+      "model_id": 1662539,
+      "model_name": "VXP Illustrious 2.0",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1662539",
+      "catalog_entries": [
+        {
+          "catalog_name": "vxpIllustrious20_rc3.safetensors",
+          "set": "anime_starter",
+          "group": "checkpoints",
+          "version_id": 1881740,
+          "version_name": "RC3",
+          "download_url": "https://civitai.com/api/download/models/1881740?fileId=1781644"
+        },
+        {
+          "catalog_name": "vxpIllustrious20_rc3.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 1881740,
+          "version_name": "RC3",
+          "download_url": "https://civitai.com/api/download/models/1881740?fileId=1781644"
+        }
+      ]
+    },
+    {
+      "model_id": 1070739,
+      "model_name": "VXP_IL_XL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1070739",
+      "catalog_entries": [
+        {
+          "catalog_name": "vxpILXL_v188.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 1774915,
+          "version_name": "v1.88",
+          "download_url": "https://civitai.com/api/download/models/1774915?fileId=1675747"
+        },
+        {
+          "catalog_name": "vxpILXL_source.safetensors",
+          "set": "uncategorized",
+          "group": "checkpoints",
+          "version_id": 1201891,
+          "version_name": "v1.2",
+          "download_url": "https://civitai.com/api/download/models/1201891"
+        }
+      ]
+    },
+    {
+      "model_id": 553648,
+      "model_name": "WAI-ANI-HENTAI-PONYXL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/553648",
+      "catalog_entries": [
+        {
+          "catalog_name": "waiANIHENTAIPONYXL.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 952743,
+          "version_name": "v6.0",
+          "download_url": "https://civitai.com/api/download/models/952743?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+        }
+      ]
+    },
+    {
+      "model_id": 404154,
+      "model_name": "WAI-ANI-PONYXL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/404154",
+      "catalog_entries": [
+        {
+          "catalog_name": "waiANIPONYXL_v140.safetensors",
+          "set": "anime_starter",
+          "group": "checkpoints",
+          "version_id": 1767402,
+          "version_name": "v14.0",
+          "download_url": "https://civitai.com/api/download/models/1767402?fileId=1671379"
+        },
+        {
+          "catalog_name": "waiANIPONYXL_v140.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 1767402,
+          "version_name": "v14.0",
+          "download_url": "https://civitai.com/api/download/models/1767402?fileId=1671379"
+        }
+      ]
+    },
+    {
+      "model_id": 827184,
+      "model_name": "WAI-illustrious-SDXL",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/827184",
+      "catalog_entries": [
+        {
+          "catalog_name": "waiIllustriousSDXL_v170.safetensors",
+          "set": "anime_starter",
+          "group": "checkpoints",
+          "version_id": 2883731,
+          "version_name": "v17.0",
+          "download_url": "https://civitai.com/api/download/models/2883731?fileId=2763986"
+        },
+        {
+          "catalog_name": "waiIllustriousSDXL_v170.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 2883731,
+          "version_name": "v17.0",
+          "download_url": "https://civitai.com/api/download/models/2883731?fileId=2763986"
+        }
+      ]
+    },
+    {
+      "model_id": 1277670,
+      "model_name": "✨ JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL ✨",
+      "model_type": "Checkpoint",
+      "main_url": "https://civitai.com/models/1277670",
+      "catalog_entries": [
+        {
+          "catalog_name": "JANKUtrainedChenkinNoobai_v777.safetensors",
+          "set": "all_models",
+          "group": "checkpoints",
+          "version_id": 2786084,
+          "version_name": "v7.77",
+          "download_url": "https://civitai.com/api/download/models/2786084"
+        }
+      ]
+    },
+    {
+      "model_id": 896369,
+      "model_name": "Armbinder",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/896369",
+      "catalog_entries": [
+        {
+          "catalog_name": "Armbinder_IL.safetensors",
+          "set": "all_loras",
+          "group": "loras",
+          "version_id": 1260659,
+          "version_name": "Illustrious",
+          "download_url": "https://civitai.com/api/download/models/1260659?fileId=1165775"
+        }
+      ]
+    },
+    {
+      "model_id": 1837372,
+      "model_name": "Free use with armbinders",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/1837372",
+      "catalog_entries": [
+        {
+          "catalog_name": "Free_use_with_armbinders.safetensors",
+          "set": "all_loras",
+          "group": "loras",
+          "version_id": 2079214,
+          "version_name": "V1",
+          "download_url": "https://civitai.com/api/download/models/2079214?fileId=1976370"
+        }
+      ]
+    },
+    {
+      "model_id": 1451639,
+      "model_name": "Quad Amputee Stumpless",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/1451639",
+      "catalog_entries": [
+        {
+          "catalog_name": "Amputee_stumpless_Illu_v3_drawn.safetensors",
+          "set": "all_loras",
+          "group": "loras",
+          "version_id": 1857241,
+          "version_name": "Illustrious V3 Drawn",
+          "download_url": "https://civitai.com/api/download/models/1857241?fileId=1756941"
+        }
+      ]
+    },
+    {
+      "model_id": 787560,
+      "model_name": "Reverse-Prayer Armbinder | 背手祈祷式单手套",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/787560",
+      "catalog_entries": [
+        {
+          "catalog_name": "RParmbinderPony.safetensors",
+          "set": "all_loras",
+          "group": "loras",
+          "version_id": 1270573,
+          "version_name": "pony ver",
+          "download_url": "https://civitai.com/api/download/models/1270573?fileId=1175559"
+        }
+      ]
+    },
+    {
+      "model_id": 684499,
+      "model_name": "Sex Slave Training",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/684499",
+      "catalog_entries": [
+        {
+          "catalog_name": "Sex_slave_training.safetensors",
+          "set": "all_loras",
+          "group": "loras",
+          "version_id": 766116,
+          "version_name": "Pony",
+          "download_url": "https://civitai.com/api/download/models/766116?fileId=679980"
+        },
+        {
+          "catalog_name": "Sex_slave_training_illustrious.safetensors",
+          "set": "all_loras",
+          "group": "loras",
+          "version_id": 1766947,
+          "version_name": "Ver.IL",
+          "download_url": "https://civitai.com/api/download/models/1766947?fileId=1667707"
+        }
+      ]
+    },
+    {
+      "model_id": 2349919,
+      "model_name": "armbinder bondage",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/2349919",
+      "catalog_entries": [
+        {
+          "catalog_name": "bondage_armbinder.safetensors",
+          "set": "all_loras",
+          "group": "loras",
+          "version_id": 2643047,
+          "version_name": "V1",
+          "download_url": "https://civitai.com/api/download/models/2643047?fileId=2535617"
+        }
+      ]
+    },
+    {
+      "model_id": 589918,
+      "model_name": "マンコ拡張/pussy spreader",
+      "model_type": "LORA",
+      "main_url": "https://civitai.com/models/589918",
+      "catalog_entries": [
+        {
+          "catalog_name": "pussy spreader_illustrious_V1.0.safetensors",
+          "set": "all_loras",
+          "group": "loras",
+          "version_id": 1229565,
+          "version_name": "v1.0 ill",
+          "download_url": "https://civitai.com/api/download/models/1229565?fileId=1134994"
+        }
+      ]
+    }
+  ]
+}

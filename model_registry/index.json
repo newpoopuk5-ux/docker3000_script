@@ -1,0 +1,831 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-14T14:33:04.537703+00:00",
+  "source_roots": "civitai_model_roots.json",
+  "recommended_category": "recommended",
+  "kinds": {
+    "checkpoint": {
+      "label": "Checkpoint",
+      "folder": "checkpoints",
+      "tab": "models"
+    },
+    "lora": {
+      "label": "LoRA",
+      "folder": "loras",
+      "tab": "loras"
+    },
+    "vae": {
+      "label": "VAE",
+      "folder": "vae",
+      "tab": "vae"
+    },
+    "text_encoder": {
+      "label": "Text Encoder",
+      "folder": "text_encoders",
+      "tab": "te"
+    },
+    "flux_diffusion": {
+      "label": "Flux Diffusion",
+      "folder": "diffusion_models",
+      "tab": "flux"
+    },
+    "flux_gguf_unet": {
+      "label": "Flux GGUF UNet",
+      "folder": "unet",
+      "tab": "flux"
+    },
+    "flux_lora": {
+      "label": "Flux LoRA",
+      "folder": "loras",
+      "tab": "flux"
+    },
+    "controlnet": {
+      "label": "ControlNet",
+      "folder": "controlnet",
+      "tab": "controlnet"
+    },
+    "upscaler": {
+      "label": "Upscaler",
+      "folder": "upscale_models",
+      "tab": "upscalers"
+    }
+  },
+  "categories": {
+    "anime_starter": {
+      "label": "anime starter",
+      "description": "Anime starter checkpoints",
+      "refs": [
+        "civitai:1325426",
+        "civitai:140272",
+        "civitai:376130",
+        "civitai:317902",
+        "civitai:1662539",
+        "civitai:404154",
+        "civitai:827184"
+      ]
+    },
+    "all_models": {
+      "label": "all models",
+      "description": "All checkpoints",
+      "refs": [
+        "civitai:1325426",
+        "civitai:1353314",
+        "civitai:575395",
+        "civitai:709404",
+        "civitai:2583",
+        "civitai:140272",
+        "civitai:376031",
+        "civitai:795765",
+        "civitai:133005",
+        "civitai:573152",
+        "civitai:934764:f2908822",
+        "civitai:376130",
+        "civitai:257749",
+        "civitai:317902",
+        "civitai:1662539",
+        "civitai:1070739",
+        "civitai:553648",
+        "civitai:404154",
+        "civitai:827184",
+        "civitai:1277670"
+      ]
+    },
+    "all_te": {
+      "label": "all te",
+      "description": "All text encoders",
+      "refs": [
+        "civitai:934764:f2898941"
+      ]
+    },
+    "all_vae": {
+      "label": "all vae",
+      "description": "All VAE",
+      "refs": [
+        "civitai:934764:f2898940"
+      ]
+    },
+    "uncategorized": {
+      "label": "uncategorized",
+      "description": "Uncategorized",
+      "refs": [
+        "civitai:1070739"
+      ]
+    },
+    "all_loras": {
+      "label": "all loras",
+      "description": "All LoRAs",
+      "refs": [
+        "civitai:896369",
+        "civitai:1837372",
+        "civitai:1451639",
+        "civitai:787560",
+        "civitai:684499",
+        "civitai:2349919",
+        "civitai:589918",
+        "civitai:908876",
+        "civitai:1209663"
+      ]
+    },
+    "anima": {
+      "label": "anima",
+      "description": "Anima Base (HF UNET + TE + VAE)",
+      "refs": [
+        "hf:circlestone-labsanima:qwen-image-vae",
+        "hf:circlestone-labsanima:qwen-3-06b-base",
+        "hf:circlestone-labsanima:anima-base-v10"
+      ]
+    },
+    "recommended": {
+      "label": "Recommended",
+      "description": "Anime starter + Anima + MiaoMiao bundles",
+      "refs": [
+        "civitai:1325426",
+        "civitai:140272",
+        "civitai:376130",
+        "civitai:317902",
+        "civitai:1662539",
+        "civitai:404154",
+        "civitai:827184",
+        "hf:circlestone-labsanima:qwen-image-vae",
+        "hf:circlestone-labsanima:qwen-3-06b-base",
+        "hf:circlestone-labsanima:anima-base-v10"
+      ]
+    }
+  },
+  "entries": {
+    "civitai:1325426": {
+      "ref": "civitai:1325426",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Amanatsu (Illustrious)",
+      "model_id": 1325426,
+      "main_url": "https://civitai.com/models/1325426",
+      "default_version_id": 2288934,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e85a8ca3-d66e-4b64-ad4a-f3cb4d7b95fc/original=true/107152029.jpeg",
+      "version_count": 3,
+      "tags": [
+        "illustrious",
+        "checkpoint",
+        "amanatsu",
+        "(illustrious)"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2288934
+    },
+    "civitai:1353314": {
+      "ref": "civitai:1353314",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Animij",
+      "model_id": 1353314,
+      "main_url": "https://civitai.com/models/1353314",
+      "default_version_id": 2827109,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9aed08ab-82fa-4b5b-97a5-f8c6e1b6d4e3/original=true/126292343.jpeg",
+      "version_count": 11,
+      "tags": [
+        "illustrious",
+        "checkpoint",
+        "animij"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2827109
+    },
+    "civitai:575395": {
+      "ref": "civitai:575395",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Big Lust",
+      "model_id": 575395,
+      "main_url": "https://civitai.com/models/575395",
+      "default_version_id": 1081768,
+      "default_base_model": "SDXL 1.0",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/83797d58-8805-4772-8604-c8b72b7a092e/original=true/41146710.jpeg",
+      "version_count": 3,
+      "tags": [
+        "sdxl-10",
+        "sdxl",
+        "checkpoint",
+        "lust"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1081768
+    },
+    "civitai:709404": {
+      "ref": "civitai:709404",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "CyberRealistic Pony Semi-Realistic",
+      "model_id": 709404,
+      "main_url": "https://civitai.com/models/709404",
+      "default_version_id": 3007024,
+      "default_base_model": "Pony",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/70caa871-156c-4e55-a300-e6993d354eb2/original=true/132915721.jpeg",
+      "version_count": 9,
+      "tags": [
+        "pony",
+        "checkpoint",
+        "cyberrealistic",
+        "semi",
+        "realistic"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 3007024
+    },
+    "civitai:2583": {
+      "ref": "civitai:2583",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Hassaku (SD1.5)",
+      "model_id": 2583,
+      "main_url": "https://civitai.com/models/2583",
+      "default_version_id": 106922,
+      "default_base_model": "SD 1.5",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/566b1f1b-c3fa-4a63-99f1-57be50aaa08d/original=true/1340616.jpeg",
+      "version_count": 6,
+      "tags": [
+        "sd-15",
+        "checkpoint",
+        "hassaku",
+        "(sd1.5)"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 106922
+    },
+    "civitai:140272": {
+      "ref": "civitai:140272",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Hassaku XL (Illustrious)",
+      "model_id": 140272,
+      "main_url": "https://civitai.com/models/140272",
+      "default_version_id": 2615702,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ea4c627d-91f2-486a-bc8f-026d316684e2/original=true/118186280.jpeg",
+      "version_count": 30,
+      "tags": [
+        "illustrious",
+        "checkpoint",
+        "hassaku",
+        "(illustrious)"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2615702
+    },
+    "civitai:376031": {
+      "ref": "civitai:376031",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Hassaku XL (Pony)",
+      "model_id": 376031,
+      "main_url": "https://civitai.com/models/376031",
+      "default_version_id": 575495,
+      "default_base_model": "Pony",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/40628a2e-c336-4ef0-8ae0-f2c1bdd87442/original=true/15933394.jpeg",
+      "version_count": 6,
+      "tags": [
+        "pony",
+        "checkpoint",
+        "hassaku",
+        "(pony)"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 575495
+    },
+    "civitai:795765": {
+      "ref": "civitai:795765",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Illustrious-XL",
+      "model_id": 795765,
+      "main_url": "https://civitai.com/models/795765",
+      "default_version_id": 889818,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ba3f42b7-a4e8-43a7-8b25-8b50708a85cb/original=true/31462610.jpeg",
+      "version_count": 1,
+      "tags": [
+        "illustrious",
+        "checkpoint"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 889818
+    },
+    "civitai:133005": {
+      "ref": "civitai:133005",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Juggernaut XL",
+      "model_id": 133005,
+      "main_url": "https://civitai.com/models/133005",
+      "default_version_id": 1759168,
+      "default_base_model": "SDXL 1.0",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/37f9b909-e7ef-479a-b3db-1f59409d25cb/original=true/74821598.jpeg",
+      "version_count": 17,
+      "tags": [
+        "sdxl-10",
+        "sdxl",
+        "checkpoint",
+        "juggernaut"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1759168
+    },
+    "civitai:573152": {
+      "ref": "civitai:573152",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "LUSTIFY! [SDXL NSFW checkpoint]",
+      "model_id": 573152,
+      "main_url": "https://civitai.com/models/573152",
+      "default_version_id": 2808677,
+      "default_base_model": "SDXL 1.0",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/906d2b90-7b51-42bd-8b1a-a6c97ae6ee4c/original=true/125775674.jpeg",
+      "version_count": 15,
+      "tags": [
+        "sdxl-10",
+        "sdxl",
+        "checkpoint",
+        "lustify!",
+        "[sdxl",
+        "nsfw",
+        "checkpoint]"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2808677
+    },
+    "civitai:934764:f2908822": {
+      "ref": "civitai:934764:f2908822",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "MiaoMiao Harem",
+      "model_id": 934764,
+      "main_url": "https://civitai.com/models/934764",
+      "default_version_id": 3020110,
+      "default_base_model": "Anima",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/37e7e829-7607-4062-b269-a66f7c26d35a/original=true/133367243.jpeg",
+      "version_count": 24,
+      "tags": [
+        "anima",
+        "checkpoint",
+        "miaomiao",
+        "harem"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 3020110
+    },
+    "civitai:934764:f2898941": {
+      "ref": "civitai:934764:f2898941",
+      "source": "civitai",
+      "kind": "text_encoder",
+      "label": "MiaoMiao Harem",
+      "model_id": 934764,
+      "main_url": "https://civitai.com/models/934764",
+      "default_version_id": 3020110,
+      "default_base_model": "Anima",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/37e7e829-7607-4062-b269-a66f7c26d35a/original=true/133367243.jpeg",
+      "version_count": 24,
+      "tags": [
+        "anima",
+        "text-encoder",
+        "miaomiao",
+        "harem"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 3020110
+    },
+    "civitai:934764:f2898940": {
+      "ref": "civitai:934764:f2898940",
+      "source": "civitai",
+      "kind": "vae",
+      "label": "MiaoMiao Harem",
+      "model_id": 934764,
+      "main_url": "https://civitai.com/models/934764",
+      "default_version_id": 3020110,
+      "default_base_model": "Anima",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/37e7e829-7607-4062-b269-a66f7c26d35a/original=true/133367243.jpeg",
+      "version_count": 24,
+      "tags": [
+        "anima",
+        "vae",
+        "miaomiao",
+        "harem"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 3020110
+    },
+    "civitai:376130": {
+      "ref": "civitai:376130",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Nova Anime XL",
+      "model_id": 376130,
+      "main_url": "https://civitai.com/models/376130",
+      "default_version_id": 2940478,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c2ac76e4-8bcb-48c0-abde-a8594288bfef/original=true/130519340.jpeg",
+      "version_count": 30,
+      "tags": [
+        "illustrious",
+        "checkpoint",
+        "nova",
+        "anime"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2940478
+    },
+    "civitai:257749": {
+      "ref": "civitai:257749",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "Pony Diffusion V6 XL",
+      "model_id": 257749,
+      "main_url": "https://civitai.com/models/257749",
+      "default_version_id": 290640,
+      "default_base_model": "Pony",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4790674c-e16d-4dc7-b384-af4381fcfa3f/original=true/5706937.jpeg",
+      "version_count": 3,
+      "tags": [
+        "pony",
+        "checkpoint",
+        "diffusion"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 290640
+    },
+    "civitai:317902": {
+      "ref": "civitai:317902",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "T-ponynai3",
+      "model_id": 317902,
+      "main_url": "https://civitai.com/models/317902",
+      "default_version_id": 1392706,
+      "default_base_model": "Pony",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c227d0fc-1f62-4421-a4b3-8e8a474242a9/original=true/56794361.jpeg",
+      "version_count": 13,
+      "tags": [
+        "pony",
+        "checkpoint",
+        "ponynai3"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1392706
+    },
+    "civitai:1662539": {
+      "ref": "civitai:1662539",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "VXP Illustrious 2.0",
+      "model_id": 1662539,
+      "main_url": "https://civitai.com/models/1662539",
+      "default_version_id": 1881740,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/554287b9-f307-45dd-9eef-61f658721c44/original=true/81139442.jpeg",
+      "version_count": 1,
+      "tags": [
+        "illustrious",
+        "checkpoint"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1881740
+    },
+    "civitai:1070739": {
+      "ref": "civitai:1070739",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "VXP_IL_XL",
+      "model_id": 1070739,
+      "main_url": "https://civitai.com/models/1070739",
+      "default_version_id": 1774915,
+      "default_base_model": "SDXL 1.0",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d6474066-f4e9-4930-93ca-4f44bc4cba0d/original=true/75609978.jpeg",
+      "version_count": 3,
+      "tags": [
+        "sdxl-10",
+        "sdxl",
+        "checkpoint"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1774915
+    },
+    "civitai:553648": {
+      "ref": "civitai:553648",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "WAI-ANI-HENTAI-PONYXL",
+      "model_id": 553648,
+      "main_url": "https://civitai.com/models/553648",
+      "default_version_id": 952743,
+      "default_base_model": "Pony",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e7afeb9e-55cc-4bc0-a0a7-0e9b930612da/original=true/34422976.jpeg",
+      "version_count": 6,
+      "tags": [
+        "pony",
+        "checkpoint",
+        "hentai",
+        "ponyxl"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 952743
+    },
+    "civitai:404154": {
+      "ref": "civitai:404154",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "WAI-ANI-PONYXL",
+      "model_id": 404154,
+      "main_url": "https://civitai.com/models/404154",
+      "default_version_id": 1767402,
+      "default_base_model": "Pony",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e0f0b94f-381c-4424-a68e-17e9616320f5/original=true/75399877.jpeg",
+      "version_count": 17,
+      "tags": [
+        "pony",
+        "checkpoint",
+        "ponyxl"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1767402
+    },
+    "civitai:827184": {
+      "ref": "civitai:827184",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "WAI-illustrious-SDXL",
+      "model_id": 827184,
+      "main_url": "https://civitai.com/models/827184",
+      "default_version_id": 2883731,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/bf704a4b-9e7c-4651-9387-91f121b24ef3/original=true/128374653.jpeg",
+      "version_count": 17,
+      "tags": [
+        "illustrious",
+        "checkpoint",
+        "sdxl"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2883731
+    },
+    "civitai:1277670": {
+      "ref": "civitai:1277670",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "label": "✨ JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL ✨",
+      "model_id": 1277670,
+      "main_url": "https://civitai.com/models/1277670",
+      "default_version_id": 2786084,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/573cab67-bc20-4bdc-ae8d-d5caa1ba42d4/original=true/124686956.jpeg",
+      "version_count": 10,
+      "tags": [
+        "illustrious",
+        "checkpoint",
+        "janku",
+        "trained",
+        "chenkin",
+        "noobai",
+        "rouwei"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2786084
+    },
+    "civitai:896369": {
+      "ref": "civitai:896369",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "Armbinder",
+      "model_id": 896369,
+      "main_url": "https://civitai.com/models/896369",
+      "default_version_id": 1260659,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5173b07c-fcf5-42cb-878c-073993957ac4/original=true/50522080.jpeg",
+      "version_count": 3,
+      "tags": [
+        "illustrious",
+        "lora",
+        "armbinder"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1260659
+    },
+    "civitai:1837372": {
+      "ref": "civitai:1837372",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "Free use with armbinders",
+      "model_id": 1837372,
+      "main_url": "https://civitai.com/models/1837372",
+      "default_version_id": 2079214,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1e4e253f-d21b-4a36-8c38-e94ba02a53e4/original=true/92266971.jpeg",
+      "version_count": 1,
+      "tags": [
+        "illustrious",
+        "lora",
+        "free",
+        "with",
+        "armbinders"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2079214
+    },
+    "civitai:1451639": {
+      "ref": "civitai:1451639",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "Quad Amputee Stumpless",
+      "model_id": 1451639,
+      "main_url": "https://civitai.com/models/1451639",
+      "default_version_id": 1857241,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d6501532-78c2-4d12-9177-79d3405d367a/original=true/79815946.jpeg",
+      "version_count": 5,
+      "tags": [
+        "illustrious",
+        "lora",
+        "quad",
+        "amputee",
+        "stumpless"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1857241
+    },
+    "civitai:787560": {
+      "ref": "civitai:787560",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "Reverse-Prayer Armbinder | 背手祈祷式单手套",
+      "model_id": 787560,
+      "main_url": "https://civitai.com/models/787560",
+      "default_version_id": 1270573,
+      "default_base_model": "Pony",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e69da01b-bd37-4d95-bcd2-bcd3c1aceeeb/original=true/51007056.jpeg",
+      "version_count": 2,
+      "tags": [
+        "pony",
+        "lora",
+        "reverse",
+        "prayer",
+        "armbinder",
+        "背手祈祷式单手套"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1270573
+    },
+    "civitai:684499": {
+      "ref": "civitai:684499",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "Sex Slave Training",
+      "model_id": 684499,
+      "main_url": "https://civitai.com/models/684499",
+      "default_version_id": 1766947,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/21f9d81d-16c3-4aa4-9e32-3442154fc211/original=true/75214556.jpeg",
+      "version_count": 2,
+      "tags": [
+        "illustrious",
+        "lora",
+        "slave",
+        "training"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1766947
+    },
+    "civitai:2349919": {
+      "ref": "civitai:2349919",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "armbinder bondage",
+      "model_id": 2349919,
+      "main_url": "https://civitai.com/models/2349919",
+      "default_version_id": 2643047,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e70d28a5-a4e2-4428-b24b-e197ac09a285/original=true/119476356.jpeg",
+      "version_count": 1,
+      "tags": [
+        "illustrious",
+        "lora",
+        "armbinder",
+        "bondage"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2643047
+    },
+    "civitai:589918": {
+      "ref": "civitai:589918",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "マンコ拡張/pussy spreader",
+      "model_id": 589918,
+      "main_url": "https://civitai.com/models/589918",
+      "default_version_id": 1703115,
+      "default_base_model": "NoobAI",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b9e8a892-4807-4b68-874b-3c8f2cc6e2ee/original=true/72040123.jpeg",
+      "version_count": 4,
+      "tags": [
+        "noobai",
+        "lora",
+        "マンコ拡張/pussy",
+        "spreader"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 1703115
+    },
+    "hf:circlestone-labsanima:qwen-image-vae": {
+      "ref": "hf:circlestone-labsanima:qwen-image-vae",
+      "source": "hf",
+      "kind": "vae",
+      "label": "Anima · qwen_image_vae",
+      "default_version_id": "v1",
+      "default_base_model": "",
+      "preview_remote_url": null,
+      "version_count": 1,
+      "tags": [
+        "vae",
+        "anima",
+        "qwen",
+        "image"
+      ],
+      "bundle_id": "anima"
+    },
+    "hf:circlestone-labsanima:qwen-3-06b-base": {
+      "ref": "hf:circlestone-labsanima:qwen-3-06b-base",
+      "source": "hf",
+      "kind": "text_encoder",
+      "label": "Anima · qwen_3_06b_base",
+      "default_version_id": "v1",
+      "default_base_model": "",
+      "preview_remote_url": null,
+      "version_count": 1,
+      "tags": [
+        "text-encoder",
+        "anima",
+        "qwen",
+        "base"
+      ],
+      "bundle_id": "anima"
+    },
+    "hf:circlestone-labsanima:anima-base-v10": {
+      "ref": "hf:circlestone-labsanima:anima-base-v10",
+      "source": "hf",
+      "kind": "flux_diffusion",
+      "label": "Anima · anima-base-v1.0",
+      "default_version_id": "v1",
+      "default_base_model": "Flux",
+      "preview_remote_url": null,
+      "version_count": 1,
+      "tags": [
+        "flux",
+        "flux-diffusion",
+        "anima",
+        "base",
+        "v1.0"
+      ],
+      "bundle_id": "anima"
+    },
+    "civitai:908876": {
+      "ref": "civitai:908876",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "Plug gag [NoobAI EPS/Illustrious, Pony XL]",
+      "model_id": 908876,
+      "main_url": "https://civitai.com/models/908876",
+      "default_version_id": 2236260,
+      "default_base_model": "Illustrious",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/021d30cf-cf8d-4fb4-97a6-a0dfd8bd6d55/original=true/101515792.jpeg",
+      "version_count": 3,
+      "tags": [
+        "illustrious",
+        "lora",
+        "plug",
+        "[noobai",
+        "eps/illustrious,",
+        "pony"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 2236260
+    },
+    "civitai:1209663": {
+      "ref": "civitai:1209663",
+      "source": "civitai",
+      "kind": "lora",
+      "label": "Harness Panel Gag",
+      "model_id": 1209663,
+      "main_url": "https://civitai.com/models/1209663",
+      "default_version_id": 3015777,
+      "default_base_model": "Anima",
+      "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/bc7fb987-0881-4105-9ff4-e60753daccb7/original=true/133218894.jpeg",
+      "version_count": 10,
+      "tags": [
+        "anima",
+        "lora",
+        "harness",
+        "panel"
+      ],
+      "bundle_id": null,
+      "civitai_version_id": 3015777
+    }
+  }
+}

@@ -1,7 +1,27 @@
 import os
 from unittest.mock import patch
 
-from download_models import add_token, download_url, file_ok, redact_download_secrets
+from download_models import (
+    add_token,
+    civitai_preview_entries,
+    _pick_primary_civitai_preview,
+    download_url,
+    file_ok,
+    redact_download_secrets,
+)
+
+entries = civitai_preview_entries({"images": [{"url": "https://example.com/a.jpeg", "width": 512, "type": "image"}]})
+assert len(entries) == 1 and entries[0]["url"].endswith("a.jpeg")
+
+animated_first = {
+    "images": [
+        {"url": "https://example.com/a.mp4", "type": "video"},
+        {"url": "https://example.com/b.jpeg", "type": "image", "width": 512},
+    ]
+}
+picked = _pick_primary_civitai_preview(animated_first)
+assert picked and picked["url"].endswith("b.jpeg")
+assert len(civitai_preview_entries(animated_first)) == 1
 
 os.environ["CIVITAI_TOKEN"] = "secret-civitai-token"
 import download_models as dm

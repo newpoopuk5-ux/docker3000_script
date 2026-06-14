@@ -7,6 +7,7 @@ import subprocess
 import sys
 import threading
 import time
+import unicodedata
 from pathlib import Path
 from typing import Callable, Optional
 from urllib.parse import urlparse, parse_qs
@@ -65,7 +66,7 @@ TARGET_DIRS = {
 }
 
 def run(cmd):
-    print("+", " ".join(str(x) for x in cmd))
+    _safe_log_line("+ " + " ".join(str(x) for x in cmd))
     subprocess.run(cmd, check=True)
 
 
@@ -92,7 +93,13 @@ def redact_download_secrets(text: str) -> str:
 
 
 def _safe_log_line(text: str) -> None:
-    print(redact_download_secrets(text))
+    line = redact_download_secrets(text)
+    try:
+        print(line)
+    except UnicodeEncodeError:
+        encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+        sys.stdout.buffer.write((line + "\n").encode(encoding, errors="replace"))
+        sys.stdout.flush()
 
 
 def _emit_progress(progress: Optional[Callable[..., None]], msg: str, **stats) -> None:
@@ -340,6 +347,57 @@ def add_token(url: str) -> str:
 
 
 _CIVITAI_VERSION_RX = re.compile(r"/api/download/models/(\d+)|/model-versions/(\d+)|[?&]modelVersionId=(\d+)")
+_CIVITAI_MODEL_RX = re.compile(r"/models/(\d+)")
+
+
+def normalize_civitai_url(url: str) -> str:
+    return (url or "").strip().replace("civitai.red", "civitai.com")
+
+
+def extract_civitai_model_id(url: str):
+    m = _CIVITAI_MODEL_RX.search(normalize_civitai_url(url))
+    if not m:
+        return None
+    return int(m.group(1))
+
+
+def is_civitai_model_page_url(url: str) -> bool:
+    normalized = normalize_civitai_url(url)
+    if "/api/download/" in normalized:
+        return False
+    return extract_civitai_model_id(normalized) is not None
+
+
+def build_civitai_download_url(version_id: int, file_id: int | None = None) -> str:
+    base = f"https://civitai.com/api/download/models/{int(version_id)}"
+    if file_id is not None:
+        return f"{base}?fileId={int(file_id)}"
+    return base
+
+
+def _sanitize_filename_part(text: str, *, max_len: int = 120) -> str:
+    cleaned = str(text or "")
+    kept: list[str] = []
+    for ch in cleaned:
+        cat = unicodedata.category(ch)
+        if cat in ("So", "Sk", "Cs", "Co", "Cn", "Cf"):
+            continue
+        kept.append(ch)
+    cleaned = "".join(kept)
+    cleaned = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip(" .")
+    if not cleaned:
+        return "model"
+    return cleaned[:max_len]
+
+
+def civitai_pretty_filename(model_name: str, version_name: str, original_filename: str) -> str:
+    ext = Path(str(original_filename or "model.safetensors")).suffix or ".safetensors"
+    model_part = _sanitize_filename_part(model_name)
+    version_part = _sanitize_filename_part(version_name)
+    if version_part and version_part.lower() not in model_part.lower():
+        return f"{model_part} {version_part}{ext}"
+    return f"{model_part}{ext}"
 
 
 def extract_civitai_version_id(url: str):
@@ -383,7 +441,12 @@ def folder_key_for_path(target_dir: Path) -> str:
     return "checkpoints"
 
 
-def civitai_target_path(url: str, folder_key: str | None = None) -> tuple[Path, dict, dict]:
+def civitai_target_path(
+    url: str,
+    folder_key: str | None = None,
+    *,
+    save_as: str | None = None,
+) -> tuple[Path, dict, dict]:
     version_id = extract_civitai_version_id(url)
     if not version_id:
         raise ValueError("Could not parse Civitai model version from URL.")
@@ -397,34 +460,536 @@ def civitai_target_path(url: str, folder_key: str | None = None) -> tuple[Path, 
         target_dir = TARGET_DIRS[key]
     else:
         target_dir = auto_target_dir(meta, file_entry)
-    filename = file_entry.get("name") or f"civitai_{version_id}.safetensors"
-    return target_dir / filename, meta, file_entry
+    raw_name = file_entry.get("name") or f"civitai_{version_id}.safetensors"
+    model_info = meta.get("model") or {}
+    pretty = save_as or civitai_pretty_filename(
+        (model_info.get("name") or "").strip(),
+        (meta.get("name") or "").strip(),
+        raw_name,
+    )
+    return target_dir / pretty, meta, file_entry
 
 
-def preview_civitai_url(url: str, folder_key: str | None = None) -> dict:
-    url = (url or "").strip()
-    if "civitai." not in url:
-        return {"ok": False, "error": "Only Civitai URLs are supported for custom download."}
+CIVITAI_PREVIEW_LIMIT = 3
+CIVITAI_PRIMARY_PREVIEW_SLOT = 2
+CIVITAI_PREVIEW_MAX_BYTES = 12 * 1024 * 1024
+CATALOG_PREVIEW_DIR = (COMFY_ROOT / "models" / ".catalog_previews").resolve()
+PREVIEW_MANIFEST_NAME = ".preview.json"
+
+_PREVIEW_IMAGE_SUFFIXES = (".jpeg", ".jpg", ".png", ".webp")
+
+
+def civitai_preview_cache_dir(version_id: int) -> Path:
+    return CATALOG_PREVIEW_DIR / str(int(version_id))
+
+
+def _model_stem(model_name: str) -> str:
+    stem = Path(str(model_name or "model").strip()).stem
+    return stem or "model"
+
+
+def _named_preview_base(stem: str, slot: int) -> str:
+    slot = int(slot)
+    if slot == CIVITAI_PRIMARY_PREVIEW_SLOT:
+        return stem
+    if slot == 1:
+        return f"{stem}.preview1"
+    if slot == CIVITAI_PRIMARY_PREVIEW_SLOT + 1:
+        return f"{stem}.alt"
+    return f"{stem}.preview{slot}"
+
+
+def _read_preview_manifest(dest_dir: Path) -> dict:
+    path = dest_dir / PREVIEW_MANIFEST_NAME
+    if not path.is_file():
+        return {}
     try:
-        target, meta, file_entry = civitai_target_path(url, folder_key)
-    except Exception as e:
-        return {"ok": False, "error": redact_download_secrets(str(e))}
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _write_preview_manifest(
+    dest_dir: Path,
+    *,
+    model_name: str,
+    primary: str | None,
+    fallback: str | None,
+) -> None:
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "model_name": model_name,
+        "model_stem": _model_stem(model_name),
+        "primary": primary,
+        "fallback": fallback,
+    }
+    (dest_dir / PREVIEW_MANIFEST_NAME).write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+
+def _preview_slot_basename(slot: int) -> str:
+    return f"{int(slot):02d}"
+
+
+def _find_legacy_preview_file(dest_dir: Path, slot: int) -> Path | None:
+    if not dest_dir.is_dir():
+        return None
+    prefix = _preview_slot_basename(slot)
+    matches = [
+        p for p in dest_dir.iterdir()
+        if p.is_file()
+        and p.name.startswith(prefix)
+        and p.suffix.lower() in _PREVIEW_IMAGE_SUFFIXES
+        and p.stat().st_size > 512
+    ]
+    if not matches:
+        return None
+    matches.sort(key=lambda p: p.name)
+    return matches[0]
+
+
+def _find_named_preview_file(dest_dir: Path, stem: str, slot: int) -> Path | None:
+    if not dest_dir.is_dir():
+        return None
+    want_stem = _named_preview_base(stem, slot)
+    matches = [
+        p for p in dest_dir.iterdir()
+        if p.is_file()
+        and p.stem == want_stem
+        and p.suffix.lower() in _PREVIEW_IMAGE_SUFFIXES
+        and p.stat().st_size > 512
+    ]
+    if not matches:
+        return None
+    matches.sort(key=lambda p: p.name)
+    return matches[0]
+
+
+def _find_any_cached_preview_file(dest_dir: Path, *, alt: bool = False) -> Path | None:
+    if not dest_dir.is_dir():
+        return None
+    matches: list[Path] = []
+    for path in dest_dir.iterdir():
+        if not path.is_file() or path.name == PREVIEW_MANIFEST_NAME:
+            continue
+        if path.suffix.lower() not in _PREVIEW_IMAGE_SUFFIXES:
+            continue
+        if not _is_valid_cached_preview(path):
+            continue
+        is_alt = path.stem.endswith(".alt")
+        if alt and not is_alt:
+            continue
+        if not alt and is_alt:
+            continue
+        matches.append(path)
+    if not matches:
+        return None
+    matches.sort(key=lambda p: p.name)
+    return matches[0]
+
+
+def _resolve_preview_file(dest_dir: Path, slot: int, model_name: str | None = None) -> Path | None:
+    manifest = _read_preview_manifest(dest_dir)
+    key = "primary" if slot == CIVITAI_PRIMARY_PREVIEW_SLOT else "fallback"
+    listed = str(manifest.get(key) or "").strip()
+    if listed:
+        path = dest_dir / Path(listed).name
+        if path.is_file() and _is_valid_cached_preview(path):
+            return path
+    stem = str(manifest.get("model_stem") or "").strip() or (
+        _model_stem(model_name) if model_name else ""
+    )
+    if stem:
+        found = _find_named_preview_file(dest_dir, stem, slot)
+        if found and _is_valid_cached_preview(found):
+            return found
+    legacy = _find_legacy_preview_file(dest_dir, slot)
+    if legacy and _is_valid_cached_preview(legacy):
+        return legacy
+    if slot == CIVITAI_PRIMARY_PREVIEW_SLOT:
+        return _find_any_cached_preview_file(dest_dir, alt=False)
+    if slot == CIVITAI_PRIMARY_PREVIEW_SLOT + 1:
+        return _find_any_cached_preview_file(dest_dir, alt=True)
+    return None
+
+
+def civitai_model_filename(meta: dict, file_id: int | None = None) -> str:
+    file_entry = resolve_civitai_file(meta, file_id)
+    version_id = meta.get("id") or "unknown"
+    return str(file_entry.get("name") or f"civitai_{version_id}.safetensors")
+
+
+def primary_cached_preview_filename(version_id: int, model_name: str | None = None) -> str | None:
+    dest = civitai_preview_cache_dir(int(version_id))
+    for slot in (CIVITAI_PRIMARY_PREVIEW_SLOT, 1, 3, CIVITAI_PRIMARY_PREVIEW_SLOT + 1):
+        path = _resolve_preview_file(dest, slot, model_name)
+        if path and _is_valid_cached_preview(path):
+            return path.name
+    return None
+
+
+def fallback_cached_preview_filename(version_id: int, model_name: str | None = None) -> str | None:
+    path = _resolve_preview_file(
+        civitai_preview_cache_dir(int(version_id)),
+        CIVITAI_PRIMARY_PREVIEW_SLOT + 1,
+        model_name,
+    )
+    return path.name if path else None
+
+
+def first_cached_preview_filename(version_id: int, model_name: str | None = None) -> str | None:
+    return primary_cached_preview_filename(version_id, model_name)
+
+
+def civitai_preview_cache_ready(version_id: int, model_name: str | None = None) -> bool:
+    del model_name
+    return primary_cached_preview_filename(int(version_id), None) is not None
+
+
+def civitai_preview_file_path(version_id: int, filename: str) -> Path | None:
+    safe = Path(str(filename or "")).name
+    if not safe or safe != filename:
+        return None
+    path = civitai_preview_cache_dir(int(version_id)) / safe
+    return path if path.is_file() else None
+
+
+def _looks_like_displayable_image(path: Path) -> bool:
+    try:
+        head = path.read_bytes()[:16]
+    except OSError:
+        return False
+    if len(head) >= 3 and head[:3] == b"\xff\xd8\xff":
+        return True
+    if head[:8] == b"\x89PNG\r\n\x1a\n":
+        return True
+    if head[:6] in (b"GIF87a", b"GIF89a"):
+        return True
+    if len(head) >= 12 and head[:4] == b"RIFF" and head[8:12] == b"WEBP":
+        return True
+    if len(head) >= 8 and head[4:8] == b"ftyp":
+        return False
+    return False
+
+
+def _is_valid_cached_preview(path: Path) -> bool:
+    try:
+        size = path.stat().st_size
+    except OSError:
+        return False
+    if size <= 512 or size > CIVITAI_PREVIEW_MAX_BYTES:
+        return False
+    return _looks_like_displayable_image(path)
+
+
+def civitai_preview_entries(meta: dict, limit: int = CIVITAI_PREVIEW_LIMIT) -> list[dict]:
+    limit = max(0, int(limit))
+    if limit == 0:
+        return []
+    gallery = _normalize_civitai_gallery(meta)
+    if not gallery:
+        return []
+    fetch = min(limit, 3, len(gallery))
+    return [
+        {key: value for key, value in row.items() if key != "animated"}
+        for row in gallery[:fetch]
+    ]
+
+
+def _is_animated_civitai_image(img: dict) -> bool:
+    if not isinstance(img, dict):
+        return True
+    kind = str(img.get("type") or "").strip().lower()
+    if kind in ("video", "animated", "animation"):
+        return True
+    url = str(img.get("url") or "").lower()
+    if any(token in url for token in (".gif", ".mp4", ".webm", ".mov", ".m4v")):
+        return True
+    mime = str(img.get("mimeType") or img.get("mime") or "").strip().lower()
+    if mime.startswith("video/") or mime == "image/gif":
+        return True
+    return False
+
+
+def _normalize_civitai_gallery(meta: dict) -> list[dict]:
+    out: list[dict] = []
+    for img in meta.get("images") or []:
+        if not isinstance(img, dict):
+            continue
+        url = str(img.get("url") or "").strip()
+        if not url:
+            continue
+        out.append({
+            "url": url,
+            "width": img.get("width"),
+            "height": img.get("height"),
+            "type": img.get("type"),
+            "animated": _is_animated_civitai_image(img),
+        })
+    return out
+
+
+def _pick_primary_civitai_preview(meta: dict) -> dict | None:
+    """Prefer Civitai gallery image #2; fall back through #1/#3 then any static image."""
+    gallery = _normalize_civitai_gallery(meta)
+    if not gallery:
+        return None
+    order: list[dict] = []
+    if len(gallery) >= 2:
+        order.append(gallery[1])
+    if gallery:
+        order.append(gallery[0])
+    if len(gallery) >= 3:
+        order.append(gallery[2])
+    order.extend(gallery)
+    seen: set[str] = set()
+    for row in order:
+        url = str(row.get("url") or "")
+        if not url or url in seen:
+            continue
+        seen.add(url)
+        if row["animated"]:
+            continue
+        return {key: value for key, value in row.items() if key != "animated"}
+    for row in gallery:
+        if not row["animated"]:
+            return {key: value for key, value in row.items() if key != "animated"}
+    return None
+
+
+def civitai_preview_dir_for(target: Path) -> Path:
+    return target.parent / f"{target.stem}.previews"
+
+
+def _preview_image_ext(url: str) -> str:
+    lower = (url or "").lower().split("?")[0]
+    if lower.endswith(".png") or ".png/" in lower:
+        return ".png"
+    if lower.endswith(".webp") or ".webp/" in lower:
+        return ".webp"
+    if lower.endswith(".gif") or ".gif/" in lower:
+        return ".gif"
+    if lower.endswith(".jpg") or lower.endswith(".jpeg") or ".jpg/" in lower or ".jpeg/" in lower:
+        return ".jpeg"
+    return ".jpeg"
+
+
+def _maybe_migrate_legacy_previews(dest_dir: Path, model_name: str) -> None:
+    if _read_preview_manifest(dest_dir):
+        return
+    stem = _model_stem(model_name)
+    primary_fn: str | None = None
+    fallback_fn: str | None = None
+    for slot in (CIVITAI_PRIMARY_PREVIEW_SLOT, CIVITAI_PRIMARY_PREVIEW_SLOT + 1):
+        legacy = _find_legacy_preview_file(dest_dir, slot)
+        if not legacy or _find_named_preview_file(dest_dir, stem, slot):
+            if slot == CIVITAI_PRIMARY_PREVIEW_SLOT:
+                existing = _find_named_preview_file(dest_dir, stem, slot)
+                if existing:
+                    primary_fn = existing.name
+            else:
+                existing = _find_named_preview_file(dest_dir, stem, slot)
+                if existing:
+                    fallback_fn = existing.name
+            continue
+        new_path = dest_dir / f"{_named_preview_base(stem, slot)}{legacy.suffix}"
+        try:
+            if not new_path.exists():
+                legacy.rename(new_path)
+            else:
+                legacy.unlink(missing_ok=True)
+            if slot == CIVITAI_PRIMARY_PREVIEW_SLOT:
+                primary_fn = new_path.name
+            else:
+                fallback_fn = new_path.name
+        except OSError:
+            if legacy.is_file():
+                if slot == CIVITAI_PRIMARY_PREVIEW_SLOT:
+                    primary_fn = legacy.name
+                else:
+                    fallback_fn = legacy.name
+    if primary_fn or fallback_fn:
+        _write_preview_manifest(dest_dir, model_name=model_name, primary=primary_fn, fallback=fallback_fn)
+
+
+def _download_civitai_preview_entries(
+    entries: list[dict],
+    dest_dir: Path,
+    model_name: str,
+) -> list[str]:
+    if not entries:
+        return []
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    model_name = str(model_name or "model.safetensors").strip() or "model.safetensors"
+    _maybe_migrate_legacy_previews(dest_dir, model_name)
+    stem = _model_stem(model_name)
+    saved: list[str] = []
+    primary_fn: str | None = None
+    fallback_fn: str | None = None
+    for idx, entry in enumerate(entries, start=1):
+        url = entry.get("url") or ""
+        if _is_animated_civitai_image({"url": url, "type": entry.get("type")}):
+            continue
+        existing = _resolve_preview_file(dest_dir, idx, model_name)
+        if existing:
+            if not _is_valid_cached_preview(existing):
+                try:
+                    existing.unlink(missing_ok=True)
+                except OSError:
+                    pass
+            else:
+                saved.append(str(existing))
+                if idx == CIVITAI_PRIMARY_PREVIEW_SLOT:
+                    primary_fn = existing.name
+                elif idx == CIVITAI_PRIMARY_PREVIEW_SLOT + 1:
+                    fallback_fn = existing.name
+                continue
+        ext = _preview_image_ext(url)
+        out_path = dest_dir / f"{_named_preview_base(stem, idx)}{ext}"
+        try:
+            r = requests.get(url, headers=_civitai_request_headers(url), timeout=90, stream=True)
+            r.raise_for_status()
+            content_len = r.headers.get("Content-Length")
+            if content_len:
+                try:
+                    if int(content_len) > CIVITAI_PREVIEW_MAX_BYTES:
+                        continue
+                except (TypeError, ValueError):
+                    pass
+            downloaded = 0
+            with open(out_path, "wb") as f:
+                for chunk in r.iter_content(65536):
+                    if not chunk:
+                        continue
+                    downloaded += len(chunk)
+                    if downloaded > CIVITAI_PREVIEW_MAX_BYTES:
+                        break
+                    f.write(chunk)
+            if downloaded > CIVITAI_PREVIEW_MAX_BYTES or not _is_valid_cached_preview(out_path):
+                out_path.unlink(missing_ok=True)
+                continue
+            saved.append(str(out_path))
+            if idx == CIVITAI_PRIMARY_PREVIEW_SLOT:
+                primary_fn = out_path.name
+            elif idx == CIVITAI_PRIMARY_PREVIEW_SLOT + 1:
+                fallback_fn = out_path.name
+        except Exception as e:
+            _safe_log_line(f"  ! preview {out_path.name} failed: {redact_download_secrets(str(e))}")
+    slot_names: dict[int, str] = {}
+    for idx in (1, 2, 3):
+        hit = _resolve_preview_file(dest_dir, idx, model_name)
+        if hit and _is_valid_cached_preview(hit):
+            slot_names[idx] = hit.name
+    primary_fn = slot_names.get(CIVITAI_PRIMARY_PREVIEW_SLOT) or slot_names.get(1) or slot_names.get(3)
+    fallback_fn = slot_names.get(CIVITAI_PRIMARY_PREVIEW_SLOT + 1) or slot_names.get(1) or slot_names.get(3)
+    if primary_fn and fallback_fn == primary_fn:
+        fallback_fn = None
+    if saved:
+        _safe_log_line(f"  + previews: {len(saved)} saved under {dest_dir.name}/ ({_sanitize_filename_part(model_name)})")
+    if primary_fn or fallback_fn:
+        _write_preview_manifest(dest_dir, model_name=model_name, primary=primary_fn, fallback=fallback_fn)
+    return saved
+
+
+def download_civitai_previews_to_cache(
+    meta: dict,
+    model_name: str | None = None,
+    limit: int = CIVITAI_PREVIEW_LIMIT,
+) -> list[str]:
+    version_id = meta.get("id")
+    if not version_id:
+        return []
+    resolved_name = (model_name or civitai_model_filename(meta)).strip()
+    entries = civitai_preview_entries(meta, limit=limit)
+    return _download_civitai_preview_entries(
+        entries,
+        civitai_preview_cache_dir(int(version_id)),
+        resolved_name,
+    )
+
+
+def download_civitai_preview_images(
+    target: Path,
+    meta: dict,
+    limit: int = CIVITAI_PREVIEW_LIMIT,
+) -> list[str]:
+    entries = civitai_preview_entries(meta, limit=limit)
+    return _download_civitai_preview_entries(entries, civitai_preview_dir_for(target), target.name)
+
+
+def _file_size_bytes(file_entry: dict) -> int | None:
+    size_kb = file_entry.get("sizeKB")
+    if isinstance(size_kb, (int, float)):
+        return int(size_kb * 1024)
+    raw = file_entry.get("size")
+    return int(raw) if isinstance(raw, (int, float)) else None
+
+
+def _preview_from_version_meta(
+    meta: dict,
+    *,
+    source_url: str,
+    folder_key: str | None = None,
+    file_id: int | None = None,
+    source_kind: str = "download_url",
+    model_id: int | None = None,
+    main_url: str | None = None,
+    versions: list[dict] | None = None,
+) -> dict:
+    file_entry = resolve_civitai_file(meta, file_id)
+    if not file_entry:
+        return {"ok": False, "error": "No files found for this Civitai version."}
     model_info = meta.get("model") or {}
     model_name = (model_info.get("name") or "").strip()
     version_name = (meta.get("name") or "").strip()
     display_parts = [part for part in (model_name, version_name) if part]
-    size_kb = file_entry.get("sizeKB")
-    size_bytes = int(size_kb * 1024) if isinstance(size_kb, (int, float)) else file_entry.get("size")
+    raw_filename = file_entry.get("name") or civitai_model_filename(meta, file_id)
+    pretty_filename = civitai_pretty_filename(model_name, version_name, raw_filename)
+    version_id = meta.get("id") or extract_civitai_version_id(source_url)
+    resolved_file_id = file_id if file_id is not None else file_entry.get("id")
+    download_url = build_civitai_download_url(int(version_id), resolved_file_id) if version_id else source_url
+    try:
+        target, _, _ = civitai_target_path(
+            download_url,
+            folder_key,
+            save_as=pretty_filename,
+        )
+    except Exception as e:
+        return {"ok": False, "error": redact_download_secrets(str(e))}
     suggested_dir = auto_target_dir(meta, file_entry)
     selected_key = (folder_key or "").strip() or "auto"
-    return {
+    preview_images = civitai_preview_entries(meta, limit=CIVITAI_PREVIEW_LIMIT)
+    picked = preview_images[0] if preview_images else None
+    preview_remote_url = (picked or {}).get("url")
+    if version_id and preview_images:
+        try:
+            download_civitai_previews_to_cache(meta, model_name=pretty_filename, limit=CIVITAI_PREVIEW_LIMIT)
+        except Exception as e:
+            _safe_log_line(f"  ! lookup preview cache failed: {redact_download_secrets(str(e))}")
+    vid = int(version_id) if version_id else None
+    primary_file = primary_cached_preview_filename(vid) if vid else None
+    cached_previews: list[dict] = []
+    if vid and primary_file:
+        cached_previews.append({
+            "slot": CIVITAI_PRIMARY_PREVIEW_SLOT,
+            "filename": primary_file,
+            "width": picked.get("width") if picked else None,
+            "height": picked.get("height") if picked else None,
+        })
+    payload = {
         "ok": True,
-        "url": url,
+        "source_kind": source_kind,
+        "url": source_url,
+        "download_url": download_url,
         "model_name": model_name,
         "version_name": version_name,
-        "display_name": " · ".join(display_parts) or (file_entry.get("name") or "Civitai model"),
-        "filename": file_entry.get("name"),
-        "file_size_bytes": size_bytes,
+        "display_name": " · ".join(display_parts) or pretty_filename,
+        "filename": raw_filename,
+        "pretty_filename": pretty_filename,
+        "file_size_bytes": _file_size_bytes(file_entry),
         "model_type": model_info.get("type"),
         "file_type": file_entry.get("type"),
         "base_model": meta.get("baseModel"),
@@ -432,23 +997,138 @@ def preview_civitai_url(url: str, folder_key: str | None = None) -> dict:
         "suggested_folder": folder_key_for_path(suggested_dir),
         "selected_folder": selected_key,
         "target_path": str(target),
-        "civitai_version_id": meta.get("id") or extract_civitai_version_id(url),
-        "civitai_file_id": extract_civitai_file_id(url),
+        "civitai_version_id": vid,
+        "civitai_file_id": resolved_file_id,
         "already_installed": file_ok(target),
+        "preview_thumb_file": primary_file,
+        "preview_fallback_file": None,
+        "preview_remote_url": preview_remote_url,
+        "preview_images": cached_previews,
+        "preview_image_count": len(cached_previews),
     }
+    if model_id is not None:
+        payload["model_id"] = model_id
+    if main_url:
+        payload["main_url"] = main_url
+    if versions is not None:
+        payload["versions"] = versions
+        payload["selected_version_id"] = vid
+    return payload
 
 
-def build_item_from_url(url: str, folder_key: str | None = None) -> dict:
+def preview_civitai_url(url: str, folder_key: str | None = None) -> dict:
+    url = normalize_civitai_url(url)
+    if "civitai." not in url:
+        return {"ok": False, "error": "Only Civitai URLs are supported for custom download."}
+    if is_civitai_model_page_url(url):
+        return preview_civitai_model_page(url, folder_key)
+    try:
+        version_id = extract_civitai_version_id(url)
+        if not version_id:
+            raise ValueError("Could not parse Civitai model version from URL.")
+        meta = civitai_lookup(version_id)
+    except Exception as e:
+        return {"ok": False, "error": redact_download_secrets(str(e))}
+    return _preview_from_version_meta(
+        meta,
+        source_url=url,
+        folder_key=folder_key,
+        file_id=extract_civitai_file_id(url),
+        source_kind="download_url",
+    )
+
+
+def preview_civitai_version(
+    version_id: int,
+    file_id: int | None = None,
+    folder_key: str | None = None,
+) -> dict:
+    try:
+        meta = civitai_lookup(int(version_id))
+    except Exception as e:
+        return {"ok": False, "error": redact_download_secrets(str(e))}
+    download_url = build_civitai_download_url(int(version_id), file_id)
+    return _preview_from_version_meta(
+        meta,
+        source_url=download_url,
+        folder_key=folder_key,
+        file_id=file_id,
+        source_kind="model_page",
+        model_id=(meta.get("model") or {}).get("id"),
+    )
+
+
+def preview_civitai_model_page(url: str, folder_key: str | None = None) -> dict:
+    url = normalize_civitai_url(url)
+    model_id = extract_civitai_model_id(url)
+    if not model_id:
+        return {"ok": False, "error": "Could not parse Civitai model id from URL."}
+    try:
+        model_data = civitai_lookup_model(model_id)
+    except Exception as e:
+        return {"ok": False, "error": redact_download_secrets(str(e))}
+    raw_versions = list(model_data.get("modelVersions") or [])
+    if not raw_versions:
+        return {"ok": False, "error": "This Civitai model has no published versions."}
+    raw_versions.sort(key=lambda row: str(row.get("createdAt") or ""), reverse=True)
+    latest_id = raw_versions[0].get("id")
+    hint_id = extract_civitai_version_id(url)
+    selected = next((row for row in raw_versions if row.get("id") == hint_id), None) or raw_versions[0]
+    version_options: list[dict] = []
+    for row in raw_versions:
+        file_entry = resolve_civitai_file(row)
+        version_options.append({
+            "id": row.get("id"),
+            "name": row.get("name"),
+            "base_model": row.get("baseModel"),
+            "created_at": row.get("createdAt"),
+            "file_size_bytes": _file_size_bytes(file_entry) if file_entry else None,
+            "is_latest": row.get("id") == latest_id,
+        })
+    model_name = (model_data.get("name") or "").strip()
+    model_type = model_data.get("type")
+    main_url = f"https://civitai.com/models/{model_id}"
+    enriched = dict(selected)
+    enriched["model"] = {
+        "id": model_id,
+        "name": model_name,
+        "type": model_type,
+    }
+    preview = _preview_from_version_meta(
+        enriched,
+        source_url=url,
+        folder_key=folder_key,
+        file_id=None,
+        source_kind="model_page",
+        model_id=model_id,
+        main_url=main_url,
+        versions=version_options,
+    )
+    if preview.get("ok"):
+        preview["model_type"] = model_type
+    return preview
+
+
+def build_item_from_url(url: str, folder_key: str | None = None, name: str | None = None) -> dict:
     key = (folder_key or "").strip()
     item = {
         "source": "civitai",
-        "url": (url or "").strip(),
+        "url": normalize_civitai_url(url),
     }
+    if name:
+        item["name"] = str(name).strip()
     if key and key != "auto" and key in TARGET_DIRS:
         item["folder_key"] = key
     else:
         item["target_auto"] = True
     return item
+
+
+def civitai_lookup_model(model_id: int) -> dict:
+    url = f"https://civitai.com/api/v1/models/{int(model_id)}"
+    r = requests.get(url, headers=_civitai_request_headers(url), timeout=20)
+    r.raise_for_status()
+    return r.json()
 
 
 def civitai_lookup(version_id: int) -> dict:
@@ -512,7 +1192,7 @@ def auto_target_dir(meta: dict, file_entry: dict | None = None) -> Path:
     return TARGET_DIRS["checkpoints"]
 
 
-def write_civitai_sidecar(target: Path, meta: dict):
+def write_civitai_sidecar(target: Path, meta: dict, preview_paths: list[str] | None = None):
     """Drop a small sidecar JSON next to the model so the UI can read variant info later."""
     try:
         sidecar = target.with_suffix(target.suffix + ".civitai.json")
@@ -525,11 +1205,13 @@ def write_civitai_sidecar(target: Path, meta: dict):
             "civitai_model_id": (meta.get("modelId") or (meta.get("model") or {}).get("id")),
             "name": meta.get("name"),
             "model_name": (meta.get("model") or {}).get("name"),
+            "preview_images": civitai_preview_entries(meta),
+            "preview_paths": preview_paths or [],
         }
         sidecar.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"  + sidecar: {sidecar.name} (variant={payload['variant']})")
+        _safe_log_line(f"  + sidecar: {sidecar.name} (variant={payload['variant']})")
     except Exception as e:
-        print(f"  ! sidecar write failed: {e}")
+        _safe_log_line(f"  ! sidecar write failed: {e}")
 
 def file_ok(path: Path) -> bool:
     return path.exists() and path.stat().st_size > 1024 * 1024
@@ -630,7 +1312,7 @@ def download_url(
 ):
     target.parent.mkdir(parents=True, exist_ok=True)
     if file_ok(target):
-        print(f"SKIP exists: {target}")
+        _safe_log_line(f"SKIP exists: {target}")
         return
     url = add_token(url)
     dl_kwargs = {"progress": progress, "cancel_event": cancel_event, "proc_cb": proc_cb}
@@ -813,7 +1495,7 @@ def hf_download(
 ):
     target.parent.mkdir(parents=True, exist_ok=True)
     if file_ok(target):
-        print(f"SKIP exists: {target}")
+        _safe_log_line(f"SKIP exists: {target}")
         return
     _emit_progress(progress, f"downloading {target.name} from Hugging Face")
     errors: list[str] = []
@@ -928,7 +1610,8 @@ def download_item(
     if item.get("target"):
         target = Path(item["target"])
     elif auto_dir is not None:
-        target = auto_dir / (item.get("name") or auto_name or f"civitai_{extract_civitai_version_id(item.get('url') or '')}.safetensors")
+        fallback = auto_name or f"civitai_{extract_civitai_version_id(item.get('url') or '')}.safetensors"
+        target = auto_dir / (item.get("name") or fallback)
     else:
         target = TARGET_DIRS[folder_key] / item["name"]
 
@@ -941,7 +1624,8 @@ def download_item(
         raise RuntimeError(f"Unsupported source in {item}: {source}")
 
     if civitai_meta and target.exists():
-        write_civitai_sidecar(target, civitai_meta)
+        preview_paths = download_civitai_preview_images(target, civitai_meta)
+        write_civitai_sidecar(target, civitai_meta, preview_paths=preview_paths)
 
 def unzip_if_needed(zip_path: Path, dest: Path):
     if not zip_path.exists():
@@ -961,7 +1645,7 @@ def install_aria2():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--set", default="basic", help="models.json set name, e.g. basic, all, flux_user, flux_min, flux_official, flux_all")
+    parser.add_argument("--set", default="anime_starter", help="models.json set name, e.g. anime_starter, all, flux_user, flux_min, flux_official, flux_all")
     parser.add_argument("--models", default="models.json")
     args = parser.parse_args()
 

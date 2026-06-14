@@ -28,18 +28,42 @@ from llm_manager import (
     start_url_download,
 )
 from llm_runner import llm_health, stop_llm, test_llm
+from download_models import (
+    CIVITAI_PREVIEW_LIMIT,
+    civitai_lookup,
+    civitai_preview_file_path,
+    download_civitai_previews_to_cache,
+    primary_cached_preview_filename,
+)
 from model_manager import (
     cancel_download,
+    civitai_prefetch_status,
     delete_model,
+    ensure_civitai_prefetch_started,
     list_downloads,
     load_catalog,
     manager_supported,
+    model_adjacent_preview_path,
+    prefetch_civitai_catalog_previews,
     preview_url,
+    preview_version,
     start_download,
     start_url_download,
 )
+from model_registry import (
+    load_entries_batch,
+    load_entry,
+    registry_asset_file_path,
+    registry_index_payload,
+    registry_installed_payload,
+    registry_supported,
+    start_registry_download,
+)
 
 app = Flask(__name__)
+
+if manager_supported():
+    ensure_civitai_prefetch_started(include_flux=True)
 
 
 def update_env_file(key, value):
@@ -348,6 +372,40 @@ def llm_delete(profile_id):
     return jsonify(result), status
 
 
+@app.get("/api/models/registry")
+def models_registry_index():
+    if not registry_supported():
+        return jsonify({"ok": False, "supported": False, "error": "model registry not found"}), 404
+    return jsonify(registry_index_payload())
+
+
+@app.get("/api/models/registry/entry")
+def models_registry_entry():
+    ref = (request.args.get("ref") or "").strip()
+    if not ref:
+        return jsonify({"ok": False, "error": "ref is required"}), 400
+    row = load_entry(ref)
+    if not row:
+        return jsonify({"ok": False, "error": f"Unknown ref: {ref}"}), 404
+    return jsonify({"ok": True, "supported": True, "entry": row})
+
+
+@app.get("/api/models/registry/entries")
+def models_registry_entries():
+    raw = (request.args.get("refs") or "").strip()
+    refs = [part.strip() for part in raw.split(",") if part.strip()]
+    if not refs:
+        return jsonify({"ok": False, "error": "refs is required"}), 400
+    return jsonify(load_entries_batch(refs))
+
+
+@app.get("/api/models/registry/installed")
+def models_registry_installed():
+    if not registry_supported():
+        return jsonify({"ok": False, "supported": False, "error": "model registry not found"}), 404
+    return jsonify(registry_installed_payload())
+
+
 @app.get("/api/models")
 def models_overview():
     set_name = (request.args.get("set") or "").strip() or None
@@ -356,6 +414,75 @@ def models_overview():
     payload["control_supported"] = control_supported()
     payload["manager_supported"] = manager_supported()
     return jsonify(payload)
+
+
+@app.get("/api/models/civitai-prefetch-status")
+def models_civitai_prefetch_status():
+    return jsonify(civitai_prefetch_status())
+
+
+@app.post("/api/models/prefetch-civitai-previews")
+def models_prefetch_civitai_previews():
+    body = request.json or {}
+    include_flux = str(body.get("include_flux") or "").strip().lower() in ("1", "true", "yes")
+    result = prefetch_civitai_catalog_previews(include_flux=include_flux)
+    status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
+    return jsonify(result), status
+
+
+@app.get("/api/models/civitai-preview/<int:version_id>")
+def models_civitai_preview_primary(version_id):
+    path = _resolve_civitai_preview_path(version_id)
+    if path:
+        return send_file(path)
+    return jsonify({"ok": False, "error": "Preview not found"}), 404
+
+
+@app.get("/api/models/civitai-preview/<int:version_id>/<path:filename>")
+def models_civitai_preview_file(version_id, filename):
+    path = civitai_preview_file_path(version_id, filename)
+    if not path:
+        path = _resolve_civitai_preview_path(version_id)
+    if not path:
+        return jsonify({"ok": False, "error": "Preview not found"}), 404
+    return send_file(path)
+
+
+def _resolve_civitai_preview_path(version_id: int) -> Path | None:
+    thumb = primary_cached_preview_filename(int(version_id))
+    if thumb:
+        hit = civitai_preview_file_path(int(version_id), thumb)
+        if hit:
+            return hit
+    try:
+        meta = civitai_lookup(int(version_id))
+        download_civitai_previews_to_cache(meta, limit=CIVITAI_PREVIEW_LIMIT)
+        thumb = primary_cached_preview_filename(int(version_id))
+        if thumb:
+            return civitai_preview_file_path(int(version_id), thumb)
+    except Exception:
+        return None
+    return None
+
+
+@app.get("/api/models/registry-preview/<path:filename>")
+def models_registry_preview_file(filename):
+    path = registry_asset_file_path(filename)
+    if not path:
+        return jsonify({"ok": False, "error": "Preview not found"}), 404
+    return send_file(path)
+
+
+@app.get("/api/models/model-preview")
+def models_adjacent_preview_file():
+    folder = (request.args.get("folder") or "").strip()
+    name = (request.args.get("name") or "").strip()
+    if not folder or not name:
+        return jsonify({"ok": False, "error": "folder and name are required"}), 400
+    path = model_adjacent_preview_path(folder, name)
+    if not path:
+        return jsonify({"ok": False, "error": "Preview not found"}), 404
+    return send_file(path)
 
 
 @app.post("/api/models/preview-url")
@@ -370,13 +497,53 @@ def models_preview_url():
     return jsonify(result), status
 
 
+@app.post("/api/models/preview-civitai-version")
+def models_preview_civitai_version():
+    body = request.json or {}
+    raw_version = body.get("version_id") or body.get("civitai_version_id")
+    raw_file = body.get("file_id") or body.get("civitai_file_id")
+    folder = (body.get("folder") or body.get("folder_key") or "").strip() or None
+    try:
+        version_id = int(raw_version)
+    except (TypeError, ValueError):
+        return jsonify({"ok": False, "error": "version_id is required"}), 400
+    file_id = None
+    if raw_file is not None and str(raw_file).strip().isdigit():
+        file_id = int(raw_file)
+    result = preview_version(version_id, file_id, folder)
+    status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
+    return jsonify(result), status
+
+
 @app.post("/api/models/download")
 def models_download():
     body = request.json or {}
     url = (body.get("url") or "").strip()
     folder = (body.get("folder") or body.get("folder_key") or "").strip() or None
-    if url:
-        result = start_url_download(url, folder)
+    raw_version = body.get("version_id") or body.get("civitai_version_id")
+    raw_file = body.get("file_id") or body.get("civitai_file_id")
+    version_id = None
+    file_id = None
+    if raw_version is not None and str(raw_version).strip().isdigit():
+        version_id = int(raw_version)
+    if raw_file is not None and str(raw_file).strip().isdigit():
+        file_id = int(raw_file)
+    registry_ref = (body.get("ref") or body.get("registry_ref") or "").strip()
+    raw_registry_version = body.get("registry_version_id")
+    if raw_registry_version is None and registry_ref:
+        raw_registry_version = body.get("version_id")
+    registry_version_id = None
+    if registry_ref and raw_registry_version is not None and str(raw_registry_version).strip() != "":
+        try:
+            registry_version_id = int(raw_registry_version)
+        except (TypeError, ValueError):
+            registry_version_id = raw_registry_version
+    if registry_ref:
+        result = start_registry_download(registry_ref, registry_version_id)
+        status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
+        return jsonify(result), status
+    if url or version_id is not None:
+        result = start_url_download(url, folder, version_id=version_id, file_id=file_id)
         status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
         return jsonify(result), status
     catalog_id = (body.get("id") or body.get("catalog_id") or "").strip()
