@@ -28,7 +28,7 @@
     "height": 1216,
     "model": "waiIllustriousSDXL_v17.safetensors",
     "positive": "",
-    "negative": "worst quality, low quality, score_1, score_2, score_3, artist name"
+    "negative": "lowres, blurry, deformed, bad anatomy, extra limbs, fused fingers, text, watermark, low quality, blue skin, cyan skin, red skin, unnatural skin tone"
   },
   "miaomiaoHarem_anima12": {
     "sampler_name": "euler",
