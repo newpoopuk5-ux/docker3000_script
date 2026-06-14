@@ -362,9 +362,10 @@ def models_overview():
 def models_preview_url():
     body = request.json or {}
     url = (body.get("url") or "").strip()
+    folder = (body.get("folder") or body.get("folder_key") or "").strip() or None
     if not url:
         return jsonify({"ok": False, "error": "url is required"}), 400
-    result = preview_url(url)
+    result = preview_url(url, folder)
     status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
     return jsonify(result), status
 
@@ -373,8 +374,9 @@ def models_preview_url():
 def models_download():
     body = request.json or {}
     url = (body.get("url") or "").strip()
+    folder = (body.get("folder") or body.get("folder_key") or "").strip() or None
     if url:
-        result = start_url_download(url)
+        result = start_url_download(url, folder)
         status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
         return jsonify(result), status
     catalog_id = (body.get("id") or body.get("catalog_id") or "").strip()

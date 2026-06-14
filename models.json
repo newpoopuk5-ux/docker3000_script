@@ -76,6 +76,42 @@
       "loras": [],
       "private_hf": []
     },
+    "anima_harem_illustrious_no_flux": {
+      "description": "Anima / Illustrious / Pony: MiaoMiao Harem + TE/VAE, Amanatsu, T-ponynai3",
+      "checkpoints": [
+        {
+          "name": "amanatsuIllustrious_v2.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/2288934?fileId=2225962"
+        },
+        {
+          "name": "tPonynai3_v7.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/1392706?fileId=1295292"
+        },
+        {
+          "name": "miaomiaoHarem_anima12.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/3020110?fileId=2908822"
+        }
+      ],
+      "text_encoders": [
+        {
+          "name": "miaomiaoHarem_anima12_txt.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/3020110?fileId=2898941"
+        }
+      ],
+      "vae": [
+        {
+          "name": "qwen_image_vae.safetensors",
+          "source": "direct",
+          "url": "https://civitai.com/api/download/models/3020110?fileId=2898940"
+        }
+      ],
+      "loras": [],
+      "private_hf": []
+    },
     "pony_no_flux": {
       "description": "Pony pack (no Flux)",
       "checkpoints": [

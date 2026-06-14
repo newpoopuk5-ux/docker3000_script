@@ -383,7 +383,7 @@ def folder_key_for_path(target_dir: Path) -> str:
     return "checkpoints"
 
 
-def civitai_target_path(url: str) -> tuple[Path, dict, dict]:
+def civitai_target_path(url: str, folder_key: str | None = None) -> tuple[Path, dict, dict]:
     version_id = extract_civitai_version_id(url)
     if not version_id:
         raise ValueError("Could not parse Civitai model version from URL.")
@@ -392,17 +392,21 @@ def civitai_target_path(url: str) -> tuple[Path, dict, dict]:
     file_entry = resolve_civitai_file(meta, file_id)
     if not file_entry:
         raise ValueError("No files found for this Civitai version.")
-    target_dir = auto_target_dir(meta, file_entry)
+    key = (folder_key or "").strip()
+    if key and key != "auto" and key in TARGET_DIRS:
+        target_dir = TARGET_DIRS[key]
+    else:
+        target_dir = auto_target_dir(meta, file_entry)
     filename = file_entry.get("name") or f"civitai_{version_id}.safetensors"
     return target_dir / filename, meta, file_entry
 
 
-def preview_civitai_url(url: str) -> dict:
+def preview_civitai_url(url: str, folder_key: str | None = None) -> dict:
     url = (url or "").strip()
     if "civitai." not in url:
         return {"ok": False, "error": "Only Civitai URLs are supported for custom download."}
     try:
-        target, meta, file_entry = civitai_target_path(url)
+        target, meta, file_entry = civitai_target_path(url, folder_key)
     except Exception as e:
         return {"ok": False, "error": redact_download_secrets(str(e))}
     model_info = meta.get("model") or {}
@@ -411,6 +415,8 @@ def preview_civitai_url(url: str) -> dict:
     display_parts = [part for part in (model_name, version_name) if part]
     size_kb = file_entry.get("sizeKB")
     size_bytes = int(size_kb * 1024) if isinstance(size_kb, (int, float)) else file_entry.get("size")
+    suggested_dir = auto_target_dir(meta, file_entry)
+    selected_key = (folder_key or "").strip() or "auto"
     return {
         "ok": True,
         "url": url,
@@ -420,8 +426,11 @@ def preview_civitai_url(url: str) -> dict:
         "filename": file_entry.get("name"),
         "file_size_bytes": size_bytes,
         "model_type": model_info.get("type"),
+        "file_type": file_entry.get("type"),
         "base_model": meta.get("baseModel"),
         "folder": folder_key_for_path(target.parent),
+        "suggested_folder": folder_key_for_path(suggested_dir),
+        "selected_folder": selected_key,
         "target_path": str(target),
         "civitai_version_id": meta.get("id") or extract_civitai_version_id(url),
         "civitai_file_id": extract_civitai_file_id(url),
@@ -429,12 +438,17 @@ def preview_civitai_url(url: str) -> dict:
     }
 
 
-def build_item_from_url(url: str) -> dict:
-    return {
+def build_item_from_url(url: str, folder_key: str | None = None) -> dict:
+    key = (folder_key or "").strip()
+    item = {
         "source": "civitai",
         "url": (url or "").strip(),
-        "target_auto": True,
     }
+    if key and key != "auto" and key in TARGET_DIRS:
+        item["folder_key"] = key
+    else:
+        item["target_auto"] = True
+    return item
 
 
 def civitai_lookup(version_id: int) -> dict:
@@ -471,6 +485,14 @@ def auto_target_dir(meta: dict, file_entry: dict | None = None) -> Path:
         file_entry = resolve_civitai_file(meta)
     fmt = (file_entry.get("metadata") or {}).get("format", "").lower()
     fname = (file_entry.get("name") or "").lower()
+    file_type = (file_entry.get("type") or "").strip().lower()
+
+    if file_type == "vae":
+        return TARGET_DIRS["vae"]
+    if file_type in ("text encoder", "text_encoder"):
+        return TARGET_DIRS["text_encoders"]
+    if base == "anima" and model_type == "checkpoint" and file_type == "model":
+        return TARGET_DIRS["flux_diffusion_models"]
 
     if model_type == "lora" or model_type == "locon":
         return TARGET_DIRS["flux_loras"] if "flux" in base else TARGET_DIRS["loras"]
@@ -898,6 +920,10 @@ def download_item(
                     auto_dir = auto_target_dir(civitai_meta, primary)
             except Exception as e:
                 print(f"  ! Civitai lookup failed for version {version_id}: {e}")
+
+    folder_override = str(item.get("folder_key") or "").strip()
+    if folder_override in TARGET_DIRS:
+        auto_dir = TARGET_DIRS[folder_override]
 
     if item.get("target"):
         target = Path(item["target"])

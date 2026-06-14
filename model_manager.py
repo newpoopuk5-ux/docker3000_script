@@ -358,7 +358,7 @@ def _job_progress(job_id: str):
     return progress
 
 
-def _run_url_download_job(job_id: str, url: str, display_name: str) -> None:
+def _run_url_download_job(job_id: str, url: str, display_name: str, folder_key: str | None = None) -> None:
     kwargs = _download_kwargs(job_id)
     if kwargs["cancel_event"].is_set():
         _mark_job_cancelled(job_id)
@@ -367,7 +367,7 @@ def _run_url_download_job(job_id: str, url: str, display_name: str) -> None:
     progress = _job_progress(job_id)
 
     try:
-        item = build_item_from_url(url)
+        item = build_item_from_url(url, folder_key)
         download_item(item, "auto", progress=progress, **kwargs)
         if kwargs["cancel_event"].is_set():
             _mark_job_cancelled(job_id)
@@ -420,16 +420,16 @@ def _run_download_job(job_id: str, catalog_id: str) -> None:
         _clear_job_handles(job_id)
 
 
-def preview_url(url: str) -> dict:
+def preview_url(url: str, folder_key: str | None = None) -> dict:
     if not manager_supported():
         return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
-    return preview_civitai_url(url)
+    return preview_civitai_url(url, folder_key)
 
 
-def start_url_download(url: str) -> dict:
+def start_url_download(url: str, folder_key: str | None = None) -> dict:
     if not manager_supported():
         return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
-    preview = preview_civitai_url(url)
+    preview = preview_civitai_url(url, folder_key)
     if not preview.get("ok"):
         return preview
     if preview.get("already_installed"):
@@ -454,7 +454,11 @@ def start_url_download(url: str) -> dict:
             "progress": "queued",
             "created_at": time.time(),
         }
-    thread = threading.Thread(target=_run_url_download_job, args=(job_id, url, display_name), daemon=True)
+    thread = threading.Thread(
+        target=_run_url_download_job,
+        args=(job_id, url, display_name, folder_key),
+        daemon=True,
+    )
     thread.start()
     return {
         "ok": True,
