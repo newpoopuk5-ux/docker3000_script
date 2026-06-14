@@ -521,6 +521,7 @@ def model_inventory():
     return jsonify({
         "sdxl": {
             "checkpoints": all_checkpoints,
+            "diffusion_models": diffusion_models,
             "text_encoders": list_files(TEXT_ENCODER_DIR, (".safetensors", ".ckpt", ".pt", ".bin", ".gguf")),
             "vae": list_files(VAE_DIR, (".safetensors", ".ckpt", ".pt", ".bin")),
         },

@@ -2,7 +2,7 @@ import json
 import os
 import random
 
-from config import CHECKPOINT_DIR, DEFAULT_NODE_MAP, WORKFLOW_IMG2IMG_PATH, WORKFLOW_NODE_MAP_PATH, WORKFLOW_PATH
+from config import CHECKPOINT_DIR, DIFFUSION_MODEL_DIR, DEFAULT_NODE_MAP, WORKFLOW_IMG2IMG_PATH, WORKFLOW_NODE_MAP_PATH, WORKFLOW_PATH
 from metadata import link_node_id
 
 
@@ -446,7 +446,24 @@ def build_sdxl_workflow(data):
     sampler_id = require_node(workflow, node_map, "sampler")
     save_id = require_node(workflow, node_map, "save")
 
-    workflow[checkpoint_id]["inputs"]["ckpt_name"] = data.get("model", workflow[checkpoint_id]["inputs"]["ckpt_name"])
+    model_name = data.get("model", workflow[checkpoint_id]["inputs"]["ckpt_name"])
+    
+    is_unet = os.path.exists(DIFFUSION_MODEL_DIR / model_name)
+    
+    if is_unet:
+        # Replace CheckpointLoaderSimple with UNETLoader
+        unet_id = add_node(workflow, "UNETLoader", {
+            "unet_name": model_name,
+            "weight_dtype": "default"
+        }, "Load Diffusion Model")
+        model_link = [unet_id, 0]
+        # Remove CheckpointLoaderSimple
+        if checkpoint_id in workflow:
+            del workflow[checkpoint_id]
+    else:
+        workflow[checkpoint_id]["inputs"]["ckpt_name"] = model_name
+        model_link = [checkpoint_id, 0]
+
     workflow[positive_id]["inputs"]["text"] = data.get("prompt", workflow[positive_id]["inputs"]["text"])
     workflow[negative_id]["inputs"]["text"] = data.get("negative", workflow[negative_id]["inputs"]["text"])
 
@@ -455,46 +472,48 @@ def build_sdxl_workflow(data):
     workflow[sampler_id]["inputs"]["cfg"] = float(data.get("cfg", workflow[sampler_id]["inputs"]["cfg"]))
     workflow[sampler_id]["inputs"]["sampler_name"] = data.get("sampler_name") or workflow[sampler_id]["inputs"].get("sampler_name", "euler")
     workflow[sampler_id]["inputs"]["scheduler"] = data.get("scheduler") or workflow[sampler_id]["inputs"].get("scheduler", "karras")
+    
+    base_width = int(data.get("width", 1024))
+    base_height = int(data.get("height", 1024))
+    
     if is_img2img:
         load_image_id = require_node(workflow, node_map, "load_image")
         workflow[load_image_id]["inputs"]["image"] = source_image
         workflow[sampler_id]["inputs"]["denoise"] = float(data.get("denoise", workflow[sampler_id]["inputs"].get("denoise", 0.6)))
     else:
         latent_id = require_node(workflow, node_map, "latent")
-        workflow[latent_id]["inputs"]["width"] = int(data.get("width", workflow[latent_id]["inputs"]["width"]))
-        workflow[latent_id]["inputs"]["height"] = int(data.get("height", workflow[latent_id]["inputs"]["height"]))
+        workflow[latent_id]["inputs"]["width"] = base_width
+        workflow[latent_id]["inputs"]["height"] = base_height
 
         batch_size = max(1, min(8, int(data.get("batch_size", 1) or 1)))
         workflow[latent_id]["inputs"]["batch_size"] = batch_size
 
-    upscale_model = data.get("upscale_model", "")
-    if upscale_model:
-        upscale_model_id = require_node(workflow, node_map, "upscale_model")
-        workflow[upscale_model_id]["inputs"]["model_name"] = upscale_model
-    else:
-        # If no upscaler selected, bypass upscale node by saving decoded image directly.
-        vae_decode_id = require_node(workflow, node_map, "vae_decode")
-        workflow[save_id]["inputs"]["images"] = [vae_decode_id, 0]
+    # Ensure model input is connected to the right loader
+    workflow[sampler_id]["inputs"]["model"] = model_link
 
+    # Custom VAE / Text Encoder logic
     custom_vae = data.get("sdxl_vae", "").strip()
-    if custom_vae and custom_vae.lower() not in ("default", "none"):
-        vae_decode_id = require_node(workflow, node_map, "vae_decode")
-        new_vae_id = add_node(workflow, "VAELoader", {"vae_name": custom_vae}, "Custom VAE")
-        workflow[vae_decode_id]["inputs"]["vae"] = [new_vae_id, 0]
+    vae_decode_id = require_node(workflow, node_map, "vae_decode")
+    vae_link = [checkpoint_id, 2] if not is_unet else None
 
+    if custom_vae and custom_vae.lower() not in ("default", "none"):
+        new_vae_id = add_node(workflow, "VAELoader", {"vae_name": custom_vae}, "Custom VAE")
+        vae_link = [new_vae_id, 0]
+    
+    if vae_link:
+        workflow[vae_decode_id]["inputs"]["vae"] = vae_link
+    
     custom_te = data.get("sdxl_text_encoder", "").strip()
     custom_clip_id = None
     if custom_te and custom_te.lower() not in ("default", "none"):
         custom_clip_id = add_node(workflow, "CLIPLoader", {"clip_name": custom_te, "type": "stable_diffusion"}, "Custom Text Encoder")
         workflow[positive_id]["inputs"]["clip"] = [custom_clip_id, 0]
         workflow[negative_id]["inputs"]["clip"] = [custom_clip_id, 0]
+    elif is_unet:
+        pass # If it's a UNET, they MUST provide custom_te, otherwise it will crash. We assume they do.
 
     loras = normalize_loras(data)
     if loras:
-        # If custom CLIP, LoRAs must chain from it.
-        # We temporarily modify apply_loras behavior or just handle it here.
-        # Since apply_loras relies on checkpoint_id for clip, we can inject logic.
-        model_link = [checkpoint_id, 0]
         clip_link = [custom_clip_id, 0] if custom_clip_id else [checkpoint_id, 1]
         
         used = {int(k) for k in workflow.keys() if str(k).isdigit()}
@@ -519,9 +538,94 @@ def build_sdxl_workflow(data):
         workflow[positive_id]["inputs"]["clip"] = clip_link
         workflow[negative_id]["inputs"]["clip"] = clip_link
         workflow[sampler_id]["inputs"]["model"] = model_link
-        
-    return workflow
 
+    # Hires Fix / Upscale logic
+    hires_fix = data.get("hires_fix", False)
+    upscale_model = data.get("upscale_model", "")
+    
+    final_image_link = [vae_decode_id, 0]
+    
+    if hires_fix and upscale_model:
+        hires_upscale_by = float(data.get("hires_upscale_by", 1.5))
+        hires_steps = int(data.get("hires_steps", 10))
+        hires_denoise = float(data.get("hires_denoise", 0.8))
+        hires_cfg = float(data.get("hires_cfg", 5.5))
+        
+        # 1. Load Upscaler
+        upscaler_id = add_node(workflow, "UpscaleModelLoader", {"model_name": upscale_model}, "Hires Upscale Model")
+        
+        # 2. Pixel Upscale
+        pixel_upscale_id = add_node(workflow, "ImageUpscaleWithModel", {
+            "upscale_model": [upscaler_id, 0],
+            "image": final_image_link
+        }, "Hires Pixel Upscale")
+        
+        # 3. Downscale to exact target dimensions
+        target_width = int(base_width * hires_upscale_by)
+        target_height = int(base_height * hires_upscale_by)
+        scale_id = add_node(workflow, "ImageScale", {
+            "upscale_method": "bicubic",
+            "width": target_width,
+            "height": target_height,
+            "crop": "disabled",
+            "image": [pixel_upscale_id, 0]
+        }, "Hires Resize")
+        
+        # 4. Encode back to latent
+        encode_id = add_node(workflow, "VAEEncode", {
+            "pixels": [scale_id, 0],
+            "vae": vae_link if vae_link else [checkpoint_id, 2]
+        }, "Hires VAE Encode")
+        
+        # 5. KSampler Hires Pass
+        hires_sampler_id = add_node(workflow, "KSampler", {
+            "model": model_link,
+            "positive": [positive_id, 0] if not loras else clip_link, # Note: if loras, positive needs to be from clip_text_encode, wait!
+            "negative": [negative_id, 0] if not loras else clip_link, 
+            # Actually, we should just use [positive_id, 0] because positive_id IS the CLIPTextEncode!
+            # Let's fix that.
+            "seed": workflow[sampler_id]["inputs"]["seed"],
+            "steps": int(hires_steps / hires_denoise) if hires_denoise > 0 else hires_steps, # A1111 style steps handling
+            "cfg": hires_cfg,
+            "sampler_name": workflow[sampler_id]["inputs"]["sampler_name"],
+            "scheduler": workflow[sampler_id]["inputs"]["scheduler"],
+            "denoise": hires_denoise,
+            "latent_image": [encode_id, 0]
+        }, "Hires KSampler")
+        
+        # Fix positive/negative inputs for hires_sampler
+        workflow[hires_sampler_id]["inputs"]["positive"] = [positive_id, 0]
+        workflow[hires_sampler_id]["inputs"]["negative"] = [negative_id, 0]
+        
+        # 6. Decode final image
+        hires_decode_id = add_node(workflow, "VAEDecode", {
+            "samples": [hires_sampler_id, 0],
+            "vae": vae_link if vae_link else [checkpoint_id, 2]
+        }, "Hires VAE Decode")
+        
+        final_image_link = [hires_decode_id, 0]
+        
+    elif upscale_model:
+        # Standard upscale (no hires pass)
+        upscaler_id = add_node(workflow, "UpscaleModelLoader", {"model_name": upscale_model}, "Load Upscale Model")
+        upscale_id = add_node(workflow, "ImageUpscaleWithModel", {
+            "upscale_model": [upscaler_id, 0],
+            "image": final_image_link,
+        }, "Upscale Image")
+        final_image_link = [upscale_id, 0]
+
+    # Save node
+    workflow[save_id]["inputs"]["images"] = final_image_link
+    
+    # We must remove the default upscaler logic that might be dangling.
+    # Actually, workflow_utils.py load_workflow returns the base workflow which has upscale_model node inside it.
+    if "upscale_model" in node_map:
+        # Delete unused default upscale node to avoid ComfyUI errors
+        upscale_model_id = node_map["upscale_model"]
+        if upscale_model_id in workflow:
+            del workflow[upscale_model_id]
+
+    return workflow
 
 def build_workflow(data):
     if is_flux_payload(data):
