@@ -153,6 +153,8 @@ def _version_file_row(
     file_id: int | None = None,
     size_bytes: int | None = None,
     preview_remote_url: str | None = None,
+    folder: str | None = None,
+    primary: bool = True,
 ) -> dict:
     fid = file_id if file_id is not None else _file_id_from_url(download_url)
     pretty = civitai_pretty_filename(model_name, version_name, catalog_name)
@@ -160,22 +162,50 @@ def _version_file_row(
     if fid and "fileId=" not in dl:
         sep = "&" if "?" in dl else "?"
         dl = f"{dl}{sep}fileId={fid}"
+    file_row = {
+        "file_id": fid,
+        "download_url": dl,
+        "catalog_filename": catalog_name,
+        "pretty_filename": pretty,
+        "size_bytes": size_bytes,
+        "primary": primary,
+    }
+    if folder:
+        file_row["folder"] = folder
     return {
         "version_id": int(version_id),
         "name": version_name or f"v{version_id}",
         "base_model": base_model or "",
         "preview_remote_url": preview_remote_url,
-        "files": [
-            {
-                "file_id": fid,
-                "download_url": dl,
-                "catalog_filename": catalog_name,
-                "pretty_filename": pretty,
-                "size_bytes": size_bytes,
-                "primary": True,
-            }
-        ],
+        "files": [file_row],
     }
+
+
+# Civitai models whose checkpoint + TE + VAE ship as one catalog card (multi-file versions).
+MERGE_MULTI_FILE_MODEL_IDS = {934764}
+ANIMA_BUNDLE_REF = "bundle:anima"
+
+GROUP_TO_FOLDER = {
+    "checkpoints": "checkpoints",
+    "loras": "loras",
+    "vae": "vae",
+    "text_encoders": "text_encoders",
+    "flux_diffusion_models": "diffusion_models",
+    "flux_gguf_unet": "unet",
+    "controlnet": "controlnet",
+    "upscalers": "upscale_models",
+}
+
+FILE_FOLDER_PRIORITY = (
+    "checkpoints",
+    "diffusion_models",
+    "loras",
+    "text_encoders",
+    "vae",
+    "unet",
+    "controlnet",
+    "upscale_models",
+)
 
 
 def _split_model_refs(model: dict) -> list[tuple[str, list[dict]]]:
@@ -184,6 +214,9 @@ def _split_model_refs(model: dict) -> list[tuple[str, list[dict]]]:
     entries = list(model.get("catalog_entries") or [])
     if not model_id or not entries:
         return []
+
+    if model_id in MERGE_MULTI_FILE_MODEL_IDS:
+        return [(f"civitai:{model_id}", entries)]
 
     groups = {str(e.get("group") or "") for e in entries}
     if len(groups) <= 1:
@@ -201,6 +234,137 @@ def _split_model_refs(model: dict) -> list[tuple[str, list[dict]]]:
         ref = f"civitai:{model_id}:{suffix}"
         rows.append((ref, subset))
     return rows
+
+
+def _aggregate_versions_merged(
+    model: dict,
+    catalog_entries: list[dict],
+    *,
+    refresh: bool,
+    version_meta_cache: dict[int, dict],
+) -> list[dict]:
+    """Merge multi-group catalog rows into one version with several files (MiaoMiao + TE + VAE)."""
+    model_name = str(model.get("model_name") or "")
+    model_id = int(model.get("model_id") or 0)
+    by_vid: dict[int, dict] = {}
+
+    for entry in catalog_entries:
+        vid = int(entry.get("version_id") or 0)
+        if not vid:
+            continue
+        group = str(entry.get("group") or "checkpoints")
+        folder = GROUP_TO_FOLDER.get(group, group)
+        catalog_name = str(entry.get("catalog_name") or "")
+        version_name = str(entry.get("version_name") or "")
+        base_model = str(entry.get("base_model") or "")
+        download_url = str(entry.get("download_url") or "")
+        file_id = _file_id_from_url(download_url)
+        size_bytes = None
+        preview_remote_url = None
+
+        if refresh:
+            if vid not in version_meta_cache:
+                version_meta_cache[vid] = civitai_lookup(vid)
+                time.sleep(0.12)
+            meta = version_meta_cache[vid]
+            file_entry = resolve_civitai_file(meta, file_id)
+            catalog_name = str(file_entry.get("name") or catalog_name)
+            version_name = str(meta.get("name") or version_name)
+            base_model = str(meta.get("baseModel") or base_model)
+            fid = file_entry.get("id")
+            if fid:
+                file_id = int(fid)
+            size_bytes = int(file_entry.get("size") or 0) or None
+            preview_remote_url = _preview_url_from_meta(meta)
+            download_url = (
+                f"https://civitai.com/api/download/models/{vid}?fileId={file_id}"
+                if file_id
+                else download_url
+            )
+
+        file_part = _version_file_row(
+            version_id=vid,
+            version_name=version_name,
+            base_model=base_model,
+            catalog_name=catalog_name,
+            download_url=download_url,
+            model_name=model_name,
+            file_id=file_id,
+            size_bytes=size_bytes,
+            preview_remote_url=preview_remote_url,
+            folder=folder,
+            primary=False,
+        )["files"][0]
+
+        if vid not in by_vid:
+            by_vid[vid] = {
+                "version_id": vid,
+                "name": version_name or f"v{vid}",
+                "base_model": base_model or "",
+                "preview_remote_url": preview_remote_url,
+                "files": [],
+            }
+        elif preview_remote_url and not by_vid[vid].get("preview_remote_url"):
+            by_vid[vid]["preview_remote_url"] = preview_remote_url
+
+        existing_ids = {int(f.get("file_id") or 0) for f in by_vid[vid]["files"]}
+        if int(file_part.get("file_id") or 0) not in existing_ids:
+            by_vid[vid]["files"].append(file_part)
+
+    for ver in by_vid.values():
+        ver["files"].sort(
+            key=lambda row: FILE_FOLDER_PRIORITY.index(row.get("folder") or "checkpoints")
+            if row.get("folder") in FILE_FOLDER_PRIORITY
+            else 99
+        )
+        for idx, row in enumerate(ver["files"]):
+            row["primary"] = idx == 0
+
+    versions = sorted(by_vid.values(), key=lambda v: int(v.get("version_id") or 0), reverse=True)
+
+    if refresh and model_id and versions:
+        try:
+            url = f"https://civitai.com/api/v1/models/{model_id}"
+            r = requests.get(url, timeout=30)
+            r.raise_for_status()
+            full = r.json()
+            time.sleep(0.12)
+            known_vids = {int(v["version_id"]) for v in versions}
+            for v in full.get("modelVersions") or []:
+                if not isinstance(v, dict):
+                    continue
+                v_id = int(v.get("id") or 0)
+                if not v_id or v_id in known_vids:
+                    continue
+                if v_id not in version_meta_cache:
+                    version_meta_cache[v_id] = civitai_lookup(v_id)
+                    time.sleep(0.12)
+                meta = version_meta_cache[v_id]
+                file_entry = resolve_civitai_file(meta)
+                fid = file_entry.get("id")
+                versions.append(
+                    _version_file_row(
+                        version_id=v_id,
+                        version_name=str(meta.get("name") or v.get("name") or ""),
+                        base_model=str(meta.get("baseModel") or v.get("baseModel") or ""),
+                        catalog_name=str(file_entry.get("name") or f"civitai_{v_id}.safetensors"),
+                        download_url=(
+                            f"https://civitai.com/api/download/models/{v_id}?fileId={fid}"
+                            if fid
+                            else f"https://civitai.com/api/download/models/{v_id}"
+                        ),
+                        model_name=model_name,
+                        file_id=int(fid) if fid else None,
+                        size_bytes=int(file_entry.get("size") or 0) or None,
+                        preview_remote_url=_preview_url_from_meta(meta),
+                        folder="checkpoints",
+                        primary=True,
+                    )
+                )
+            versions.sort(key=lambda row: int(row.get("version_id") or 0), reverse=True)
+        except Exception:
+            pass
+    return versions
 
 
 def _aggregate_versions(
@@ -302,7 +466,7 @@ def _aggregate_versions(
                         model_name=model_name,
                         file_id=int(fid) if fid else None,
                         size_bytes=int(file_entry.get("size") or 0) or None,
-                        preview_remote_url=static_preview_url_from_version_meta(meta),
+                        preview_remote_url=_preview_url_from_meta(meta),
                     )
                 )
             versions.sort(key=lambda row: int(row.get("version_id") or 0), reverse=True)
@@ -371,12 +535,20 @@ def build(*, refresh: bool = False) -> tuple[dict, dict]:
         for ref, subset in _split_model_refs(model):
             primary_group = str(subset[0].get("group") or "checkpoints")
             kind = _kind_for_group(primary_group, model_type)
-            versions = _aggregate_versions(
-                model,
-                subset,
-                refresh=refresh,
-                version_meta_cache=version_meta_cache,
-            )
+            if model_id in MERGE_MULTI_FILE_MODEL_IDS:
+                versions = _aggregate_versions_merged(
+                    model,
+                    subset,
+                    refresh=refresh,
+                    version_meta_cache=version_meta_cache,
+                )
+            else:
+                versions = _aggregate_versions(
+                    model,
+                    subset,
+                    refresh=refresh,
+                    version_meta_cache=version_meta_cache,
+                )
             if not versions:
                 continue
 
@@ -391,9 +563,13 @@ def build(*, refresh: bool = False) -> tuple[dict, dict]:
                     label = f"{model_name} · {Path(catalog_name).stem}"
 
             bundle_id = None
+            requires_bundle_id = None
             for entry in subset:
                 if entry.get("set") in ("anima", "miaomiao"):
                     bundle_id = str(entry.get("set"))
+            if model_id in MERGE_MULTI_FILE_MODEL_IDS:
+                bundle_id = bundle_id or "miaomiao"
+                requires_bundle_id = "anima"
 
             index_entries[ref] = {
                 "ref": ref,
@@ -409,6 +585,8 @@ def build(*, refresh: bool = False) -> tuple[dict, dict]:
                 "tags": _infer_tags(label, kind, default_base),
                 "bundle_id": bundle_id,
             }
+            if requires_bundle_id:
+                index_entries[ref]["requires_bundle_id"] = requires_bundle_id
             if isinstance(default_vid, int):
                 index_entries[ref]["civitai_version_id"] = default_vid
 
@@ -422,13 +600,22 @@ def build(*, refresh: bool = False) -> tuple[dict, dict]:
                 "default_version_id": default_vid,
                 "folder": (KINDS.get(kind) or {}).get("folder") or "checkpoints",
                 "bundle_id": bundle_id,
+                "requires_bundle_id": requires_bundle_id,
                 "versions": versions,
             }
 
+            if model_id in MERGE_MULTI_FILE_MODEL_IDS:
+                add_category_ref("miaomiao", ref)
+
             for entry in subset:
-                add_category_ref(str(entry.get("set") or "uncategorized"), ref)
+                set_name = str(entry.get("set") or "uncategorized")
+                if model_id in MERGE_MULTI_FILE_MODEL_IDS and set_name in ("all_te", "all_vae"):
+                    continue
+                add_category_ref(set_name, ref)
 
     for hf_row in _scan_hf_sets(cfg):
+        if hf_row["set"] == "anima":
+            continue
         ref = _hf_ref(hf_row["repo_id"], hf_row["repo_path"])
         kind = _kind_for_group(hf_row["group"])
         name = hf_row["name"]
@@ -478,6 +665,64 @@ def build(*, refresh: bool = False) -> tuple[dict, dict]:
             "versions": [version_row],
         }
         add_category_ref(hf_row["set"], ref)
+
+    anima_hf_rows = _scan_hf_sets(cfg)
+    anima_hf_rows = [row for row in anima_hf_rows if row.get("set") == "anima"]
+    if anima_hf_rows:
+        bundle_files: list[dict] = []
+        for hf_row in sorted(
+            anima_hf_rows,
+            key=lambda row: FILE_FOLDER_PRIORITY.index(GROUP_TO_FOLDER.get(str(row.get("group") or ""), "checkpoints"))
+            if GROUP_TO_FOLDER.get(str(row.get("group") or ""), "checkpoints") in FILE_FOLDER_PRIORITY
+            else 99,
+        ):
+            kind = _kind_for_group(hf_row["group"])
+            folder = GROUP_TO_FOLDER.get(str(hf_row.get("group") or ""), (KINDS.get(kind) or {}).get("folder") or "checkpoints")
+            name = hf_row["name"]
+            bundle_files.append(
+                {
+                    "repo_id": hf_row["repo_id"],
+                    "repo_path": hf_row["repo_path"],
+                    "catalog_filename": name,
+                    "pretty_filename": name,
+                    "size_bytes": None,
+                    "primary": len(bundle_files) == 0,
+                    "folder": folder,
+                }
+            )
+        version_row = {
+            "version_id": "v1",
+            "name": "Base bundle",
+            "base_model": "Anima",
+            "preview_remote_url": None,
+            "files": bundle_files,
+        }
+        ref = ANIMA_BUNDLE_REF
+        index_entries[ref] = {
+            "ref": ref,
+            "source": "hf",
+            "kind": "flux_diffusion",
+            "label": "Anima Base",
+            "default_version_id": "v1",
+            "default_base_model": "Anima",
+            "preview_remote_url": None,
+            "preview_static_file": "anima-cover.png",
+            "version_count": 1,
+            "tags": _infer_tags("Anima Base", "flux_diffusion", "Anima"),
+            "bundle_id": "anima",
+        }
+        by_ref[ref] = {
+            "ref": ref,
+            "source": "hf",
+            "kind": "flux_diffusion",
+            "label": "Anima Base",
+            "default_version_id": "v1",
+            "folder": "diffusion_models",
+            "repo_id": anima_hf_rows[0]["repo_id"],
+            "bundle_id": "anima",
+            "versions": [version_row],
+        }
+        add_category_ref("anima", ref)
 
     recommended_refs: list[str] = []
     for cat in RECOMMENDED_CATEGORIES:

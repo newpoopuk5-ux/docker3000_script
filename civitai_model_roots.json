@@ -564,8 +564,8 @@
     {
       "set": "all_te",
       "group": "text_encoders",
-      "catalog_name": "miaomiaoHarem_anima12_txt.safetensors",
-      "download_url": "https://civitai.com/api/download/models/3020110?fileId=2898941",
+          "catalog_name": "anima_baseV10_txt.safetensors",
+          "download_url": "https://civitai.com/api/download/models/3020110?fileId=2898941",
       "version_id": 3020110,
       "file_id": 2898941,
       "model_id": 934764,

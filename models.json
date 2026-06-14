@@ -81,7 +81,7 @@
       ],
       "text_encoders": [
         {
-          "name": "miaomiaoHarem_anima12_txt.safetensors",
+          "name": "anima_baseV10_txt.safetensors",
           "source": "direct",
           "url": "https://civitai.com/api/download/models/3020110?fileId=2898941"
         }

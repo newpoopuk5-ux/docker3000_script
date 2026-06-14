@@ -157,51 +157,134 @@ def load_entry(ref: str) -> dict | None:
     return row
 
 
-def match_version_installed(version: dict, disk_rows: list[dict]) -> dict | None:
-    names = _version_filenames(version)
-    hit = _match_names(names, disk_rows)
+def _primary_file(version: dict) -> dict | None:
+    files = version.get("files") or []
+    if not files:
+        return None
+    return next((row for row in files if row.get("primary")), files[0])
+
+
+def _file_disk_names(file_row: dict) -> list[str]:
+    names: list[str] = []
+    for key in ("catalog_filename", "pretty_filename"):
+        value = str(file_row.get(key) or "").strip()
+        if value:
+            names.append(value)
+    return names
+
+
+def match_file_installed(file_row: dict, disk_index: dict[str, list[dict]], entry: dict | None = None) -> dict | None:
+    folder = str(file_row.get("folder") or "").strip()
+    if not folder and entry:
+        kind = str(entry.get("kind") or "")
+        folder = str(entry.get("folder") or (KINDS.get(kind) or {}).get("folder") or "checkpoints")
+    if not folder:
+        folder = "checkpoints"
+    names = _file_disk_names(file_row)
+    hit = _match_names(names, disk_index.get(folder) or [])
     if hit:
-        return {"disk_row": hit, "match_kind": "filename"}
-    vid = version.get("version_id")
-    try:
-        vid_int = int(vid)
-    except (TypeError, ValueError):
-        vid_int = None
-    if vid_int is not None:
-        sidecar_hit = next((row for row in disk_rows if row.get("version_id") == vid_int), None)
-        if sidecar_hit:
-            return {"disk_row": sidecar_hit, "match_kind": "sidecar"}
+        return {"disk_row": hit, "match_kind": "filename", "folder": folder}
+    for alt_folder, disk_rows in disk_index.items():
+        if alt_folder == folder:
+            continue
+        hit = _match_names(names, disk_rows)
+        if hit:
+            return {"disk_row": hit, "match_kind": "filename", "folder": alt_folder}
     return None
 
 
+def match_version_installed(
+    version: dict,
+    disk_index: dict[str, list[dict]] | list[dict],
+) -> dict | None:
+    if isinstance(disk_index, list):
+        disk_index = {"checkpoints": disk_index}
+    primary = _primary_file(version)
+    if primary:
+        hit = match_file_installed(primary, disk_index, None)
+        if hit:
+            return hit
+    names = _version_filenames(version)
+    for folder, disk_rows in disk_index.items():
+        hit = _match_names(names, disk_rows)
+        if hit:
+            return {"disk_row": hit, "match_kind": "filename", "folder": folder}
+        vid = version.get("version_id")
+        try:
+            vid_int = int(vid)
+        except (TypeError, ValueError):
+            vid_int = None
+        if vid_int is not None:
+            sidecar_hit = next((row for row in disk_rows if row.get("version_id") == vid_int), None)
+            if sidecar_hit:
+                return {"disk_row": sidecar_hit, "match_kind": "sidecar", "folder": folder}
+    return None
+
+
+def version_has_bundle_files(version: dict) -> bool:
+    files = version.get("files") or []
+    return len(files) > 1
+
+
+def _file_install_key(file_row: dict, index: int = 0) -> str:
+    fid = file_row.get("file_id")
+    if fid is not None:
+        return str(fid)
+    name = str(file_row.get("catalog_filename") or file_row.get("pretty_filename") or "").strip()
+    if name:
+        return name
+    return str(index)
+
+
+def version_bundle_installed(version: dict, disk_index: dict[str, list[dict]], entry: dict | None = None) -> bool:
+    files = version.get("files") or []
+    if not files:
+        return False
+    if len(files) == 1:
+        return match_version_installed(version, disk_index) is not None
+    return all(match_file_installed(file_row, disk_index, entry) for file_row in files)
+
+
 def list_installed_version_ids(entry: dict, disk_index: dict[str, list[dict]] | None = None) -> list:
-    folder = str(entry.get("folder") or (KINDS.get(entry.get("kind") or "") or {}).get("folder") or "checkpoints")
     disk_index = disk_index if disk_index is not None else _scan_disk_index()
-    disk_rows = disk_index.get(folder) or []
     installed: list = []
     for version in entry.get("versions") or []:
-        if match_version_installed(version, disk_rows):
+        if match_version_installed(version, disk_index):
             installed.append(version.get("version_id"))
     return installed
 
 
 def enrich_entry_install(entry: dict, disk_index: dict[str, list[dict]] | None = None) -> dict:
-    folder = str(entry.get("folder") or (KINDS.get(entry.get("kind") or "") or {}).get("folder") or "checkpoints")
     disk_index = disk_index if disk_index is not None else _scan_disk_index()
-    disk_rows = disk_index.get(folder) or []
     installed_ids: list = []
     version_install: dict[str, dict] = {}
     for version in entry.get("versions") or []:
-        hit = match_version_installed(version, disk_rows)
-        if not hit:
-            continue
         vid = version.get("version_id")
+        file_status: dict[str, dict] = {}
+        primary_hit = None
+        for index, file_row in enumerate(version.get("files") or []):
+            key = _file_install_key(file_row, index)
+            hit = match_file_installed(file_row, disk_index, entry)
+            file_status[key] = {
+                "installed": hit is not None,
+                "disk_name": hit["disk_row"].get("name") if hit else None,
+                "disk_path": hit["disk_row"].get("path") if hit else None,
+                "folder": hit.get("folder") if hit else file_row.get("folder"),
+                "catalog_filename": file_row.get("catalog_filename"),
+            }
+            if file_row.get("primary") and hit:
+                primary_hit = hit
+        if not primary_hit and not any(row.get("installed") for row in file_status.values()):
+            continue
         installed_ids.append(vid)
-        row = hit["disk_row"]
+        row = primary_hit["disk_row"] if primary_hit else {}
         version_install[str(vid)] = {
-            "disk_name": row.get("name"),
-            "disk_path": row.get("path"),
-            "size_bytes": row.get("size_bytes"),
+            "disk_name": row.get("name") if primary_hit else None,
+            "disk_path": row.get("path") if primary_hit else None,
+            "size_bytes": row.get("size_bytes") if primary_hit else None,
+            "folder": primary_hit.get("folder") if primary_hit else None,
+            "bundle_complete": version_bundle_installed(version, disk_index, entry),
+            "files": file_status,
         }
     out = dict(entry)
     out["installed_version_ids"] = installed_ids
@@ -319,7 +402,7 @@ def match_entry_installed(entry: dict, disk_index: dict[str, list[dict]] | None 
     match_kind = None
 
     for version in versions:
-        hit = match_version_installed(version, disk_rows)
+        hit = match_version_installed(version, disk_index)
         if hit:
             installed_version = version
             disk_row = hit["disk_row"]
@@ -462,13 +545,14 @@ def _catalog_folder_key(entry: dict) -> str:
     return FOLDER_TO_CATALOG_KEY.get(folder, folder or "checkpoints")
 
 
-def build_download_item(entry: dict, version: dict) -> tuple[dict, str]:
-    folder_key = _catalog_folder_key(entry)
-    source = str(entry.get("source") or "civitai")
+def build_download_item(entry: dict, version: dict, file_row: dict | None = None) -> tuple[dict, str]:
     files = version.get("files") or []
     if not files:
         raise RuntimeError("No files for selected version")
-    file_row = files[0]
+    file_row = file_row or _primary_file(version) or files[0]
+    folder_key = str(file_row.get("folder") or _catalog_folder_key(entry))
+    folder_key = FOLDER_TO_CATALOG_KEY.get(folder_key, folder_key)
+    source = str(entry.get("source") or "civitai")
     if source == "hf":
         item = {
             "source": "hf",
@@ -496,7 +580,48 @@ def build_download_item(entry: dict, version: dict) -> tuple[dict, str]:
     return item, folder_key
 
 
-def _run_registry_download_job(job_id: str, ref: str, version_id) -> None:
+def build_download_items(
+    entry: dict,
+    version: dict,
+    *,
+    bundle: bool = False,
+    file_id=None,
+) -> list[tuple[dict, str]]:
+    files = version.get("files") or []
+    if not files:
+        raise RuntimeError("No files for selected version")
+    if file_id is not None:
+        file_row = None
+        for index, row in enumerate(files):
+            if str(row.get("file_id") or "") == str(file_id):
+                file_row = row
+                break
+            if str(row.get("catalog_filename") or "") == str(file_id):
+                file_row = row
+                break
+            if _file_install_key(row, index) == str(file_id):
+                file_row = row
+                break
+        if not file_row:
+            raise RuntimeError(f"Unknown file_id for version: {file_id}")
+        hit = match_file_installed(file_row, _scan_disk_index(), entry)
+        if hit:
+            raise RuntimeError("File already installed")
+        return [build_download_item(entry, version, file_row)]
+    if not bundle:
+        return [build_download_item(entry, version)]
+    pending = []
+    disk_index = _scan_disk_index()
+    for file_row in files:
+        if match_file_installed(file_row, disk_index, entry):
+            continue
+        pending.append(build_download_item(entry, version, file_row))
+    if not pending:
+        raise RuntimeError("All bundle files already installed")
+    return pending
+
+
+def _run_registry_download_job(job_id: str, ref: str, version_id, bundle: bool = False, file_id=None) -> None:
     kwargs = _download_kwargs(job_id)
     if kwargs["cancel_event"].is_set():
         _mark_job_cancelled(job_id)
@@ -512,8 +637,15 @@ def _run_registry_download_job(job_id: str, ref: str, version_id) -> None:
         version = _resolve_version(entry, version_id)
         if not version:
             raise RuntimeError(f"Unknown version for {ref}")
-        item, folder_key = build_download_item(entry, version)
-        download_item(item, folder_key, progress=progress, **kwargs)
+        items = build_download_items(entry, version, bundle=bundle, file_id=file_id)
+        total = len(items)
+        for index, (item, folder_key) in enumerate(items, start=1):
+            if kwargs["cancel_event"].is_set():
+                _mark_job_cancelled(job_id)
+                return
+            if total > 1:
+                _update_job(job_id, progress=f"file {index}/{total}")
+            download_item(item, folder_key, progress=progress, **kwargs)
         if kwargs["cancel_event"].is_set():
             _mark_job_cancelled(job_id)
             return
@@ -536,7 +668,7 @@ def _run_registry_download_job(job_id: str, ref: str, version_id) -> None:
         _clear_job_handles(job_id)
 
 
-def start_registry_download(ref: str, version_id=None) -> dict:
+def start_registry_download(ref: str, version_id=None, bundle: bool = False, file_id=None) -> dict:
     if not manager_supported():
         return {"ok": False, "supported": False, "error": "Model downloads are not available on this host."}
     if not registry_supported():
@@ -550,12 +682,33 @@ def start_registry_download(ref: str, version_id=None) -> dict:
     version = _resolve_version(entry, version_id)
     if not version:
         return {"ok": False, "error": "Unknown version"}
-    folder = str(entry.get("folder") or (KINDS.get(entry.get("kind") or "") or {}).get("folder") or "checkpoints")
-    disk_rows = (_scan_disk_index().get(folder) or [])
-    if match_version_installed(version, disk_rows):
+    disk_index = _scan_disk_index()
+    if file_id is not None:
+        files = version.get("files") or []
+        target = None
+        for index, row in enumerate(files):
+            if str(row.get("file_id") or "") == str(file_id):
+                target = row
+                break
+            if str(row.get("catalog_filename") or "") == str(file_id):
+                target = row
+                break
+            if _file_install_key(row, index) == str(file_id):
+                target = row
+                break
+        if target and match_file_installed(target, disk_index, entry):
+            return {"ok": True, "already_installed": True, "ref": ref, "version_id": version.get("version_id"), "file_id": file_id}
+    elif bundle:
+        if version_bundle_installed(version, disk_index, entry):
+            return {"ok": True, "already_installed": True, "ref": ref, "version_id": version.get("version_id"), "bundle": True}
+    elif match_version_installed(version, disk_index):
         return {"ok": True, "already_installed": True, "ref": ref, "version_id": version.get("version_id")}
 
     label = str(entry.get("label") or ref)
+    if file_id is not None:
+        label = f"{label} · {file_id}"
+    elif bundle and version_has_bundle_files(version):
+        label = f"{label} (bundle)"
     job_id = uuid.uuid4().hex
     from model_manager import _DOWNLOAD_JOBS, _DOWNLOAD_LOCK
 
@@ -564,7 +717,7 @@ def start_registry_download(ref: str, version_id=None) -> dict:
             "id": job_id,
             "catalog_id": f"registry:{ref}",
             "display_name": label,
-            "source_url": (version.get("files") or [{}])[0].get("download_url"),
+            "source_url": (_primary_file(version) or {}).get("download_url"),
             "status": "queued",
             "ok": None,
             "error": None,
@@ -572,8 +725,14 @@ def start_registry_download(ref: str, version_id=None) -> dict:
             "created_at": time.time(),
             "registry_ref": ref,
             "version_id": version.get("version_id"),
+            "bundle": bool(bundle),
+            "file_id": file_id,
         }
-    thread = threading.Thread(target=_run_registry_download_job, args=(job_id, ref, version.get("version_id")), daemon=True)
+    thread = threading.Thread(
+        target=_run_registry_download_job,
+        args=(job_id, ref, version.get("version_id"), bundle, file_id),
+        daemon=True,
+    )
     thread.start()
     return {
         "ok": True,
@@ -582,6 +741,8 @@ def start_registry_download(ref: str, version_id=None) -> dict:
         "version_id": version.get("version_id"),
         "display_name": label,
         "status": "queued",
+        "bundle": bool(bundle),
+        "file_id": file_id,
     }
 
 

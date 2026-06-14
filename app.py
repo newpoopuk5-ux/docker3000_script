@@ -539,7 +539,10 @@ def models_download():
         except (TypeError, ValueError):
             registry_version_id = raw_registry_version
     if registry_ref:
-        result = start_registry_download(registry_ref, registry_version_id)
+        bundle = bool(body.get("bundle"))
+        raw_file = body.get("file_id") or body.get("catalog_filename")
+        file_id = str(raw_file).strip() if raw_file is not None and str(raw_file).strip() else None
+        result = start_registry_download(registry_ref, registry_version_id, bundle=bundle, file_id=file_id)
         status = 200 if result.get("ok") else (501 if result.get("supported") is False else 400)
         return jsonify(result), status
     if url or version_id is not None:
