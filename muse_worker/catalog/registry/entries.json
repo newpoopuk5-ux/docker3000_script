@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-14T15:39:11.646886+00:00",
+  "generated_at": "2026-06-15T01:43:30.115776+00:00",
   "by_ref": {
     "civitai:1325426": {
       "ref": "civitai:1325426",
@@ -946,6 +946,9 @@
               "size_bytes": 7105375718,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "1girl"
           ]
         },
         {
@@ -1775,6 +1778,7 @@
           "name": "Anima_1.2",
           "base_model": "",
           "preview_remote_url": null,
+          "trigger_words": [],
           "files": [
             {
               "file_id": 2908822,
@@ -3943,6 +3947,9 @@
               "size_bytes": 37864904,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "armbinder"
           ]
         },
         {
@@ -3959,6 +3966,9 @@
               "size_bytes": 228454332,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "armbinder"
           ]
         }
       ]
@@ -4019,6 +4029,10 @@
               "size_bytes": 228458444,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "amputee",
+            "gold cappedlimb"
           ]
         },
         {
@@ -4051,6 +4065,10 @@
               "size_bytes": 228460084,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "amputee",
+            "gold cappedlimb"
           ]
         },
         {
@@ -4067,6 +4085,9 @@
               "size_bytes": 228459132,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "amputee"
           ]
         },
         {
@@ -4083,6 +4104,9 @@
               "size_bytes": 228459020,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "amputee"
           ]
         }
       ]
@@ -4129,6 +4153,10 @@
               "size_bytes": 42872284,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "rparmbinder",
+            "bound arms"
           ]
         }
       ]
@@ -4235,6 +4263,9 @@
               "size_bytes": 127727328,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "pussy spreader,spread pussy,bdsm,"
           ]
         },
         {
@@ -4251,6 +4282,9 @@
               "size_bytes": 127727304,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "pussy spreader, spread pussy, bdsm"
           ]
         },
         {
@@ -4283,6 +4317,11 @@
               "size_bytes": 57422484,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "pussy spreader,spread pussy",
+            "bdsm",
+            "bound"
           ]
         }
       ]
