@@ -1,0 +1,4338 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-14T15:39:11.646886+00:00",
+  "by_ref": {
+    "civitai:1325426": {
+      "ref": "civitai:1325426",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 1325426,
+      "label": "Amanatsu (Illustrious)",
+      "main_url": "https://civitai.com/models/1325426",
+      "default_version_id": 2288934,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2288934,
+          "name": "v2",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 2225962,
+              "download_url": "https://civitai.com/api/download/models/2288934?fileId=2225962",
+              "catalog_filename": "amanatsuIllustrious_v2.safetensors",
+              "pretty_filename": "Amanatsu (Illustrious) v2.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1496755,
+          "name": "V1.1",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/baede16b-0748-4187-9313-0af3b003e05d/original=true/61728808.jpeg",
+          "files": [
+            {
+              "file_id": 1396860,
+              "download_url": "https://civitai.com/api/download/models/1496755?fileId=1396860",
+              "catalog_filename": "amanatsuIllustrious_v11.safetensors",
+              "pretty_filename": "Amanatsu (Illustrious) V1.1.safetensors",
+              "size_bytes": 6938042568,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1496424,
+          "name": "v1.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/7bd032d3-4985-47cc-a9e5-160af11bc463/original=true/61715791.jpeg",
+          "files": [
+            {
+              "file_id": 1396510,
+              "download_url": "https://civitai.com/api/download/models/1496424?fileId=1396510",
+              "catalog_filename": "amanatsuIllustrious_v10.safetensors",
+              "pretty_filename": "Amanatsu (Illustrious) v1.0.safetensors",
+              "size_bytes": 6938041104,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:1353314": {
+      "ref": "civitai:1353314",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 1353314,
+      "label": "Animij",
+      "main_url": "https://civitai.com/models/1353314",
+      "default_version_id": 1613008,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2827109,
+          "name": "v10",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f8be045a-46db-4b10-9954-eed8e04877e8/original=true/126284844.jpeg",
+          "files": [
+            {
+              "file_id": 2713075,
+              "download_url": "https://civitai.com/api/download/models/2827109?fileId=2713075",
+              "catalog_filename": "animij_v10.safetensors",
+              "pretty_filename": "Animij v10.safetensors",
+              "size_bytes": 6938040674,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2703578,
+          "name": "v9",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9b334ac4-9c0b-4114-8776-3d67b575652b/original=true/121679537.jpeg",
+          "files": [
+            {
+              "file_id": 2589804,
+              "download_url": "https://civitai.com/api/download/models/2703578?fileId=2589804",
+              "catalog_filename": "animij_v9.safetensors",
+              "pretty_filename": "Animij v9.safetensors",
+              "size_bytes": 7419803912,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2579397,
+          "name": "v8",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1700820a-e0bf-4e20-9032-bb55a032c536/original=true/117098966.jpeg",
+          "files": [
+            {
+              "file_id": 2466636,
+              "download_url": "https://civitai.com/api/download/models/2579397?fileId=2466636",
+              "catalog_filename": "animij_v8.safetensors",
+              "pretty_filename": "Animij v8.safetensors",
+              "size_bytes": 7419803912,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2491204,
+          "name": "v7",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6fad0398-7295-45ec-8bf6-85a06c716e48/original=true/113460870.jpeg",
+          "files": [
+            {
+              "file_id": 2379277,
+              "download_url": "https://civitai.com/api/download/models/2491204?fileId=2379277",
+              "catalog_filename": "animij_v7.safetensors",
+              "pretty_filename": "Animij v7.safetensors",
+              "size_bytes": 6938040400,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2245840,
+          "name": "v1.2",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/282e9abf-f2f3-4f47-9533-81ddd5fc2e25/original=true/102078541.jpeg",
+          "files": [
+            {
+              "file_id": 2138163,
+              "download_url": "https://civitai.com/api/download/models/2245840?fileId=2138163",
+              "catalog_filename": "animij_v12.safetensors",
+              "pretty_filename": "Animij v1.2.safetensors",
+              "size_bytes": 7359696328,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2119925,
+          "name": "v6",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8fed52a7-4a3e-4454-a5ca-1948455a377d/original=true/94666613.jpeg",
+          "files": [
+            {
+              "file_id": 2014238,
+              "download_url": "https://civitai.com/api/download/models/2119925?fileId=2014238",
+              "catalog_filename": "animij_v6.safetensors",
+              "pretty_filename": "Animij v6.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1984137,
+          "name": "v5",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/16256bdd-4a82-47f4-837d-a8d0397cdb9d/original=true/86865124.jpeg",
+          "files": [
+            {
+              "file_id": 1881877,
+              "download_url": "https://civitai.com/api/download/models/1984137?fileId=1881877",
+              "catalog_filename": "animij_v5.safetensors",
+              "pretty_filename": "Animij v5.safetensors",
+              "size_bytes": 7419803912,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1945082,
+          "name": "v4",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/30a36c2d-9e8e-47b0-9ee4-e08f78b61d4b/original=true/84644223.jpeg",
+          "files": [
+            {
+              "file_id": 1842757,
+              "download_url": "https://civitai.com/api/download/models/1945082?fileId=1842757",
+              "catalog_filename": "animij_v4.safetensors",
+              "pretty_filename": "Animij v4.safetensors",
+              "size_bytes": 7419803912,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1811796,
+          "name": "v3",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1ef113af-dcc6-46b7-8f59-cd1a88299d64/original=true/77424467.jpeg",
+          "files": [
+            {
+              "file_id": 1712399,
+              "download_url": "https://civitai.com/api/download/models/1811796?fileId=1712399",
+              "catalog_filename": "animij_v3.safetensors",
+              "pretty_filename": "Animij v3.safetensors",
+              "size_bytes": 7105347638,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1613008,
+          "name": "v2",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/1613008",
+              "catalog_filename": "animij_v20.safetensors",
+              "pretty_filename": "Animij v2.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1528632,
+          "name": "v1",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/1528632",
+              "catalog_filename": "animij_v10.safetensors",
+              "pretty_filename": "Animij v1.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:575395": {
+      "ref": "civitai:575395",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 575395,
+      "label": "Big Lust",
+      "main_url": "https://civitai.com/models/575395",
+      "default_version_id": 1081768,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1081768,
+          "name": "v1.6",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/1081768?type=Model&format=SafeTensor&size=full&fp=fp16",
+              "catalog_filename": "biglust_full_fp16.safetensors",
+              "pretty_filename": "Big Lust v1.6.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 929239,
+          "name": "v1.5",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/577e9060-713e-4a57-b3e3-ee70b75f8d7e/original=true/33195776.jpeg",
+          "files": [
+            {
+              "file_id": 836872,
+              "download_url": "https://civitai.com/api/download/models/929239?fileId=836872",
+              "catalog_filename": "bigLust_v15.safetensors",
+              "pretty_filename": "Big Lust v1.5.safetensors",
+              "size_bytes": 6938062394,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 641504,
+          "name": "v1.0",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/129caace-012c-4185-ab4e-2d424bbb4ab1/original=true/19660742.jpeg",
+          "files": [
+            {
+              "file_id": 561819,
+              "download_url": "https://civitai.com/api/download/models/641504?fileId=561819",
+              "catalog_filename": "bigLust_v10.safetensors",
+              "pretty_filename": "Big Lust v1.0.safetensors",
+              "size_bytes": 7140751802,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:709404": {
+      "ref": "civitai:709404",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 709404,
+      "label": "CyberRealistic Pony Semi-Realistic",
+      "main_url": "https://civitai.com/models/709404",
+      "default_version_id": 2833750,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 3007024,
+          "name": "Semi-Real v6",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a47294db-0ef7-40e3-8d8a-e1a84549a90f/original=true/132915676.jpeg",
+          "files": [
+            {
+              "file_id": 2886411,
+              "download_url": "https://civitai.com/api/download/models/3007024?fileId=2886411",
+              "catalog_filename": "cyberrealisticPony_semiRealV6.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v6.safetensors",
+              "size_bytes": 6938041288,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2833750,
+          "name": "Semi-Real v5",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 2721289,
+              "download_url": "https://civitai.com/api/download/models/2833750?fileId=2721289",
+              "catalog_filename": "cyberrealisticPony_semiRealV5.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v5.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2601141,
+          "name": "Semi-Real v4.5",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/77bbfa5d-719e-48d7-a18d-12a4ebc76083/original=true/117670175.jpeg",
+          "files": [
+            {
+              "file_id": 2488408,
+              "download_url": "https://civitai.com/api/download/models/2601141?fileId=2488408",
+              "catalog_filename": "cyberrealisticPony_semiRealV45.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v4.5.safetensors",
+              "size_bytes": 7105348104,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2268768,
+          "name": "Semi-Real v4.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c9ed3398-4a71-41d5-80ee-581a86d8d62d/original=true/103405479.jpeg",
+          "files": [
+            {
+              "file_id": 2160897,
+              "download_url": "https://civitai.com/api/download/models/2268768?fileId=2160897",
+              "catalog_filename": "cyberrealisticPony_semiRealV40.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v4.0.safetensors",
+              "size_bytes": 7105348104,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2022237,
+          "name": "Semi-Real v3.6",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/773ca984-9899-48d0-bc9f-4827bb9157b1/original=true/88970311.jpeg",
+          "files": [
+            {
+              "file_id": 1919199,
+              "download_url": "https://civitai.com/api/download/models/2022237?fileId=1919199",
+              "catalog_filename": "cyberrealisticPony_semiRealV36.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v3.6.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1871475,
+          "name": "Semi-Real v3.5",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a8638086-c194-4a63-a674-4c8a0a83dd38/original=true/80604854.jpeg",
+          "files": [
+            {
+              "file_id": 1771352,
+              "download_url": "https://civitai.com/api/download/models/1871475?fileId=1771352",
+              "catalog_filename": "cyberrealisticPony_semiRealV35.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v3.5.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1692717,
+          "name": "Semi-Real v3.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1e67d956-aafc-46b0-b4ce-2f3d2e3fa5aa/original=true/71586187.jpeg",
+          "files": [
+            {
+              "file_id": 1593930,
+              "download_url": "https://civitai.com/api/download/models/1692717?fileId=1593930",
+              "catalog_filename": "cyberrealisticPony_semiRealV30.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v3.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1173780,
+          "name": "Semi-Real v2.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b1ee2b44-7f7f-4ff6-98b8-3283b37312ca/original=true/47939317.jpeg",
+          "files": [
+            {
+              "file_id": 1079106,
+              "download_url": "https://civitai.com/api/download/models/1173780?fileId=1079106",
+              "catalog_filename": "cyberrealisticPony_semiRealV20.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v2.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 793496,
+          "name": "Semi-Real v1.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ee222b96-6772-4603-a413-c709ae2289d5/original=true/27198800.jpeg",
+          "files": [
+            {
+              "file_id": 707060,
+              "download_url": "https://civitai.com/api/download/models/793496?fileId=707060",
+              "catalog_filename": "cyberrealisticPony_semiRealV10.safetensors",
+              "pretty_filename": "CyberRealistic Pony Semi-Realistic Semi-Real v1.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:2583": {
+      "ref": "civitai:2583",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 2583,
+      "label": "Hassaku (SD1.5)",
+      "main_url": "https://civitai.com/models/2583",
+      "default_version_id": 106922,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 106922,
+          "name": "v1.3",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/106922",
+              "catalog_filename": "hassakuSD15.safetensors",
+              "pretty_filename": "Hassaku (SD1.5) v1.3.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 62528,
+          "name": "V1.2",
+          "base_model": "SD 1.5",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/648e2bdc-9259-4a62-8a15-1f45d8748a5d/original=true/688742.jpeg",
+          "files": [
+            {
+              "file_id": 44151,
+              "download_url": "https://civitai.com/api/download/models/62528?fileId=44151",
+              "catalog_filename": "hassakuSD15_v12.safetensors",
+              "pretty_filename": "Hassaku (SD1.5) V1.2.safetensors",
+              "size_bytes": 2132625892,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 37521,
+          "name": "V1.1",
+          "base_model": "SD 1.5",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6e13a7e0-e19b-4da6-becc-9f23154bb100/original=true/423931.jpeg",
+          "files": [
+            {
+              "file_id": 29775,
+              "download_url": "https://civitai.com/api/download/models/37521?fileId=29775",
+              "catalog_filename": "hassakuSD15_v11.safetensors",
+              "pretty_filename": "Hassaku (SD1.5) V1.1.safetensors",
+              "size_bytes": 2132626072,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 32763,
+          "name": "V1m",
+          "base_model": "SD 1.5",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cf9217f5-5e0b-4e3b-2310-3d0964be8a00/original=true/378116.jpeg",
+          "files": [
+            {
+              "file_id": 26992,
+              "download_url": "https://civitai.com/api/download/models/32763?fileId=26992",
+              "catalog_filename": "hassakuSD15_v1m.safetensors",
+              "pretty_filename": "Hassaku (SD1.5) V1m.safetensors",
+              "size_bytes": 2132626072,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 30191,
+          "name": "V1to1.3-inpainting",
+          "base_model": "SD 1.5",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2d374c83-e047-4282-9b1a-f56b9aadfa1e/original=true/710077.jpeg",
+          "files": [
+            {
+              "file_id": 78545,
+              "download_url": "https://civitai.com/api/download/models/30191?fileId=78545",
+              "catalog_filename": "hassakuSD15_v1to13Inpainting.safetensors",
+              "pretty_filename": "Hassaku (SD1.5) V1to1.3-inpainting.safetensors",
+              "size_bytes": 2132679948,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 29539,
+          "name": "V1",
+          "base_model": "SD 1.5",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/7d9ee258-5859-4878-2f6d-f60894906600/original=true/334161.jpeg",
+          "files": [
+            {
+              "file_id": 24426,
+              "download_url": "https://civitai.com/api/download/models/29539?fileId=24426",
+              "catalog_filename": "hassakuSD15_v1.safetensors",
+              "pretty_filename": "Hassaku (SD1.5) V1.safetensors",
+              "size_bytes": 2132626102,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:140272": {
+      "ref": "civitai:140272",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 140272,
+      "label": "Hassaku XL (Illustrious)",
+      "main_url": "https://civitai.com/models/140272",
+      "default_version_id": 2615702,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2615702,
+          "name": "v3.4",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 2503211,
+              "download_url": "https://civitai.com/api/download/models/2615702?fileId=2503211",
+              "catalog_filename": "hassakuXLIllustrious_v34.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v3.4.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2518501,
+          "name": "v3.3",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1065aaae-85a2-414b-923d-034a83b1b298/original=true/114433639.jpeg",
+          "files": [
+            {
+              "file_id": 2406286,
+              "download_url": "https://civitai.com/api/download/models/2518501?fileId=2406286",
+              "catalog_filename": "hassakuXLIllustrious_v33.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v3.3.safetensors",
+              "size_bytes": 6938065488,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2337366,
+          "name": "v3.2",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a9f431b3-5bb1-43bb-a011-f31a31d6b280/original=true/107437190.jpeg",
+          "files": [
+            {
+              "file_id": 2233995,
+              "download_url": "https://civitai.com/api/download/models/2337366?fileId=2233995",
+              "catalog_filename": "hassakuXLIllustrious_v32.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v3.2.safetensors",
+              "size_bytes": 6938065408,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2310765,
+          "name": "v3_Base",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd8153ad-cb96-4f3a-ba16-3599d33f9966/original=true/105925916.jpeg",
+          "files": [
+            {
+              "file_id": 2201551,
+              "download_url": "https://civitai.com/api/download/models/2310765?fileId=2201551",
+              "catalog_filename": "hassakuXLIllustrious_v3Base.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v3_Base.safetensors",
+              "size_bytes": 6938084280,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2262382,
+          "name": "v3.1",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3e0df26d-db15-482b-9751-8dfbd9102e30/original=true/103053412.jpeg",
+          "files": [
+            {
+              "file_id": 2154626,
+              "download_url": "https://civitai.com/api/download/models/2262382?fileId=2154626",
+              "catalog_filename": "hassakuXLIllustrious_v31.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v3.1.safetensors",
+              "size_bytes": 6938042720,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2010753,
+          "name": "v3 WIP",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6ab5e11c-a1f7-45ed-aa59-a9a1b44ba05d/original=true/88306955.jpeg",
+          "files": [
+            {
+              "file_id": 1907803,
+              "download_url": "https://civitai.com/api/download/models/2010753?fileId=1907803",
+              "catalog_filename": "hassakuXLIllustrious_v3WIP.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v3 WIP.safetensors",
+              "size_bytes": 6938040448,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1697082,
+          "name": "v2.2",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d776d766-3ade-4634-a20e-4dca53241596/original=true/71964843.jpeg",
+          "files": [
+            {
+              "file_id": 1602046,
+              "download_url": "https://civitai.com/api/download/models/1697082?fileId=1602046",
+              "catalog_filename": "hassakuXLIllustrious_v22.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v2.2.safetensors",
+              "size_bytes": 6938040456,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1617798,
+          "name": "v2.1fix",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/189506b3-1317-4b9b-8b56-3065e19dcf55/original=true/67768070.jpeg",
+          "files": [
+            {
+              "file_id": 1517902,
+              "download_url": "https://civitai.com/api/download/models/1617798?fileId=1517902",
+              "catalog_filename": "hassakuXLIllustrious_v21fix.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v2.1fix.safetensors",
+              "size_bytes": 6938040400,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1483080,
+          "name": "v2.1",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4da04245-116c-4579-b6b6-1eda06db5373/original=true/61302136.jpeg",
+          "files": [
+            {
+              "file_id": 1388193,
+              "download_url": "https://civitai.com/api/download/models/1483080?fileId=1388193",
+              "catalog_filename": "hassakuXLIllustrious_v21.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v2.1.safetensors",
+              "size_bytes": 6938048440,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1411148,
+          "name": "v2",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/838cd183-8018-43f7-8b86-ac7252daf0c9/original=true/57967040.jpeg",
+          "files": [
+            {
+              "file_id": 1318530,
+              "download_url": "https://civitai.com/api/download/models/1411148?fileId=1318530",
+              "catalog_filename": "hassakuXLIllustrious_v2.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v2.safetensors",
+              "size_bytes": 6938046520,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1240756,
+          "name": "v1.3 - Style B",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6a06f0b0-05dd-4e49-9400-e4e7e93a5fdd/original=true/49606674.jpeg",
+          "files": [
+            {
+              "file_id": 1146168,
+              "download_url": "https://civitai.com/api/download/models/1240756?fileId=1146168",
+              "catalog_filename": "hassakuXLIllustrious_v13StyleB.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v1.3 - Style B.safetensors",
+              "size_bytes": 6938041104,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1240288,
+          "name": "v1.3 - Style A",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c5c0373b-a9dd-47e7-bd86-2e5da1b40aac/original=true/49651113.jpeg",
+          "files": [
+            {
+              "file_id": 1147687,
+              "download_url": "https://civitai.com/api/download/models/1240288?fileId=1147687",
+              "catalog_filename": "hassakuXLIllustrious_v13StyleA.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v1.3 - Style A.safetensors",
+              "size_bytes": 6938045946,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1200105,
+          "name": "v1.2 - Style",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/346f8261-058f-4bed-a167-b8e3b0c1b220/original=true/47455924.jpeg",
+          "files": [
+            {
+              "file_id": 1105506,
+              "download_url": "https://civitai.com/api/download/models/1200105?fileId=1105506",
+              "catalog_filename": "hassakuXLIllustrious_v12Style.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v1.2 - Style.safetensors",
+              "size_bytes": 6938043810,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1168876,
+          "name": "v1.1 - Style",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/74fbd39c-00ec-4cae-b0b7-bb0bf0a74d9e/original=true/45829187.jpeg",
+          "files": [
+            {
+              "file_id": 1074417,
+              "download_url": "https://civitai.com/api/download/models/1168876?fileId=1074417",
+              "catalog_filename": "hassakuXLIllustrious_v11Style.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) v1.1 - Style.safetensors",
+              "size_bytes": 6938042648,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1123479,
+          "name": "V1.0 - Style",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/af8f9b6a-a8c4-443b-83d7-6e1b9020376a/original=true/43400728.jpeg",
+          "files": [
+            {
+              "file_id": 1028604,
+              "download_url": "https://civitai.com/api/download/models/1123479?fileId=1028604",
+              "catalog_filename": "hassakuXLIllustrious_v10Style.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) V1.0 - Style.safetensors",
+              "size_bytes": 6938042664,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1103588,
+          "name": "V1.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/238ea2b4-3232-4afe-86e1-802003492efd/original=true/42379099.jpeg",
+          "files": [
+            {
+              "file_id": 1008979,
+              "download_url": "https://civitai.com/api/download/models/1103588?fileId=1008979",
+              "catalog_filename": "hassakuXLIllustrious_v10.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) V1.0.safetensors",
+              "size_bytes": 6938042330,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 378499,
+          "name": "beta V0.6",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dab469c1-ea5b-489c-8b0a-caa1e30065af/original=true/7551765.jpeg",
+          "files": [
+            {
+              "file_id": 303435,
+              "download_url": "https://civitai.com/api/download/models/378499?fileId=303435",
+              "catalog_filename": "hassakuXLIllustrious_betaV06.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) beta V0.6.safetensors",
+              "size_bytes": 6938068456,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 325904,
+          "name": "beta V0.4",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3a402090-8eda-4e99-9915-ae072aa720d2/original=true/6195923.jpeg",
+          "files": [
+            {
+              "file_id": 258088,
+              "download_url": "https://civitai.com/api/download/models/325904?fileId=258088",
+              "catalog_filename": "hassakuXLIllustrious_betaV04.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) beta V0.4.safetensors",
+              "size_bytes": 6938068456,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 296830,
+          "name": "beta V0.2M",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b837b927-f5ba-4d3b-99e7-6b4eb135b605/original=true/5435310.jpeg",
+          "files": [
+            {
+              "file_id": 233851,
+              "download_url": "https://civitai.com/api/download/models/296830?fileId=233851",
+              "catalog_filename": "hassakuXLIllustrious_betaV02M.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) beta V0.2M.safetensors",
+              "size_bytes": 6938041578,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 296486,
+          "name": "beta V0.2",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5faaf98a-74a0-4a67-8fae-1a4956f34ce9/original=true/5425100.jpeg",
+          "files": [
+            {
+              "file_id": 233584,
+              "download_url": "https://civitai.com/api/download/models/296486?fileId=233584",
+              "catalog_filename": "hassakuXLIllustrious_betaV02.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) beta V0.2.safetensors",
+              "size_bytes": 6938041578,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 251889,
+          "name": "beta V0.1",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5ab81ac5-fe89-4631-a0c2-7157bb07b976/original=true/4237207.jpeg",
+          "files": [
+            {
+              "file_id": 195264,
+              "download_url": "https://civitai.com/api/download/models/251889?fileId=195264",
+              "catalog_filename": "hassakuXLIllustrious_betaV01.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) beta V0.1.safetensors",
+              "size_bytes": 6938067648,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 223144,
+          "name": "alpha V0.9",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2c8df917-0838-440f-ab45-42f8c40259f8/original=true/3582981.jpeg",
+          "files": [
+            {
+              "file_id": 172082,
+              "download_url": "https://civitai.com/api/download/models/223144?fileId=172082",
+              "catalog_filename": "hassakuXLIllustrious_alphaV09.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.9.safetensors",
+              "size_bytes": 7105375718,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 214173,
+          "name": "alpha V0.8",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cd9f2e0b-970b-4238-bbeb-2daab11960b3/original=true/3420246.jpeg",
+          "files": [
+            {
+              "file_id": 164790,
+              "download_url": "https://civitai.com/api/download/models/214173?fileId=164790",
+              "catalog_filename": "hassakuXLIllustrious_alphaV08.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.8.safetensors",
+              "size_bytes": 7105375718,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 197482,
+          "name": "alpha V0.7",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1c4acb2e-67cc-41fa-8670-8909f424e53a/original=true/3149122.jpeg",
+          "files": [
+            {
+              "file_id": 151116,
+              "download_url": "https://civitai.com/api/download/models/197482?fileId=151116",
+              "catalog_filename": "hassakuXLIllustrious_alphaV07.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.7.safetensors",
+              "size_bytes": 7105375718,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 183389,
+          "name": "alpha V0.6",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/7676832b-25a8-4836-904b-31f29e006ece/original=true/2968406.jpeg",
+          "files": [
+            {
+              "file_id": 140862,
+              "download_url": "https://civitai.com/api/download/models/183389?fileId=140862",
+              "catalog_filename": "hassakuXLIllustrious_alphaV06.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.6.safetensors",
+              "size_bytes": 7105375038,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 176059,
+          "name": "alpha V0.5",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3413db67-09b7-4a1e-a9f5-a665b2b29bae/original=true/2797401.jpeg",
+          "files": [
+            {
+              "file_id": 134485,
+              "download_url": "https://civitai.com/api/download/models/176059?fileId=134485",
+              "catalog_filename": "hassakuXLIllustrious_alphaV05.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.5.safetensors",
+              "size_bytes": 7105375038,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 169615,
+          "name": "alpha V0.4",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f1310c6c-9b9c-4e01-bee2-44e4a3cc6cbe/original=true/2669296.jpeg",
+          "files": [
+            {
+              "file_id": 128910,
+              "download_url": "https://civitai.com/api/download/models/169615?fileId=128910",
+              "catalog_filename": "hassakuXLIllustrious_alphaV04.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.4.safetensors",
+              "size_bytes": 7105375726,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 164304,
+          "name": "alpha V0.3",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cfe12c9d-19c1-4abd-9453-4a63d0a28bf1/original=true/2553943.jpeg",
+          "files": [
+            {
+              "file_id": 124228,
+              "download_url": "https://civitai.com/api/download/models/164304?fileId=124228",
+              "catalog_filename": "hassakuXLIllustrious_alphaV03.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.3.safetensors",
+              "size_bytes": 7105375718,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 158568,
+          "name": "alpha V0.2",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c39b6e55-79c8-45d6-9407-c971aac225a1/original=true/2428072.jpeg",
+          "files": [
+            {
+              "file_id": 119136,
+              "download_url": "https://civitai.com/api/download/models/158568?fileId=119136",
+              "catalog_filename": "hassakuXLIllustrious_alphaV02.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.2.safetensors",
+              "size_bytes": 7105375726,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 155443,
+          "name": "alpha V0.1",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8299ea28-3f7a-401a-9a69-fac854437388/original=true/2358406.jpeg",
+          "files": [
+            {
+              "file_id": 116385,
+              "download_url": "https://civitai.com/api/download/models/155443?fileId=116385",
+              "catalog_filename": "hassakuXLIllustrious_alphaV01.safetensors",
+              "pretty_filename": "Hassaku XL (Illustrious) alpha V0.1.safetensors",
+              "size_bytes": 6938068016,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:376031": {
+      "ref": "civitai:376031",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 376031,
+      "label": "Hassaku XL (Pony)",
+      "main_url": "https://civitai.com/models/376031",
+      "default_version_id": 575495,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 575495,
+          "name": "v1.3(better eyes version)",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/575495",
+              "catalog_filename": "hassakuXLPony.safetensors",
+              "pretty_filename": "Hassaku XL (Pony) v1.3(better eyes version).safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 559994,
+          "name": "v1.3",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b8723bb7-5902-4e23-b4e4-db0d687664be/original=true/15106733.jpeg",
+          "files": [
+            {
+              "file_id": 475996,
+              "download_url": "https://civitai.com/api/download/models/559994?fileId=475996",
+              "catalog_filename": "hassakuXLPony_v13.safetensors",
+              "pretty_filename": "Hassaku XL (Pony) v1.3.safetensors",
+              "size_bytes": 6938042770,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 518550,
+          "name": "v1.2",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e17e5f16-94c9-400c-a3aa-7d4452a3d160/original=true/13064298.jpeg",
+          "files": [
+            {
+              "file_id": 436109,
+              "download_url": "https://civitai.com/api/download/models/518550?fileId=436109",
+              "catalog_filename": "hassakuXLPony_v12.safetensors",
+              "pretty_filename": "Hassaku XL (Pony) v1.2.safetensors",
+              "size_bytes": 6938042770,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 462119,
+          "name": "v1.1nonLoraMerge",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0c1fe860-0829-4613-86f7-b14342ce8ee8/original=true/10506918.jpeg",
+          "files": [
+            {
+              "file_id": 381311,
+              "download_url": "https://civitai.com/api/download/models/462119?fileId=381311",
+              "catalog_filename": "hassakuXLPony_v11nonloramerge.safetensors",
+              "pretty_filename": "Hassaku XL (Pony) v1.1nonLoraMerge.safetensors",
+              "size_bytes": 6938069320,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 461918,
+          "name": "v1.1",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c3063446-fe26-4e49-a15a-df42708d92a4/original=true/10502776.jpeg",
+          "files": [
+            {
+              "file_id": 381117,
+              "download_url": "https://civitai.com/api/download/models/461918?fileId=381117",
+              "catalog_filename": "hassakuXLPony_v11.safetensors",
+              "pretty_filename": "Hassaku XL (Pony) v1.1.safetensors",
+              "size_bytes": 6938066104,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 419916,
+          "name": "v1.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d080adc3-b220-446e-876b-aa3c7d628fd1/original=true/8865808.jpeg",
+          "files": [
+            {
+              "file_id": 341798,
+              "download_url": "https://civitai.com/api/download/models/419916?fileId=341798",
+              "catalog_filename": "hassakuXLPony_v10.safetensors",
+              "pretty_filename": "Hassaku XL (Pony) v1.0.safetensors",
+              "size_bytes": 6938068448,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:795765": {
+      "ref": "civitai:795765",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 795765,
+      "label": "Illustrious-XL",
+      "main_url": "https://civitai.com/models/795765",
+      "default_version_id": 889818,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 889818,
+          "name": "v0.1",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/889818",
+              "catalog_filename": "illustriousXL_v01.safetensors",
+              "pretty_filename": "Illustrious-XL v0.1.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:133005": {
+      "ref": "civitai:133005",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 133005,
+      "label": "Juggernaut XL",
+      "main_url": "https://civitai.com/models/133005",
+      "default_version_id": 782002,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1759168,
+          "name": "Ragnarok",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/37f9b909-e7ef-479a-b3db-1f59409d25cb/original=true/74821598.jpeg",
+          "files": [
+            {
+              "file_id": 1659952,
+              "download_url": "https://civitai.com/api/download/models/1759168?fileId=1659952",
+              "catalog_filename": "juggernautXL_ragnarok.safetensors",
+              "pretty_filename": "Juggernaut XL Ragnarok.safetensors",
+              "size_bytes": 7105350162,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 920957,
+          "name": "Jugg_XI_Lightning_by_RD",
+          "base_model": "SDXL Lightning",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cfd2ca74-313b-4b6c-adac-9eae209f1bf4/original=true/32764033.jpeg",
+          "files": [
+            {
+              "file_id": 828456,
+              "download_url": "https://civitai.com/api/download/models/920957?fileId=828456",
+              "catalog_filename": "juggernautXL_juggXILightningByRD.safetensors",
+              "pretty_filename": "Juggernaut XL Jugg_XI_Lightning_by_RD.safetensors",
+              "size_bytes": 7105348616,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 782002,
+          "name": "Jugg_XI_by_RunDiffusion",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/782002",
+              "catalog_filename": "juggernautXL_juggXlByRundiffusion.safetensors",
+              "pretty_filename": "Juggernaut XL Jugg_XI_by_RunDiffusion.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 471120,
+          "name": "Jugg_X_RunDiffusion_Hyper",
+          "base_model": "SDXL Hyper",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3908e871-69f4-4647-8ca4-8522e1d5ecfb/original=true/10895974.jpeg",
+          "files": [
+            {
+              "file_id": 389863,
+              "download_url": "https://civitai.com/api/download/models/471120?fileId=389863",
+              "catalog_filename": "juggernautXL_juggXRundiffusion.safetensors",
+              "pretty_filename": "Juggernaut XL Jugg_X_RunDiffusion_Hyper.safetensors",
+              "size_bytes": 7105348616,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 456194,
+          "name": "Jugg_X_by RunDiffusion",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fb35cf54-66e8-42fd-ad3f-fd05012dcee7/original=true/10269282.jpeg",
+          "files": [
+            {
+              "file_id": 375666,
+              "download_url": "https://civitai.com/api/download/models/456194?fileId=375666",
+              "catalog_filename": "juggernautXL_juggXByRundiffusion.safetensors",
+              "pretty_filename": "Juggernaut XL Jugg_X_by RunDiffusion.safetensors",
+              "size_bytes": 7105348672,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 357609,
+          "name": "V9+RDPhoto2-Lightning_4S",
+          "base_model": "SDXL Lightning",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c65e6491-ae41-4812-944e-54e20723ad04/original=true/7022347.jpeg",
+          "files": [
+            {
+              "file_id": 285361,
+              "download_url": "https://civitai.com/api/download/models/357609?fileId=285361",
+              "catalog_filename": "juggernautXL_v9Rdphoto2Lightning.safetensors",
+              "pretty_filename": "Juggernaut XL V9+RDPhoto2-Lightning_4S.safetensors",
+              "size_bytes": 7105348284,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 348913,
+          "name": "V9 + RunDiffusionPhoto 2",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/26efc0ec-9902-4a0b-852f-357836d30d94/original=true/6781335.jpeg",
+          "files": [
+            {
+              "file_id": 277777,
+              "download_url": "https://civitai.com/api/download/models/348913?fileId=277777",
+              "catalog_filename": "juggernautXL_v9Rundiffusionphoto2.safetensors",
+              "pretty_filename": "Juggernaut XL V9 + RunDiffusionPhoto 2.safetensors",
+              "size_bytes": 7105348188,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 288982,
+          "name": "V 8 + RunDiffusion",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/bf9d496b-788c-49d0-8ed8-303d5cf37054/original=true/5228979.jpeg",
+          "files": [
+            {
+              "file_id": 227002,
+              "download_url": "https://civitai.com/api/download/models/288982?fileId=227002",
+              "catalog_filename": "juggernautXL_v8Rundiffusion.safetensors",
+              "pretty_filename": "Juggernaut XL V 8 + RunDiffusion.safetensors",
+              "size_bytes": 7105348592,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 252902,
+          "name": "V7 FP16 VAE Fix",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0dcd88e2-4684-48d7-8f66-bb236e74c415/original=true/4257521.jpeg",
+          "files": [
+            {
+              "file_id": 196018,
+              "download_url": "https://civitai.com/api/download/models/252902?fileId=196018",
+              "catalog_filename": "juggernautXL_v7FP16VAEFix.safetensors",
+              "pretty_filename": "Juggernaut XL V7 FP16 VAE Fix.safetensors",
+              "size_bytes": 7105353424,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 240840,
+          "name": "V 7 + RunDiffusion",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/29634cfe-a886-4a34-a2ec-ba27f5eb9fe9/original=true/3963914.jpeg",
+          "files": [
+            {
+              "file_id": 186353,
+              "download_url": "https://civitai.com/api/download/models/240840?fileId=186353",
+              "catalog_filename": "juggernautXL_v7Rundiffusion.safetensors",
+              "pretty_filename": "Juggernaut XL V 7 + RunDiffusion.safetensors",
+              "size_bytes": 7105352832,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 198530,
+          "name": "Version 6 + RunDiffusion",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/715c6893-51a3-4168-ad32-4e0cce1230e0/original=true/3160560.jpeg",
+          "files": [
+            {
+              "file_id": 151968,
+              "download_url": "https://civitai.com/api/download/models/198530?fileId=151968",
+              "catalog_filename": "juggernautXL_version6Rundiffusion.safetensors",
+              "pretty_filename": "Juggernaut XL Version 6 + RunDiffusion.safetensors",
+              "size_bytes": 7105348560,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 166909,
+          "name": "Version 5",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/424fbe50-64ff-486f-86c3-2dfff0c3ea6e/original=true/2612024.jpeg",
+          "files": [
+            {
+              "file_id": 126522,
+              "download_url": "https://civitai.com/api/download/models/166909?fileId=126522",
+              "catalog_filename": "juggernautXL_version5.safetensors",
+              "pretty_filename": "Juggernaut XL Version 5.safetensors",
+              "size_bytes": 6938061110,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 162509,
+          "name": "Version 4.5",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6ad7ad9e-6ec9-478d-9305-b9c65d79b6b8/original=true/2514070.jpeg",
+          "files": [
+            {
+              "file_id": 122604,
+              "download_url": "https://civitai.com/api/download/models/162509?fileId=122604",
+              "catalog_filename": "juggernautXL_version45.safetensors",
+              "pretty_filename": "Juggernaut XL Version 4.5.safetensors",
+              "size_bytes": 6938058410,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 161185,
+          "name": "Version 4 (NSFW)",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2d1e5830-c611-4e4f-ba4b-e7bd8badf5f3/original=true/2486026.jpeg",
+          "files": [
+            {
+              "file_id": 121397,
+              "download_url": "https://civitai.com/api/download/models/161185?fileId=121397",
+              "catalog_filename": "juggernautXL_version4NSFW.safetensors",
+              "pretty_filename": "Juggernaut XL Version 4 (NSFW).safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 156005,
+          "name": "Version 3",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5fd6075a-174b-45b0-9139-d1a607b1a261/original=true/2371394.jpeg",
+          "files": [
+            {
+              "file_id": 116882,
+              "download_url": "https://civitai.com/api/download/models/156005?fileId=116882",
+              "catalog_filename": "juggernautXL_version3.safetensors",
+              "pretty_filename": "Juggernaut XL Version 3.safetensors",
+              "size_bytes": 6938056850,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 152076,
+          "name": "Version 2",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/97cb9615-2866-4bfd-ab24-6147fd3830a7/original=true/2283661.jpeg",
+          "files": [
+            {
+              "file_id": 113240,
+              "download_url": "https://civitai.com/api/download/models/152076?fileId=113240",
+              "catalog_filename": "juggernautXL_version2.safetensors",
+              "pretty_filename": "Juggernaut XL Version 2.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 146359,
+          "name": "Version 1",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/efe3ac96-195f-4299-a2c7-e9f08c400875/original=true/2158328.jpeg",
+          "files": [
+            {
+              "file_id": 108397,
+              "download_url": "https://civitai.com/api/download/models/146359?fileId=108397",
+              "catalog_filename": "juggernautXL_version1.safetensors",
+              "pretty_filename": "Juggernaut XL Version 1.safetensors",
+              "size_bytes": 6938046042,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:573152": {
+      "ref": "civitai:573152",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 573152,
+      "label": "LUSTIFY! [SDXL NSFW checkpoint]",
+      "main_url": "https://civitai.com/models/573152",
+      "default_version_id": 2808677,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2875936,
+          "name": "APEX 🎨INPAINTING🎨",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a1347f0c-cd88-4ce4-96c9-6781ae6b2a03/original=true/128054285.jpeg",
+          "files": [
+            {
+              "file_id": 2756970,
+              "download_url": "https://civitai.com/api/download/models/2875936?fileId=2756970",
+              "catalog_filename": "lustifySDXLNSFW_apexINPAINTING.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] APEX INPAINTING.safetensors",
+              "size_bytes": 6938093714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2808677,
+          "name": "APEX (V8)",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/2808677?type=Model&format=SafeTensor&size=pruned&fp=fp16",
+              "catalog_filename": "lustifySDXL_pruned_fp16.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] APEX (V8).safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2155386,
+          "name": "GGWP (V7)",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fc5a9be1-471f-4e5e-b84e-488a671bdaee/original=true/98189780.jpeg",
+          "files": [
+            {
+              "file_id": 2072334,
+              "download_url": "https://civitai.com/api/download/models/2155386?fileId=2072334",
+              "catalog_filename": "lustifySDXLNSFW_ggwpV7.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] GGWP (V7).safetensors",
+              "size_bytes": 6938099634,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1588039,
+          "name": "OLT 🎨INPAINTING🎨",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5b14b548-8369-4904-88f2-d85697a88e6b/original=true/66250561.jpeg",
+          "files": [
+            {
+              "file_id": 1487829,
+              "download_url": "https://civitai.com/api/download/models/1588039?fileId=1487829",
+              "catalog_filename": "lustifySDXLNSFW_oltINPAINTING.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] OLT INPAINTING.safetensors",
+              "size_bytes": 6938071570,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1569593,
+          "name": "OLT (FIXED TEXTURES)",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b32fd00c-8a37-4ac0-9a92-1a7a836b3587/original=true/65314940.jpeg",
+          "files": [
+            {
+              "file_id": 1469595,
+              "download_url": "https://civitai.com/api/download/models/1569593?fileId=1469595",
+              "catalog_filename": "lustifySDXLNSFW_oltFIXEDTEXTURES.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] OLT (FIXED TEXTURES).safetensors",
+              "size_bytes": 6938043264,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1510911,
+          "name": "OLT (ONE LAST TIME)",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9c7da2f5-af7a-4004-9067-7aecf1f0708c/original=true/62466655.jpeg",
+          "files": [
+            {
+              "file_id": 1411023,
+              "download_url": "https://civitai.com/api/download/models/1510911?fileId=1411023",
+              "catalog_filename": "lustifySDXLNSFW_oltONELASTTIME.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] OLT (ONE LAST TIME).safetensors",
+              "size_bytes": 6938042770,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1099200,
+          "name": "ENDGAME ⚡DMD2⚡",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/28f5744e-2c6a-4086-9ab8-bae7add749fc/original=true/42065681.jpeg",
+          "files": [
+            {
+              "file_id": 1004233,
+              "download_url": "https://civitai.com/api/download/models/1099200?fileId=1004233",
+              "catalog_filename": "lustifySDXLNSFW_endgameDMD2.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] ENDGAME DMD2.safetensors",
+              "size_bytes": 6938066874,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1094291,
+          "name": "ENDGAME",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4197aeb0-9708-4a34-846b-1c0b4a67e627/original=true/41842215.jpeg",
+          "files": [
+            {
+              "file_id": 999340,
+              "download_url": "https://civitai.com/api/download/models/1094291?fileId=999340",
+              "catalog_filename": "lustifySDXLNSFW_endgame.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] ENDGAME.safetensors",
+              "size_bytes": 6938043264,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 938628,
+          "name": "v4.0 ⚡DMD2⚡",
+          "base_model": "SDXL Lightning",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/109b54a3-8fce-40bf-825e-882b863b67d3/original=true/33709842.jpeg",
+          "files": [
+            {
+              "file_id": 846000,
+              "download_url": "https://civitai.com/api/download/models/938628?fileId=846000",
+              "catalog_filename": "lustifySDXLNSFW_v40DMD2.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] v4.0 DMD2.safetensors",
+              "size_bytes": 6938048570,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 926965,
+          "name": "v4.0 alpha",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3e373e55-33ee-4a3c-8eee-0513627d5ec0/original=true/33105423.jpeg",
+          "files": [
+            {
+              "file_id": 834499,
+              "download_url": "https://civitai.com/api/download/models/926965?fileId=834499",
+              "catalog_filename": "lustifySDXLNSFW_v40Alpha.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] v4.0 alpha.safetensors",
+              "size_bytes": 6938042770,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 715933,
+          "name": "v2.0 🎨INPAINTING🎨",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a3ec7ee3-b84a-4a95-ab48-4c9dbc0db07e/original=true/23917549.jpeg",
+          "files": [
+            {
+              "file_id": 630670,
+              "download_url": "https://civitai.com/api/download/models/715933?fileId=630670",
+              "catalog_filename": "lustifySDXLNSFW_v20-inpainting.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] v2.0 INPAINTING.safetensors",
+              "size_bytes": 6938078610,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 709664,
+          "name": "v2.0 ⚡LIGHTNING⚡",
+          "base_model": "SDXL Lightning",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/18e71fee-8867-4291-89f4-df7dd18da498/original=true/23521426.jpeg",
+          "files": [
+            {
+              "file_id": 624303,
+              "download_url": "https://civitai.com/api/download/models/709664?fileId=624303",
+              "catalog_filename": "lustifySDXLNSFW_v20LIGHTNING.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] v2.0 LIGHTNING.safetensors",
+              "size_bytes": 6938047562,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 708635,
+          "name": "v2.0 alpha",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/73742163-ecc5-4d23-badd-bbab73b78df2/original=true/23485887.jpeg",
+          "files": [
+            {
+              "file_id": 623578,
+              "download_url": "https://civitai.com/api/download/models/708635?fileId=623578",
+              "catalog_filename": "lustifySDXLNSFW_v20Alpha.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] v2.0 alpha.safetensors",
+              "size_bytes": 6938043264,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 639425,
+          "name": "v1.0 ⚡LIGHTNING⚡",
+          "base_model": "SDXL Lightning",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e0ff1c57-89e2-43b8-897b-3179e5109111/original=true/19628674.jpeg",
+          "files": [
+            {
+              "file_id": 555759,
+              "download_url": "https://civitai.com/api/download/models/639425?fileId=555759",
+              "catalog_filename": "lustifySDXLNSFW_v10LIGHTNING.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] v1.0 LIGHTNING.safetensors",
+              "size_bytes": 7140743250,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 638929,
+          "name": "v1.0 alpha",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d9751b94-5a93-4498-b588-e0ecdb2c863d/original=true/19518799.jpeg",
+          "files": [
+            {
+              "file_id": 553687,
+              "download_url": "https://civitai.com/api/download/models/638929?fileId=553687",
+              "catalog_filename": "lustifySDXLNSFW_v10Alpha.safetensors",
+              "pretty_filename": "LUSTIFY! [SDXL NSFW checkpoint] v1.0 alpha.safetensors",
+              "size_bytes": 6938042770,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:934764": {
+      "ref": "civitai:934764",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 934764,
+      "label": "MiaoMiao Harem",
+      "main_url": "https://civitai.com/models/934764",
+      "default_version_id": 3020110,
+      "folder": "checkpoints",
+      "bundle_id": "miaomiao",
+      "requires_bundle_id": "anima",
+      "versions": [
+        {
+          "version_id": 3020110,
+          "name": "Anima_1.2",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 2908822,
+              "download_url": "https://civitai.com/api/download/models/3020110?fileId=2908822",
+              "catalog_filename": "miaomiaoHarem_anima12.safetensors",
+              "pretty_filename": "MiaoMiao Harem Anima_1.2.safetensors",
+              "size_bytes": null,
+              "primary": true,
+              "folder": "checkpoints"
+            },
+            {
+              "file_id": 2898941,
+              "download_url": "https://civitai.com/api/download/models/3020110?fileId=2898941",
+              "catalog_filename": "miaomiaoHarem_anima12_txt.safetensors",
+              "pretty_filename": "MiaoMiao Harem Anima_1.2.safetensors",
+              "size_bytes": null,
+              "primary": false,
+              "folder": "text_encoders"
+            },
+            {
+              "file_id": 2898940,
+              "download_url": "https://civitai.com/api/download/models/3020110?fileId=2898940",
+              "catalog_filename": "qwen_image_vae.safetensors",
+              "pretty_filename": "MiaoMiao Harem Anima_1.2.safetensors",
+              "size_bytes": null,
+              "primary": false,
+              "folder": "vae"
+            }
+          ]
+        },
+        {
+          "version_id": 3004063,
+          "name": "Anima_1.1",
+          "base_model": "Anima",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e1f1a090-b8c5-498c-84cf-32772e4fb3bb/original=true/132786971.jpeg",
+          "files": [
+            {
+              "file_id": 2909062,
+              "download_url": "https://civitai.com/api/download/models/3004063?fileId=2909062",
+              "catalog_filename": "miaomiaoHarem_anima11.safetensors",
+              "pretty_filename": "MiaoMiao Harem Anima_1.1.safetensors",
+              "size_bytes": 4182215584,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2967371,
+          "name": "Anima_Base",
+          "base_model": "Anima",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e1fca09e-740c-49c4-a8a4-a803e4dd29a9/original=true/131479458.jpeg",
+          "files": [
+            {
+              "file_id": 2846844,
+              "download_url": "https://civitai.com/api/download/models/2967371?fileId=2846844",
+              "catalog_filename": "miaomiaoHarem_animaBase.safetensors",
+              "pretty_filename": "MiaoMiao Harem Anima_Base.safetensors",
+              "size_bytes": 4182215584,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2963929,
+          "name": "Anima_1.0",
+          "base_model": "Anima",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cb3f1edf-09d7-42ea-8bd3-c5230010c7f3/original=true/131363906.jpeg",
+          "files": [
+            {
+              "file_id": 2843321,
+              "download_url": "https://civitai.com/api/download/models/2963929?fileId=2843321",
+              "catalog_filename": "miaomiaoHarem_anima10.safetensors",
+              "pretty_filename": "MiaoMiao Harem Anima_1.0.safetensors",
+              "size_bytes": 4182215584,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2851583,
+          "name": "v2.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/25144fa2-0ba9-456d-b471-0a7169a59442/original=true/128660947.jpeg",
+          "files": [
+            {
+              "file_id": 2737749,
+              "download_url": "https://civitai.com/api/download/models/2851583?fileId=2737749",
+              "catalog_filename": "miaomiaoHarem_v20.safetensors",
+              "pretty_filename": "MiaoMiao Harem v2.0.safetensors",
+              "size_bytes": 6938040400,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2673989,
+          "name": "v1.95",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f606f332-47f3-44b3-a95c-f24e5592d468/original=true/120481381.jpeg",
+          "files": [
+            {
+              "file_id": 2560716,
+              "download_url": "https://civitai.com/api/download/models/2673989?fileId=2560716",
+              "catalog_filename": "miaomiaoHarem_v195.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.95.safetensors",
+              "size_bytes": 6938040400,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2483605,
+          "name": "v1.9",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/56c99c44-1b01-4d88-a7cf-285664c44d75/original=true/113792743.jpeg",
+          "files": [
+            {
+              "file_id": 2372267,
+              "download_url": "https://civitai.com/api/download/models/2483605?fileId=2372267",
+              "catalog_filename": "miaomiaoHarem_v19.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.9.safetensors",
+              "size_bytes": 6938040400,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2423595,
+          "name": "v1.8",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fecf0def-ed4c-4af7-900a-0570fb8963b8/original=true/110900765.jpeg",
+          "files": [
+            {
+              "file_id": 2314224,
+              "download_url": "https://civitai.com/api/download/models/2423595?fileId=2314224",
+              "catalog_filename": "miaomiaoHarem_v18.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.8.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2348643,
+          "name": "Vpred 1.2",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/bbaad980-0fdb-4e34-97ac-f463fbcf7a70/original=true/107656598.jpeg",
+          "files": [
+            {
+              "file_id": 2239088,
+              "download_url": "https://civitai.com/api/download/models/2348643?fileId=2239088",
+              "catalog_filename": "miaomiaoHarem_vpred12.safetensors",
+              "pretty_filename": "MiaoMiao Harem Vpred 1.2.safetensors",
+              "size_bytes": 6938041312,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2221800,
+          "name": "v1.75",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/53ffef6d-a6c2-4914-8159-7a6dd50534cd/original=true/100681963.jpeg",
+          "files": [
+            {
+              "file_id": 2114917,
+              "download_url": "https://civitai.com/api/download/models/2221800?fileId=2114917",
+              "catalog_filename": "miaomiaoHarem_v175.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.75.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2140939,
+          "name": "v1.7",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/35cb7b18-4a5a-4311-979b-cb557803a7fc/original=true/96002395.jpeg",
+          "files": [
+            {
+              "file_id": 2034798,
+              "download_url": "https://civitai.com/api/download/models/2140939?fileId=2034798",
+              "catalog_filename": "miaomiaoHarem_v17.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.7.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1838598,
+          "name": "V-Pred_Dogma_1.1",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/762d7961-0fb0-4218-9c4c-5c6f0fa7376c/original=true/78803207.jpeg",
+          "files": [
+            {
+              "file_id": 1738812,
+              "download_url": "https://civitai.com/api/download/models/1838598?fileId=1738812",
+              "catalog_filename": "miaomiaoHarem_vPredDogma11.safetensors",
+              "pretty_filename": "MiaoMiao Harem V-Pred_Dogma_1.1.safetensors",
+              "size_bytes": 6938041296,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1775576,
+          "name": "V-Pred_Dogma_1.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3020a824-ce78-4b83-8941-f77c39e6e3aa/original=true/75862187.jpeg",
+          "files": [
+            {
+              "file_id": 1676443,
+              "download_url": "https://civitai.com/api/download/models/1775576?fileId=1676443",
+              "catalog_filename": "miaomiaoHarem_vPredDogma10.safetensors",
+              "pretty_filename": "MiaoMiao Harem V-Pred_Dogma_1.0.safetensors",
+              "size_bytes": 6938041296,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1690053,
+          "name": "Vpred 1.1",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f0d00829-f0ac-42b6-9968-ac3093802ea3/original=true/71452646.jpeg",
+          "files": [
+            {
+              "file_id": 1591312,
+              "download_url": "https://civitai.com/api/download/models/1690053?fileId=1591312",
+              "catalog_filename": "miaomiaoHarem_vpred11.safetensors",
+              "pretty_filename": "MiaoMiao Harem Vpred 1.1.safetensors",
+              "size_bytes": 6938041296,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1587133,
+          "name": "v1.6G",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5e49eaa6-99fa-4da2-ab52-b0e047bdc99d/original=true/66214509.jpeg",
+          "files": [
+            {
+              "file_id": 1486956,
+              "download_url": "https://civitai.com/api/download/models/1587133?fileId=1486956",
+              "catalog_filename": "miaomiaoHarem_v16G.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.6G.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1468334,
+          "name": "BASE V1.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/23f2bca0-32df-41c8-b6aa-bd41e360c14c/original=true/62491211.jpeg",
+          "files": [
+            {
+              "file_id": 1369675,
+              "download_url": "https://civitai.com/api/download/models/1468334?fileId=1369675",
+              "catalog_filename": "miaomiaoHarem_baseV10.safetensors",
+              "pretty_filename": "MiaoMiao Harem BASE V1.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1357881,
+          "name": "v1.5b",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/76c1729a-4f11-4473-bc8d-483e0836d90e/original=true/59203352.jpeg",
+          "files": [
+            {
+              "file_id": 1261298,
+              "download_url": "https://civitai.com/api/download/models/1357881?fileId=1261298",
+              "catalog_filename": "miaomiaoHarem_v15b.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.5b.safetensors",
+              "size_bytes": 6938043202,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1346747,
+          "name": "v1.5a",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9ccbcf50-7711-4acb-afdc-a5dffb473ec5/original=true/55789456.jpeg",
+          "files": [
+            {
+              "file_id": 1250194,
+              "download_url": "https://civitai.com/api/download/models/1346747?fileId=1250194",
+              "catalog_filename": "miaomiaoHarem_v15a.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.5a.safetensors",
+              "size_bytes": 6938043202,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1239062,
+          "name": "v1.4",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ea58e2d5-f39f-4fcb-9928-5f8a86d16398/original=true/50315673.jpeg",
+          "files": [
+            {
+              "file_id": 1144370,
+              "download_url": "https://civitai.com/api/download/models/1239062?fileId=1144370",
+              "catalog_filename": "miaomiaoHarem_v14.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.4.safetensors",
+              "size_bytes": 6938042912,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1162702,
+          "name": "v1.3",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/16794d5e-d244-40c9-bda7-8d8888c5a466/original=true/46202402.jpeg",
+          "files": [
+            {
+              "file_id": 1067863,
+              "download_url": "https://civitai.com/api/download/models/1162702?fileId=1067863",
+              "catalog_filename": "miaomiaoHarem_v13.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.3.safetensors",
+              "size_bytes": 6938040400,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1142097,
+          "name": "PDXL1.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/7facfdaf-cc5a-495f-ac4e-55888348a447/original=true/44368552.jpeg",
+          "files": [
+            {
+              "file_id": 1047146,
+              "download_url": "https://civitai.com/api/download/models/1142097?fileId=1047146",
+              "catalog_filename": "miaomiaoHarem_pdxl10.safetensors",
+              "pretty_filename": "MiaoMiao Harem PDXL1.0.safetensors",
+              "size_bytes": 6938040400,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1104654,
+          "name": "v1.2",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a0836a6d-a204-487e-9b1a-1d7f12d83136/original=true/42369540.jpeg",
+          "files": [
+            {
+              "file_id": 1009665,
+              "download_url": "https://civitai.com/api/download/models/1104654?fileId=1009665",
+              "catalog_filename": "miaomiaoHarem_v12.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.2.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1054726,
+          "name": "v1.1",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f2747a2e-5f7e-43f7-b1f7-6b2a7ec9c221/original=true/40593456.jpeg",
+          "files": [
+            {
+              "file_id": 960358,
+              "download_url": "https://civitai.com/api/download/models/1054726?fileId=960358",
+              "catalog_filename": "miaomiaoHarem_v11.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.1.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1046352,
+          "name": "v1.0",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b8df59e6-fc79-4b87-ad55-2a1b70ee6ea8/original=true/39715696.jpeg",
+          "files": [
+            {
+              "file_id": 952076,
+              "download_url": "https://civitai.com/api/download/models/1046352?fileId=952076",
+              "catalog_filename": "miaomiaoHarem_v10.safetensors",
+              "pretty_filename": "MiaoMiao Harem v1.0.safetensors",
+              "size_bytes": 6938040400,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:376130": {
+      "ref": "civitai:376130",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 376130,
+      "label": "Nova Anime XL",
+      "main_url": "https://civitai.com/models/376130",
+      "default_version_id": 2837020,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2940478,
+          "name": "IL v19.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/76dfe015-82c2-4d33-848c-c973fe2ce5da/original=true/130519328.jpeg",
+          "files": [
+            {
+              "file_id": 2819621,
+              "download_url": "https://civitai.com/api/download/models/2940478?fileId=2819621",
+              "catalog_filename": "novaAnimeXL_ilV190.safetensors",
+              "pretty_filename": "Nova Anime XL IL v19.0.safetensors",
+              "size_bytes": 6939105596,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2837020,
+          "name": "IL v18.0",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 2723189,
+              "download_url": "https://civitai.com/api/download/models/2837020?fileId=2723189",
+              "catalog_filename": "novaAnimeXL_ilV180.safetensors",
+              "pretty_filename": "Nova Anime XL IL v18.0.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2741698,
+          "name": "IL V17.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5722a23a-ab69-47fe-a982-b531251e9acf/original=true/123082710.jpeg",
+          "files": [
+            {
+              "file_id": 2628050,
+              "download_url": "https://civitai.com/api/download/models/2741698?fileId=2628050",
+              "catalog_filename": "novaAnimeXL_ilV170.safetensors",
+              "pretty_filename": "Nova Anime XL IL V17.0.safetensors",
+              "size_bytes": 6938512340,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2648201,
+          "name": "IL v16.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0ad0a366-293b-4a0a-956c-48aed1d1db5f/original=true/119486874.jpeg",
+          "files": [
+            {
+              "file_id": 2535896,
+              "download_url": "https://civitai.com/api/download/models/2648201?fileId=2535896",
+              "catalog_filename": "novaAnimeXL_ilV160.safetensors",
+              "pretty_filename": "Nova Anime XL IL v16.0.safetensors",
+              "size_bytes": 6938505444,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2553832,
+          "name": "IL v15.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/568890b6-f99d-442f-994f-7e2b4b45d27d/original=true/115878869.jpeg",
+          "files": [
+            {
+              "file_id": 2442274,
+              "download_url": "https://civitai.com/api/download/models/2553832?fileId=2442274",
+              "catalog_filename": "novaAnimeXL_ilV150.safetensors",
+              "pretty_filename": "Nova Anime XL IL v15.0.safetensors",
+              "size_bytes": 6938438276,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2456367,
+          "name": "IL v14.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dc16a240-d836-4bb1-ae31-e7a1b00f499e/original=true/112166866.jpeg",
+          "files": [
+            {
+              "file_id": 2346050,
+              "download_url": "https://civitai.com/api/download/models/2456367?fileId=2346050",
+              "catalog_filename": "novaAnimeXL_ilV140.safetensors",
+              "pretty_filename": "Nova Anime XL IL v14.0.safetensors",
+              "size_bytes": 6938436084,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2392184,
+          "name": "IL v13.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9c58020b-75ab-427d-b8c4-4a21174ac9c0/original=true/109595296.jpeg",
+          "files": [
+            {
+              "file_id": 2282330,
+              "download_url": "https://civitai.com/api/download/models/2392184?fileId=2282330",
+              "catalog_filename": "novaAnimeXL_ilV130.safetensors",
+              "pretty_filename": "Nova Anime XL IL v13.0.safetensors",
+              "size_bytes": 7140934020,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2314354,
+          "name": "IL v12.5",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c88ce71e-dda0-40da-aa39-78f2f7ee23a4/original=true/106089812.jpeg",
+          "files": [
+            {
+              "file_id": 2204862,
+              "download_url": "https://civitai.com/api/download/models/2314354?fileId=2204862",
+              "catalog_filename": "novaAnimeXL_ilV125.safetensors",
+              "pretty_filename": "Nova Anime XL IL v12.5.safetensors",
+              "size_bytes": 7140932012,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2268916,
+          "name": "IL v12.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a88868aa-ff5b-43bd-8b35-2853ca853fe7/original=true/103411534.jpeg",
+          "files": [
+            {
+              "file_id": 2161044,
+              "download_url": "https://civitai.com/api/download/models/2268916?fileId=2161044",
+              "catalog_filename": "novaAnimeXL_ilV120.safetensors",
+              "pretty_filename": "Nova Anime XL IL v12.0.safetensors",
+              "size_bytes": 7140928004,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2173013,
+          "name": "IL v11.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/de44846b-c60b-41fa-9504-56399c6a17f2/original=true/97826863.jpeg",
+          "files": [
+            {
+              "file_id": 2066207,
+              "download_url": "https://civitai.com/api/download/models/2173013?fileId=2066207",
+              "catalog_filename": "novaAnimeXL_ilV110.safetensors",
+              "pretty_filename": "Nova Anime XL IL v11.0.safetensors",
+              "size_bytes": 6938433188,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2100813,
+          "name": "IL v10.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2353a418-60a0-48e7-8d1e-ba5544086dd4/original=true/93503135.jpeg",
+          "files": [
+            {
+              "file_id": 1996254,
+              "download_url": "https://civitai.com/api/download/models/2100813?fileId=1996254",
+              "catalog_filename": "novaAnimeXL_ilV100.safetensors",
+              "pretty_filename": "Nova Anime XL IL v10.0.safetensors",
+              "size_bytes": 6938422988,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1957764,
+          "name": "IL v9.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/66a3bf4f-6af6-4d46-aba6-37fe585e0858/original=true/85334176.jpeg",
+          "files": [
+            {
+              "file_id": 1855460,
+              "download_url": "https://civitai.com/api/download/models/1957764?fileId=1855460",
+              "catalog_filename": "novaAnimeXL_ilV90.safetensors",
+              "pretty_filename": "Nova Anime XL IL v9.0.safetensors",
+              "size_bytes": 6938419836,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1854228,
+          "name": "IL v8.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/04eff08a-dd25-40dd-a8ce-9ec7faefeb46/original=true/79663493.jpeg",
+          "files": [
+            {
+              "file_id": 1754155,
+              "download_url": "https://civitai.com/api/download/models/1854228?fileId=1754155",
+              "catalog_filename": "novaAnimeXL_ilV80.safetensors",
+              "pretty_filename": "Nova Anime XL IL v8.0.safetensors",
+              "size_bytes": 6938418620,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1738204,
+          "name": "IL v7.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3a09e75a-312d-40a4-9d4a-89665414db9c/original=true/73809759.jpeg",
+          "files": [
+            {
+              "file_id": 1639046,
+              "download_url": "https://civitai.com/api/download/models/1738204?fileId=1639046",
+              "catalog_filename": "novaAnimeXL_ilV70.safetensors",
+              "pretty_filename": "Nova Anime XL IL v7.0.safetensors",
+              "size_bytes": 6938394964,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1610231,
+          "name": "IL v6.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/40e57f10-c461-4b5c-8c6d-5c0fce7e6e16/original=true/67379336.jpeg",
+          "files": [
+            {
+              "file_id": 1510415,
+              "download_url": "https://civitai.com/api/download/models/1610231?fileId=1510415",
+              "catalog_filename": "novaAnimeXL_ilV60.safetensors",
+              "pretty_filename": "Nova Anime XL IL v6.0.safetensors",
+              "size_bytes": 6938384636,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1500882,
+          "name": "IL v5B",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6fc4b081-8826-48cb-85c3-656fa71e1051/original=true/61941730.jpeg",
+          "files": [
+            {
+              "file_id": 1400836,
+              "download_url": "https://civitai.com/api/download/models/1500882?fileId=1400836",
+              "catalog_filename": "novaAnimeXL_ilV5b.safetensors",
+              "pretty_filename": "Nova Anime XL IL v5B.safetensors",
+              "size_bytes": 6938340138,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1474209,
+          "name": "IL v5A",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f53d3d6a-006f-4d7b-b52a-d71de2cb19f2/original=true/60723389.jpeg",
+          "files": [
+            {
+              "file_id": 1375642,
+              "download_url": "https://civitai.com/api/download/models/1474209?fileId=1375642",
+              "catalog_filename": "novaAnimeXL_ilV5a.safetensors",
+              "pretty_filename": "Nova Anime XL IL v5A.safetensors",
+              "size_bytes": 6938343194,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1352077,
+          "name": "IL v4.0 Happy Valentine",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4c0df97b-e6df-4b79-b8fd-b4bb9e57d7fc/original=true/54848251.jpeg",
+          "files": [
+            {
+              "file_id": 1255472,
+              "download_url": "https://civitai.com/api/download/models/1352077?fileId=1255472",
+              "catalog_filename": "novaAnimeXL_ilV40HappyValentine.safetensors",
+              "pretty_filename": "Nova Anime XL IL v4.0 Happy Valentine.safetensors",
+              "size_bytes": 6938339092,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1225516,
+          "name": "IL v3.0 Happy New Year",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1532bff8-d076-48d6-89f9-21eb93169fcf/original=true/48794576.jpeg",
+          "files": [
+            {
+              "file_id": 1130990,
+              "download_url": "https://civitai.com/api/download/models/1225516?fileId=1130990",
+              "catalog_filename": "novaAnimeXL_ilV30HappyNewYear.safetensors",
+              "pretty_filename": "Nova Anime XL IL v3.0 Happy New Year.safetensors",
+              "size_bytes": 6938201338,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1186101,
+          "name": "IL v2.5 Merry Christmas",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cc1ec515-92a2-471c-88a4-e295a7757a01/original=true/46674024.jpeg",
+          "files": [
+            {
+              "file_id": 1091365,
+              "download_url": "https://civitai.com/api/download/models/1186101?fileId=1091365",
+              "catalog_filename": "novaAnimeXL_ilV25MerryChristmas.safetensors",
+              "pretty_filename": "Nova Anime XL IL v2.5 Merry Christmas.safetensors",
+              "size_bytes": 6938197346,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1161182,
+          "name": "Illustrious v2.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2cefdc55-b1bf-49ae-9a3f-e1e506601940/original=true/45376455.jpeg",
+          "files": [
+            {
+              "file_id": 1066403,
+              "download_url": "https://civitai.com/api/download/models/1161182?fileId=1066403",
+              "catalog_filename": "novaAnimeXL_illustriousV20.safetensors",
+              "pretty_filename": "Nova Anime XL Illustrious v2.0.safetensors",
+              "size_bytes": 6938042120,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1065689,
+          "name": "Illustrious v1.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c4b2cd8f-4550-45d8-a788-df946408af19/original=true/40328451.jpeg",
+          "files": [
+            {
+              "file_id": 971256,
+              "download_url": "https://civitai.com/api/download/models/1065689?fileId=971256",
+              "catalog_filename": "novaAnimeXL_illustriousV10.safetensors",
+              "pretty_filename": "Nova Anime XL Illustrious v1.0.safetensors",
+              "size_bytes": 6938046564,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 994669,
+          "name": "v7.0 - HappyHalloween",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0c98a632-9318-426b-ab2c-8c5032aaffa9/original=true/36569331.jpeg",
+          "files": [
+            {
+              "file_id": 900580,
+              "download_url": "https://civitai.com/api/download/models/994669?fileId=900580",
+              "catalog_filename": "novaAnimeXL_v70Happyhalloween.safetensors",
+              "pretty_filename": "Nova Anime XL v7.0 - HappyHalloween.safetensors",
+              "size_bytes": 6938057314,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 957246,
+          "name": "Pony v6.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a699129c-7005-4197-a92e-ac95438dc30d/original=true/34635748.jpeg",
+          "files": [
+            {
+              "file_id": 864072,
+              "download_url": "https://civitai.com/api/download/models/957246?fileId=864072",
+              "catalog_filename": "novaAnimeXL_ponyV60.safetensors",
+              "pretty_filename": "Nova Anime XL Pony v6.0.safetensors",
+              "size_bytes": 6938052754,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 861766,
+          "name": "Pony v5.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b7d8b297-477b-4d1b-bd0b-592646836846/original=true/29977018.jpeg",
+          "files": [
+            {
+              "file_id": 770751,
+              "download_url": "https://civitai.com/api/download/models/861766?fileId=770751",
+              "catalog_filename": "novaAnimeXL_ponyV50.safetensors",
+              "pretty_filename": "Nova Anime XL Pony v5.0.safetensors",
+              "size_bytes": 6938051098,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 764670,
+          "name": "Pony v4.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4843a84b-417c-45d0-bcd9-52b8a77ed434/original=true/25991601.jpeg",
+          "files": [
+            {
+              "file_id": 678080,
+              "download_url": "https://civitai.com/api/download/models/764670?fileId=678080",
+              "catalog_filename": "novaAnimeXL_ponyV40.safetensors",
+              "pretty_filename": "Nova Anime XL Pony v4.0.safetensors",
+              "size_bytes": 6938055250,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 670266,
+          "name": "Pony v3.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/71444e34-438f-4cdc-9dd4-af2b0c63d196/original=true/21262739.jpeg",
+          "files": [
+            {
+              "file_id": 585560,
+              "download_url": "https://civitai.com/api/download/models/670266?fileId=585560",
+              "catalog_filename": "novaAnimeXL_ponyV30.safetensors",
+              "pretty_filename": "Nova Anime XL Pony v3.0.safetensors",
+              "size_bytes": 6938051082,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 544806,
+          "name": "Pony v2.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ba8ffe65-e6b9-44a6-83c9-a1ab82a10f2f/original=true/14306491.jpeg",
+          "files": [
+            {
+              "file_id": 461138,
+              "download_url": "https://civitai.com/api/download/models/544806?fileId=461138",
+              "catalog_filename": "novaAnimeXL_ponyV20.safetensors",
+              "pretty_filename": "Nova Anime XL Pony v2.0.safetensors",
+              "size_bytes": 6938047850,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 480480,
+          "name": "Pony v1.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3909ce69-7dbe-44e6-9296-8e04a2260cf6/original=true/11306854.jpeg",
+          "files": [
+            {
+              "file_id": 398974,
+              "download_url": "https://civitai.com/api/download/models/480480?fileId=398974",
+              "catalog_filename": "novaAnimeXL_ponyV10.safetensors",
+              "pretty_filename": "Nova Anime XL Pony v1.0.safetensors",
+              "size_bytes": 6938042634,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 420025,
+          "name": "XL v1.0",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a6761c6c-e0dd-41ad-b8e7-37b7ee031c8f/original=true/8866227.jpeg",
+          "files": [
+            {
+              "file_id": 341799,
+              "download_url": "https://civitai.com/api/download/models/420025?fileId=341799",
+              "catalog_filename": "novaAnimeXL_xlV10.safetensors",
+              "pretty_filename": "Nova Anime XL XL v1.0.safetensors",
+              "size_bytes": 6938048410,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:257749": {
+      "ref": "civitai:257749",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 257749,
+      "label": "Pony Diffusion V6 XL",
+      "main_url": "https://civitai.com/models/257749",
+      "default_version_id": 290640,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 298112,
+          "name": "V6 Turbo DPO merge",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff4454f0-993f-46be-80b1-fc808e166350/original=true/5476647.jpeg",
+          "files": [
+            {
+              "file_id": 234948,
+              "download_url": "https://civitai.com/api/download/models/298112?fileId=234948",
+              "catalog_filename": "ponyDiffusionV6XL_v6TurboDPOMerge.safetensors",
+              "pretty_filename": "Pony Diffusion V6 XL V6 Turbo DPO merge.safetensors",
+              "size_bytes": 6939230914,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 297064,
+          "name": "V6-1.5",
+          "base_model": "SD 1.5",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ac7a4b11-d476-4c39-b57a-8a0867dbebce/original=true/5442448.jpeg",
+          "files": [
+            {
+              "file_id": 234029,
+              "download_url": "https://civitai.com/api/download/models/297064?fileId=234029",
+              "catalog_filename": "ponyDiffusionV6XL_v615.safetensors",
+              "pretty_filename": "Pony Diffusion V6 XL V6-1.5.safetensors",
+              "size_bytes": 2132625431,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 290640,
+          "name": "V6 (start with this one)",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/290640",
+              "catalog_filename": "ponyDiffusionV6XL.safetensors",
+              "pretty_filename": "Pony Diffusion V6 XL V6 (start with this one).safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:317902": {
+      "ref": "civitai:317902",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 317902,
+      "label": "T-ponynai3",
+      "main_url": "https://civitai.com/models/317902",
+      "default_version_id": 1392706,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1392706,
+          "name": "v7",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1295292,
+              "download_url": "https://civitai.com/api/download/models/1392706?fileId=1295292",
+              "catalog_filename": "tPonynai3_v7.safetensors",
+              "pretty_filename": "T-ponynai3 v7.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 814910,
+          "name": "v6.5",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1ac3ab3c-74e9-4e11-9ebe-1409d35923fc/original=true/28169280.jpeg",
+          "files": [
+            {
+              "file_id": 728665,
+              "download_url": "https://civitai.com/api/download/models/814910?fileId=728665",
+              "catalog_filename": "tPonynai3_v65.safetensors",
+              "pretty_filename": "T-ponynai3 v6.5.safetensors",
+              "size_bytes": 6938041730,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 805539,
+          "name": "v6.1",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8b914691-0961-4470-96ed-65367f1dc2ea/original=true/27851160.jpeg",
+          "files": [
+            {
+              "file_id": 721033,
+              "download_url": "https://civitai.com/api/download/models/805539?fileId=721033",
+              "catalog_filename": "tPonynai3_v61.safetensors",
+              "pretty_filename": "T-ponynai3 v6.1.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 673299,
+          "name": "v6",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/39c0aa8b-9d30-4396-b5e5-301e2f39dda6/original=true/21432085.jpeg",
+          "files": [
+            {
+              "file_id": 588436,
+              "download_url": "https://civitai.com/api/download/models/673299?fileId=588436",
+              "catalog_filename": "tPonynai3_v6.safetensors",
+              "pretty_filename": "T-ponynai3 v6.safetensors",
+              "size_bytes": 6938044810,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 593760,
+          "name": "v5.5",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/67ee5fb7-e260-4db5-9b1f-d7f9ae3c7d74/original=true/20225600.jpeg",
+          "files": [
+            {
+              "file_id": 509009,
+              "download_url": "https://civitai.com/api/download/models/593760?fileId=509009",
+              "catalog_filename": "tPonynai3_v55.safetensors",
+              "pretty_filename": "T-ponynai3 v5.5.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 533326,
+          "name": "v5.1(weight optimized)",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cc6c51ff-c61d-4958-8743-e7053ea67bb5/original=true/14134633.jpeg",
+          "files": [
+            {
+              "file_id": 450324,
+              "download_url": "https://civitai.com/api/download/models/533326?fileId=450324",
+              "catalog_filename": "tPonynai3_v51WeightOptimized.safetensors",
+              "pretty_filename": "T-ponynai3 v5.1(weight optimized).safetensors",
+              "size_bytes": 6938041618,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 530734,
+          "name": "v5",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/22fa0213-a463-490f-ae1f-45e5dea19964/original=true/13657133.jpeg",
+          "files": [
+            {
+              "file_id": 447896,
+              "download_url": "https://civitai.com/api/download/models/530734?fileId=447896",
+              "catalog_filename": "tPonynai3_v5.safetensors",
+              "pretty_filename": "T-ponynai3 v5.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 469115,
+          "name": "v4.1 (Optimized from v4)",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/47e958ed-46b3-4df8-b9fd-d563868ca38b/original=true/10800311.jpeg",
+          "files": [
+            {
+              "file_id": 387988,
+              "download_url": "https://civitai.com/api/download/models/469115?fileId=387988",
+              "catalog_filename": "tPonynai3_v41OptimizedFromV4.safetensors",
+              "pretty_filename": "T-ponynai3 v4.1 (Optimized from v4).safetensors",
+              "size_bytes": 6938041586,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 461550,
+          "name": "v4",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ab8b4429-be8d-4998-874e-2af9bd78fb51/original=true/10566224.jpeg",
+          "files": [
+            {
+              "file_id": 380974,
+              "download_url": "https://civitai.com/api/download/models/461550?fileId=380974",
+              "catalog_filename": "tPonynai3_v4.safetensors",
+              "pretty_filename": "T-ponynai3 v4.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 422446,
+          "name": "v3.5",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cca92cfe-266d-47a2-ba3b-8347fa566fc8/original=true/8995924.jpeg",
+          "files": [
+            {
+              "file_id": 344146,
+              "download_url": "https://civitai.com/api/download/models/422446?fileId=344146",
+              "catalog_filename": "tPonynai3_v35.safetensors",
+              "pretty_filename": "T-ponynai3 v3.5.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 382597,
+          "name": "v3.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8750dc91-2368-473d-9e4a-e03ce6fd7721/original=true/7676732.jpeg",
+          "files": [
+            {
+              "file_id": 307053,
+              "download_url": "https://civitai.com/api/download/models/382597?fileId=307053",
+              "catalog_filename": "tPonynai3_v30.safetensors",
+              "pretty_filename": "T-ponynai3 v3.0.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 367231,
+          "name": "v2.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4ef11bb1-e4fb-4d8a-a662-7325f08cb650/original=true/7257509.jpeg",
+          "files": [
+            {
+              "file_id": 293944,
+              "download_url": "https://civitai.com/api/download/models/367231?fileId=293944",
+              "catalog_filename": "tPonynai3_v20.safetensors",
+              "pretty_filename": "T-ponynai3 v2.0.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 356531,
+          "name": "v1.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cc2275b3-fa41-47c7-91ed-71dadfcd2697/original=true/7007027.jpeg",
+          "files": [
+            {
+              "file_id": 284539,
+              "download_url": "https://civitai.com/api/download/models/356531?fileId=284539",
+              "catalog_filename": "tPonynai3_v10.safetensors",
+              "pretty_filename": "T-ponynai3 v1.0.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:1662539": {
+      "ref": "civitai:1662539",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 1662539,
+      "label": "VXP Illustrious 2.0",
+      "main_url": "https://civitai.com/models/1662539",
+      "default_version_id": 1881740,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1881740,
+          "name": "RC3",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1781644,
+              "download_url": "https://civitai.com/api/download/models/1881740?fileId=1781644",
+              "catalog_filename": "vxpIllustrious20_rc3.safetensors",
+              "pretty_filename": "VXP Illustrious 2.0 RC3.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:1070739": {
+      "ref": "civitai:1070739",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 1070739,
+      "label": "VXP_IL_XL",
+      "main_url": "https://civitai.com/models/1070739",
+      "default_version_id": 1774915,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1774915,
+          "name": "v1.88",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1675747,
+              "download_url": "https://civitai.com/api/download/models/1774915?fileId=1675747",
+              "catalog_filename": "vxpILXL_v188.safetensors",
+              "pretty_filename": "VXP_IL_XL v1.88.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1388755,
+          "name": "v1.7",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b60a94b1-53bc-4b3d-b96c-ff929d5eb4d7/original=true/56612465.jpeg",
+          "files": [
+            {
+              "file_id": 1291304,
+              "download_url": "https://civitai.com/api/download/models/1388755?fileId=1291304",
+              "catalog_filename": "vxpILXL_v17.safetensors",
+              "pretty_filename": "VXP_IL_XL v1.7.safetensors",
+              "size_bytes": 7105350502,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1201891,
+          "name": "v1.2",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/1201891",
+              "catalog_filename": "vxpILXL_source.safetensors",
+              "pretty_filename": "VXP_IL_XL v1.2.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:553648": {
+      "ref": "civitai:553648",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 553648,
+      "label": "WAI-ANI-HENTAI-PONYXL",
+      "main_url": "https://civitai.com/models/553648",
+      "default_version_id": 952743,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 952743,
+          "name": "v6.0",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/952743?type=Model&format=SafeTensor&size=pruned&fp=fp16",
+              "catalog_filename": "waiANIHENTAIPONYXL.safetensors",
+              "pretty_filename": "WAI-ANI-HENTAI-PONYXL v6.0.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 834110,
+          "name": "v5.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dc4c4304-dd3e-446a-ba1e-972e9ba706b4/original=true/29078555.jpeg",
+          "files": [
+            {
+              "file_id": 748505,
+              "download_url": "https://civitai.com/api/download/models/834110?fileId=748505",
+              "catalog_filename": "waiANIHENTAIPONYXL_v50.safetensors",
+              "pretty_filename": "WAI-ANI-HENTAI-PONYXL v5.0.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 731606,
+          "name": "v4.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a404a70d-6a08-47e2-bbee-61b924013ece/original=true/24693379.jpeg",
+          "files": [
+            {
+              "file_id": 645901,
+              "download_url": "https://civitai.com/api/download/models/731606?fileId=645901",
+              "catalog_filename": "waiANIHENTAIPONYXL_v40.safetensors",
+              "pretty_filename": "WAI-ANI-HENTAI-PONYXL v4.0.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 688527,
+          "name": "v3.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1cbceab3-3601-4c44-a5a6-dcb4691ea6fb/original=true/22325239.jpeg",
+          "files": [
+            {
+              "file_id": 603573,
+              "download_url": "https://civitai.com/api/download/models/688527?fileId=603573",
+              "catalog_filename": "waiANIHENTAIPONYXL_v30.safetensors",
+              "pretty_filename": "WAI-ANI-HENTAI-PONYXL v3.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 644265,
+          "name": "v2.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cd93f027-ecea-4da5-965c-9124d01eff00/original=true/19809723.jpeg",
+          "files": [
+            {
+              "file_id": 559162,
+              "download_url": "https://civitai.com/api/download/models/644265?fileId=559162",
+              "catalog_filename": "waiANIHENTAIPONYXL_v20.safetensors",
+              "pretty_filename": "WAI-ANI-HENTAI-PONYXL v2.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 616139,
+          "name": "v1.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/796002cc-22eb-4d04-bae2-6aac5e845675/original=true/18239880.jpeg",
+          "files": [
+            {
+              "file_id": 531105,
+              "download_url": "https://civitai.com/api/download/models/616139?fileId=531105",
+              "catalog_filename": "waiANIHENTAIPONYXL_v10.safetensors",
+              "pretty_filename": "WAI-ANI-HENTAI-PONYXL v1.0.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:404154": {
+      "ref": "civitai:404154",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 404154,
+      "label": "WAI-ANI-PONYXL",
+      "main_url": "https://civitai.com/models/404154",
+      "default_version_id": 1767402,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1767402,
+          "name": "v14.0",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1671379,
+              "download_url": "https://civitai.com/api/download/models/1767402?fileId=1671379",
+              "catalog_filename": "waiANIPONYXL_v140.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v14.0.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1295881,
+          "name": "v13.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1c44dabf-f7cb-4b46-8cb1-09c704d6a97d/original=true/52236918.jpeg",
+          "files": [
+            {
+              "file_id": 1200214,
+              "download_url": "https://civitai.com/api/download/models/1295881?fileId=1200214",
+              "catalog_filename": "waiANIPONYXL_v130.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v13.0.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1177000,
+          "name": "v12",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e7e6512d-9690-41f7-8a00-cce576fe8f3f/original=true/46194576.jpeg",
+          "files": [
+            {
+              "file_id": 1082392,
+              "download_url": "https://civitai.com/api/download/models/1177000?fileId=1082392",
+              "catalog_filename": "waiANIPONYXL_v12.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v12.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1085338,
+          "name": "v11",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c280077e-820a-40ee-b899-be39d9ed00b9/original=true/41341959.jpeg",
+          "files": [
+            {
+              "file_id": 990499,
+              "download_url": "https://civitai.com/api/download/models/1085338?fileId=990499",
+              "catalog_filename": "waiANIPONYXL_v11.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v11.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1065370,
+          "name": "v10",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/adb9703a-724e-40c5-9145-57d05869131d/original=true/40320877.jpeg",
+          "files": [
+            {
+              "file_id": 970910,
+              "download_url": "https://civitai.com/api/download/models/1065370?fileId=970910",
+              "catalog_filename": "waiANIPONYXL_v10.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v10.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 938880,
+          "name": "V9_hyper_12step",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/7e79d9ae-08fe-47d9-861b-4386605a180d/original=true/33717497.jpeg",
+          "files": [
+            {
+              "file_id": 846269,
+              "download_url": "https://civitai.com/api/download/models/938880?fileId=846269",
+              "catalog_filename": "waiANIPONYXL_v9Hyper12step.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL V9_hyper_12step.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 931577,
+          "name": "v9.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/80d9a831-ad70-4d12-b39e-5ead0ed38d12/original=true/33330357.jpeg",
+          "files": [
+            {
+              "file_id": 838980,
+              "download_url": "https://civitai.com/api/download/models/931577?fileId=838980",
+              "catalog_filename": "waiANIPONYXL_v90.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v9.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 900070,
+          "name": "V8_hyper_12step",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e98b5efa-e425-4d64-9329-6e461c2ec866/original=true/31738753.jpeg",
+          "files": [
+            {
+              "file_id": 808568,
+              "download_url": "https://civitai.com/api/download/models/900070?fileId=808568",
+              "catalog_filename": "waiANIPONYXL_v8Hyper12step.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL V8_hyper_12step.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 827519,
+          "name": "v8.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/07ebe645-21c2-470c-9542-8a8f2ae3309c/original=true/28748372.jpeg",
+          "files": [
+            {
+              "file_id": 741620,
+              "download_url": "https://civitai.com/api/download/models/827519?fileId=741620",
+              "catalog_filename": "waiANIPONYXL_v80.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v8.0.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 700352,
+          "name": "v7.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8a97d165-7b8a-4ca7-864b-ad3977f1d76d/original=true/23003217.jpeg",
+          "files": [
+            {
+              "file_id": 615058,
+              "download_url": "https://civitai.com/api/download/models/700352?fileId=615058",
+              "catalog_filename": "waiANIPONYXL_v70.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v7.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 652905,
+          "name": "8step",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6ebdb470-e4ca-42e0-b763-5a81a3708fd5/original=true/20283971.jpeg",
+          "files": [
+            {
+              "file_id": 567951,
+              "download_url": "https://civitai.com/api/download/models/652905?fileId=567951",
+              "catalog_filename": "waiANIPONYXL_8step.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL 8step.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 627330,
+          "name": "v6.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8a1db795-c589-45af-8e1d-2e0c280f32f5/original=true/18846128.jpeg",
+          "files": [
+            {
+              "file_id": 542214,
+              "download_url": "https://civitai.com/api/download/models/627330?fileId=542214",
+              "catalog_filename": "waiANIPONYXL_v60.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v6.0.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 519036,
+          "name": "v5.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c120d0ae-10e4-46e3-a712-6d728af73403/original=true/17998618.jpeg",
+          "files": [
+            {
+              "file_id": 436241,
+              "download_url": "https://civitai.com/api/download/models/519036?fileId=436241",
+              "catalog_filename": "waiANIPONYXL_v50.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v5.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 494190,
+          "name": "v4.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0d423669-e6b2-4273-b59e-62d474834858/original=true/11902922.jpeg",
+          "files": [
+            {
+              "file_id": 412117,
+              "download_url": "https://civitai.com/api/download/models/494190?fileId=412117",
+              "catalog_filename": "waiANIPONYXL_v40.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v4.0.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 469973,
+          "name": "v3.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/80e0be69-99e7-47a6-933b-db42c1c76206/original=true/10846080.jpeg",
+          "files": [
+            {
+              "file_id": 388672,
+              "download_url": "https://civitai.com/api/download/models/469973?fileId=388672",
+              "catalog_filename": "waiANIPONYXL_v30.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v3.0.safetensors",
+              "size_bytes": 6938040706,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 452526,
+          "name": "v2.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9f20c548-7885-4037-a941-aad461a1feed/original=true/10112275.jpeg",
+          "files": [
+            {
+              "file_id": 372126,
+              "download_url": "https://civitai.com/api/download/models/452526?fileId=372126",
+              "catalog_filename": "waiANIPONYXL_v20.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v2.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 450626,
+          "name": "v1.0",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6a5134d3-cfa2-4b62-85b0-0a30aff88de7/original=true/24350526.jpeg",
+          "files": [
+            {
+              "file_id": 370429,
+              "download_url": "https://civitai.com/api/download/models/450626?fileId=370429",
+              "catalog_filename": "waiANIPONYXL_v10.safetensors",
+              "pretty_filename": "WAI-ANI-PONYXL v1.0.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:827184": {
+      "ref": "civitai:827184",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 827184,
+      "label": "WAI-illustrious-SDXL",
+      "main_url": "https://civitai.com/models/827184",
+      "default_version_id": 2883731,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2883731,
+          "name": "v17.0",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 2763986,
+              "download_url": "https://civitai.com/api/download/models/2883731?fileId=2763986",
+              "catalog_filename": "waiIllustriousSDXL_v170.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v17.0.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2514310,
+          "name": "v16.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ea1cdc83-91ca-4a1e-9d80-32bd27ece809/original=true/114266630.jpeg",
+          "files": [
+            {
+              "file_id": 2402203,
+              "download_url": "https://civitai.com/api/download/models/2514310?fileId=2402203",
+              "catalog_filename": "waiIllustriousSDXL_v160.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v16.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2167369,
+          "name": "v15.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/718688cf-5349-45f5-ab7c-9a1a820223c2/original=true/97626482.jpeg",
+          "files": [
+            {
+              "file_id": 2062324,
+              "download_url": "https://civitai.com/api/download/models/2167369?fileId=2062324",
+              "catalog_filename": "waiIllustriousSDXL_v150.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v15.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1761560,
+          "name": "v14.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/aa671302-496f-4dcc-839a-b75a70a7665e/original=true/74972537.jpeg",
+          "files": [
+            {
+              "file_id": 1662547,
+              "download_url": "https://civitai.com/api/download/models/1761560?fileId=1662547",
+              "catalog_filename": "waiIllustriousSDXL_v140.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v14.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1612720,
+          "name": "v13.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fee36d09-7dda-4745-87f1-4646f5fc5ff7/original=true/67554754.jpeg",
+          "files": [
+            {
+              "file_id": 1512948,
+              "download_url": "https://civitai.com/api/download/models/1612720?fileId=1512948",
+              "catalog_filename": "waiIllustriousSDXL_v130.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v13.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1490781,
+          "name": "v12.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fb25f182-8033-4084-b4f6-c5de0044422f/original=true/61479822.jpeg",
+          "files": [
+            {
+              "file_id": 1390979,
+              "download_url": "https://civitai.com/api/download/models/1490781?fileId=1390979",
+              "catalog_filename": "waiIllustriousSDXL_v120.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v12.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1410435,
+          "name": "v11.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/7a0d91f6-303a-4cb4-94bc-9311d6ebb02d/original=true/57674285.jpeg",
+          "files": [
+            {
+              "file_id": 1312368,
+              "download_url": "https://civitai.com/api/download/models/1410435?fileId=1312368",
+              "catalog_filename": "waiIllustriousSDXL_v110.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v11.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1367422,
+          "name": "v10.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f02c840e-a3e8-4839-bf0e-12487fb3757e/original=true/55620292.jpeg",
+          "files": [
+            {
+              "file_id": 1270636,
+              "download_url": "https://civitai.com/api/download/models/1367422?fileId=1270636",
+              "catalog_filename": "waiIllustriousSDXL_v100.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v10.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1283437,
+          "name": "v9.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5f0f1b4d-41b1-4942-8243-f845c4ed0765/original=true/51638451.jpeg",
+          "files": [
+            {
+              "file_id": 1187991,
+              "download_url": "https://civitai.com/api/download/models/1283437?fileId=1187991",
+              "catalog_filename": "waiIllustriousSDXL_v90.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v9.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1183765,
+          "name": "v8.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4cf4915f-c478-4482-8027-d783d671e62a/original=true/46562058.jpeg",
+          "files": [
+            {
+              "file_id": 1089249,
+              "download_url": "https://civitai.com/api/download/models/1183765?fileId=1089249",
+              "catalog_filename": "waiIllustriousSDXL_v80.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v8.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1068947,
+          "name": "v7.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0f128fc6-a3bd-4bfe-a0ee-02fd10653b38/original=true/40505063.jpeg",
+          "files": [
+            {
+              "file_id": 974429,
+              "download_url": "https://civitai.com/api/download/models/1068947?fileId=974429",
+              "catalog_filename": "waiIllustriousSDXL_v70.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v7.0.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1045121,
+          "name": "v6.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8dcffa40-7e63-46c0-be14-daa232634108/original=true/39266951.jpeg",
+          "files": [
+            {
+              "file_id": 950863,
+              "download_url": "https://civitai.com/api/download/models/1045121?fileId=950863",
+              "catalog_filename": "waiIllustriousSDXL_v60.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v6.0.safetensors",
+              "size_bytes": 6938040714,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1025184,
+          "name": "v5.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/293ee89b-57c1-4849-8ecd-f1d2ee836307/original=true/38203447.jpeg",
+          "files": [
+            {
+              "file_id": 931015,
+              "download_url": "https://civitai.com/api/download/models/1025184?fileId=931015",
+              "catalog_filename": "waiIllustriousSDXL_v50.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v5.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1016997,
+          "name": "v4.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/368a29ae-ea2b-4a4c-93d0-8fcde1836b2c/original=true/37783732.jpeg",
+          "files": [
+            {
+              "file_id": 922626,
+              "download_url": "https://civitai.com/api/download/models/1016997?fileId=922626",
+              "catalog_filename": "waiIllustriousSDXL_v40.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v4.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1000629,
+          "name": "v3.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/97512fde-c19a-4c2d-a83d-a5137200bbea/original=true/36890269.jpeg",
+          "files": [
+            {
+              "file_id": 906490,
+              "download_url": "https://civitai.com/api/download/models/1000629?fileId=906490",
+              "catalog_filename": "waiIllustriousSDXL_v30.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v3.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 983521,
+          "name": "v2.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4b674719-df17-484f-9b55-411d75967b79/original=true/35991645.jpeg",
+          "files": [
+            {
+              "file_id": 889968,
+              "download_url": "https://civitai.com/api/download/models/983521?fileId=889968",
+              "catalog_filename": "waiIllustriousSDXL_v20.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v2.0.safetensors",
+              "size_bytes": 6938040682,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 925049,
+          "name": "v1.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ab8d5657-2a4f-480d-b1e0-b2f92653e108/original=true/32978512.jpeg",
+          "files": [
+            {
+              "file_id": 832613,
+              "download_url": "https://civitai.com/api/download/models/925049?fileId=832613",
+              "catalog_filename": "waiIllustriousSDXL_v10.safetensors",
+              "pretty_filename": "WAI-illustrious-SDXL v1.0.safetensors",
+              "size_bytes": 6938041160,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:1277670": {
+      "ref": "civitai:1277670",
+      "source": "civitai",
+      "kind": "checkpoint",
+      "model_id": 1277670,
+      "label": "✨ JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL ✨",
+      "main_url": "https://civitai.com/models/1277670",
+      "default_version_id": 2786084,
+      "folder": "checkpoints",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2786084,
+          "name": "v7.77",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": null,
+              "download_url": "https://civitai.com/api/download/models/2786084",
+              "catalog_filename": "JANKUtrainedChenkinNoobai_v777.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v7.77.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2578565,
+          "name": "v6.9 🔥",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8be833a6-735c-4ec7-9fb5-02936bb58a34/original=true/116771307.jpeg",
+          "files": [
+            {
+              "file_id": 2465829,
+              "download_url": "https://civitai.com/api/download/models/2578565?fileId=2465829",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v69.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v6.9.safetensors",
+              "size_bytes": 6938040674,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 2358314,
+          "name": "v6.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/69c35e8e-b446-4906-ac98-68761e6fa03d/original=true/108114695.jpeg",
+          "files": [
+            {
+              "file_id": 2248993,
+              "download_url": "https://civitai.com/api/download/models/2358314?fileId=2248993",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v60.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v6.0.safetensors",
+              "size_bytes": 6938040674,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1896532,
+          "name": "v5.0 🥇🔥",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/54f4f45c-eecd-4b2e-bf04-7d480f380c6c/original=true/94447247.jpeg",
+          "files": [
+            {
+              "file_id": 1795849,
+              "download_url": "https://civitai.com/api/download/models/1896532?fileId=1795849",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v50.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v5.0.safetensors",
+              "size_bytes": 6938040674,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1864501,
+          "name": "v4.0 - Style A",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e8d4301a-cd32-4d68-aaed-680b7fa5ba4c/original=true/80259284.jpeg",
+          "files": [
+            {
+              "file_id": 1764347,
+              "download_url": "https://civitai.com/api/download/models/1864501?fileId=1764347",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v40StyleA.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v4.0 - Style A.safetensors",
+              "size_bytes": 6938040674,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1772645,
+          "name": "v4.0 🥇🔥",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5c95e49c-c96d-49c8-b82a-35e18c47c109/original=true/79511200.jpeg",
+          "files": [
+            {
+              "file_id": 1673404,
+              "download_url": "https://civitai.com/api/download/models/1772645?fileId=1673404",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v40.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v4.0.safetensors",
+              "size_bytes": 6938040674,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1596786,
+          "name": "v3.0 🥇🔥",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/46cf7423-a9b4-4b2e-b020-4208fc740a97/original=true/66697013.jpeg",
+          "files": [
+            {
+              "file_id": 1496843,
+              "download_url": "https://civitai.com/api/download/models/1596786?fileId=1496843",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v30.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v3.0.safetensors",
+              "size_bytes": 7105348368,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1520822,
+          "name": "v2.1",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ec8cda63-caf4-42cc-af17-43841b33c507/original=true/62945947.jpeg",
+          "files": [
+            {
+              "file_id": 1421016,
+              "download_url": "https://civitai.com/api/download/models/1520822?fileId=1421016",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v21.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v2.1.safetensors",
+              "size_bytes": 6938041144,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1469829,
+          "name": "v2.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/95def33c-1387-4807-8c6e-015f8aa81206/original=true/60651174.jpeg",
+          "files": [
+            {
+              "file_id": 1371227,
+              "download_url": "https://civitai.com/api/download/models/1469829?fileId=1371227",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v20.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v2.0.safetensors",
+              "size_bytes": 7105348368,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1441401,
+          "name": "v1.0",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a36914e8-d6b7-4818-89b5-636e90d75355/original=true/59138328.jpeg",
+          "files": [
+            {
+              "file_id": 1362168,
+              "download_url": "https://civitai.com/api/download/models/1441401?fileId=1362168",
+              "catalog_filename": "JANKUTrainedChenkinNoobai_v10.safetensors",
+              "pretty_filename": "JANKU Trained + Chenkin & NoobAI + RouWei Illustrious XL v1.0.safetensors",
+              "size_bytes": 7105348368,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:896369": {
+      "ref": "civitai:896369",
+      "source": "civitai",
+      "kind": "lora",
+      "model_id": 896369,
+      "label": "Armbinder",
+      "main_url": "https://civitai.com/models/896369",
+      "default_version_id": 1260659,
+      "folder": "loras",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1260659,
+          "name": "Illustrious",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1165775,
+              "download_url": "https://civitai.com/api/download/models/1260659?fileId=1165775",
+              "catalog_filename": "Armbinder_IL.safetensors",
+              "pretty_filename": "Armbinder Illustrious.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1006601,
+          "name": "SD15",
+          "base_model": "SD 1.5",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fecc5539-5e26-4c0c-b833-a066afbc0cad/original=true/37215891.jpeg",
+          "files": [
+            {
+              "file_id": 912321,
+              "download_url": "https://civitai.com/api/download/models/1006601?fileId=912321",
+              "catalog_filename": "ArmbinderSD15.safetensors",
+              "pretty_filename": "Armbinder SD15.safetensors",
+              "size_bytes": 37864904,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1003043,
+          "name": "Pony",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a672080e-91f3-4dfa-9714-cacca65d770f/original=true/37024342.jpeg",
+          "files": [
+            {
+              "file_id": 908836,
+              "download_url": "https://civitai.com/api/download/models/1003043?fileId=908836",
+              "catalog_filename": "ArmbinderPony.safetensors",
+              "pretty_filename": "Armbinder Pony.safetensors",
+              "size_bytes": 228454332,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:1837372": {
+      "ref": "civitai:1837372",
+      "source": "civitai",
+      "kind": "lora",
+      "model_id": 1837372,
+      "label": "Free use with armbinders",
+      "main_url": "https://civitai.com/models/1837372",
+      "default_version_id": 2079214,
+      "folder": "loras",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2079214,
+          "name": "V1",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1976370,
+              "download_url": "https://civitai.com/api/download/models/2079214?fileId=1976370",
+              "catalog_filename": "Free_use_with_armbinders.safetensors",
+              "pretty_filename": "Free use with armbinders V1.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:1451639": {
+      "ref": "civitai:1451639",
+      "source": "civitai",
+      "kind": "lora",
+      "model_id": 1451639,
+      "label": "Quad Amputee Stumpless",
+      "main_url": "https://civitai.com/models/1451639",
+      "default_version_id": 1857241,
+      "folder": "loras",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1857487,
+          "name": "Illustrious V3 Realistic",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e4ad58ac-1983-4240-a8fd-f0c8235464ab/original=true/79831029.jpeg",
+          "files": [
+            {
+              "file_id": 1757199,
+              "download_url": "https://civitai.com/api/download/models/1857487?fileId=1757199",
+              "catalog_filename": "Amputee_stumpless_Illu_v3_real.safetensors",
+              "pretty_filename": "Quad Amputee Stumpless Illustrious V3 Realistic.safetensors",
+              "size_bytes": 228458444,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1857241,
+          "name": "Illustrious V3 Drawn",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1756941,
+              "download_url": "https://civitai.com/api/download/models/1857241?fileId=1756941",
+              "catalog_filename": "Amputee_stumpless_Illu_v3_drawn.safetensors",
+              "pretty_filename": "Quad Amputee Stumpless Illustrious V3 Drawn.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1657962,
+          "name": "Illustrious V2",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/87a8556e-95f0-4361-a40e-be2dd7183f53/original=true/69786511.jpeg",
+          "files": [
+            {
+              "file_id": 1558389,
+              "download_url": "https://civitai.com/api/download/models/1657962?fileId=1558389",
+              "catalog_filename": "amputee_stumpless_IlluV2.safetensors",
+              "pretty_filename": "Quad Amputee Stumpless Illustrious V2.safetensors",
+              "size_bytes": 228460084,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1641545,
+          "name": "Pony",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/457e2574-c37d-4cda-b5e8-3d2832733348/original=true/68992991.jpeg",
+          "files": [
+            {
+              "file_id": 1541947,
+              "download_url": "https://civitai.com/api/download/models/1641545?fileId=1541947",
+              "catalog_filename": "AmpStumplessPony.safetensors",
+              "pretty_filename": "Quad Amputee Stumpless Pony.safetensors",
+              "size_bytes": 228459132,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1641310,
+          "name": "Illustrious",
+          "base_model": "Illustrious",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2262b492-1fb0-41fe-b1a7-60bcfaca363f/original=true/68985475.jpeg",
+          "files": [
+            {
+              "file_id": 1541712,
+              "download_url": "https://civitai.com/api/download/models/1641310?fileId=1541712",
+              "catalog_filename": "AmpStumplessIllustrious.safetensors",
+              "pretty_filename": "Quad Amputee Stumpless Illustrious.safetensors",
+              "size_bytes": 228459020,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:787560": {
+      "ref": "civitai:787560",
+      "source": "civitai",
+      "kind": "lora",
+      "model_id": 787560,
+      "label": "Reverse-Prayer Armbinder | 背手祈祷式单手套",
+      "main_url": "https://civitai.com/models/787560",
+      "default_version_id": 1270573,
+      "folder": "loras",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1270573,
+          "name": "pony ver",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1175559,
+              "download_url": "https://civitai.com/api/download/models/1270573?fileId=1175559",
+              "catalog_filename": "RParmbinderPony.safetensors",
+              "pretty_filename": "Reverse-Prayer Armbinder 背手祈祷式单手套 pony ver.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 880744,
+          "name": "XL v1.0",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f1d035f7-3500-4305-9446-c860784dfd41/original=true/30810076.jpeg",
+          "files": [
+            {
+              "file_id": 789240,
+              "download_url": "https://civitai.com/api/download/models/880744?fileId=789240",
+              "catalog_filename": "RParmbinder.safetensors",
+              "pretty_filename": "Reverse-Prayer Armbinder 背手祈祷式单手套 XL v1.0.safetensors",
+              "size_bytes": 42872284,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:684499": {
+      "ref": "civitai:684499",
+      "source": "civitai",
+      "kind": "lora",
+      "model_id": 684499,
+      "label": "Sex Slave Training",
+      "main_url": "https://civitai.com/models/684499",
+      "default_version_id": 1766947,
+      "folder": "loras",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1766947,
+          "name": "Ver.IL",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1667707,
+              "download_url": "https://civitai.com/api/download/models/1766947?fileId=1667707",
+              "catalog_filename": "Sex_slave_training_illustrious.safetensors",
+              "pretty_filename": "Sex Slave Training Ver.IL.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 766116,
+          "name": "Pony",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 679980,
+              "download_url": "https://civitai.com/api/download/models/766116?fileId=679980",
+              "catalog_filename": "Sex_slave_training.safetensors",
+              "pretty_filename": "Sex Slave Training Pony.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:2349919": {
+      "ref": "civitai:2349919",
+      "source": "civitai",
+      "kind": "lora",
+      "model_id": 2349919,
+      "label": "armbinder bondage",
+      "main_url": "https://civitai.com/models/2349919",
+      "default_version_id": 2643047,
+      "folder": "loras",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 2643047,
+          "name": "V1",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 2535617,
+              "download_url": "https://civitai.com/api/download/models/2643047?fileId=2535617",
+              "catalog_filename": "bondage_armbinder.safetensors",
+              "pretty_filename": "armbinder bondage V1.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "civitai:589918": {
+      "ref": "civitai:589918",
+      "source": "civitai",
+      "kind": "lora",
+      "model_id": 589918,
+      "label": "マンコ拡張/pussy spreader",
+      "main_url": "https://civitai.com/models/589918",
+      "default_version_id": 1229565,
+      "folder": "loras",
+      "bundle_id": null,
+      "requires_bundle_id": null,
+      "versions": [
+        {
+          "version_id": 1703115,
+          "name": "v1.1 noob",
+          "base_model": "NoobAI",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b9e8a892-4807-4b68-874b-3c8f2cc6e2ee/original=true/72040123.jpeg",
+          "files": [
+            {
+              "file_id": 1603697,
+              "download_url": "https://civitai.com/api/download/models/1703115?fileId=1603697",
+              "catalog_filename": "pussy spreader_noobep_V1.1.safetensors",
+              "pretty_filename": "マンコ拡張pussy spreader v1.1 noob.safetensors",
+              "size_bytes": 127727328,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1395073,
+          "name": "v1.0 XL(animagine4)",
+          "base_model": "SDXL 1.0",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a834528f-07b3-463e-bd62-f0664f602c07/original=true/56906308.jpeg",
+          "files": [
+            {
+              "file_id": 1297475,
+              "download_url": "https://civitai.com/api/download/models/1395073?fileId=1297475",
+              "catalog_filename": "pussy spreader_XL_V1.0.safetensors",
+              "pretty_filename": "マンコ拡張pussy spreader v1.0 XL(animagine4).safetensors",
+              "size_bytes": 127727304,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 1229565,
+          "name": "v1.0 ill",
+          "base_model": "",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "file_id": 1134994,
+              "download_url": "https://civitai.com/api/download/models/1229565?fileId=1134994",
+              "catalog_filename": "pussy spreader_illustrious_V1.0.safetensors",
+              "pretty_filename": "マンコ拡張pussy spreader v1.0 ill.safetensors",
+              "size_bytes": null,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "version_id": 658684,
+          "name": "v1.0 pony",
+          "base_model": "Pony",
+          "preview_remote_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6e115250-2acb-4bbc-bfcf-0322d192974d/original=true/72273488.jpeg",
+          "files": [
+            {
+              "file_id": 573659,
+              "download_url": "https://civitai.com/api/download/models/658684?fileId=573659",
+              "catalog_filename": "pussy spreader_pony_V1.0.safetensors",
+              "pretty_filename": "マンコ拡張pussy spreader v1.0 pony.safetensors",
+              "size_bytes": 57422484,
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    "bundle:anima": {
+      "ref": "bundle:anima",
+      "source": "hf",
+      "kind": "flux_diffusion",
+      "label": "Anima Base",
+      "default_version_id": "v1",
+      "folder": "diffusion_models",
+      "repo_id": "circlestone-labs/Anima",
+      "bundle_id": "anima",
+      "versions": [
+        {
+          "version_id": "v1",
+          "name": "Base bundle",
+          "base_model": "Anima",
+          "preview_remote_url": null,
+          "files": [
+            {
+              "repo_id": "circlestone-labs/Anima",
+              "repo_path": "split_files/diffusion_models/anima-base-v1.0.safetensors",
+              "catalog_filename": "anima-base-v1.0.safetensors",
+              "pretty_filename": "anima-base-v1.0.safetensors",
+              "size_bytes": null,
+              "primary": true,
+              "folder": "diffusion_models"
+            },
+            {
+              "repo_id": "circlestone-labs/Anima",
+              "repo_path": "split_files/text_encoders/qwen_3_06b_base.safetensors",
+              "catalog_filename": "qwen_3_06b_base.safetensors",
+              "pretty_filename": "qwen_3_06b_base.safetensors",
+              "size_bytes": null,
+              "primary": false,
+              "folder": "text_encoders"
+            },
+            {
+              "repo_id": "circlestone-labs/Anima",
+              "repo_path": "split_files/vae/qwen_image_vae.safetensors",
+              "catalog_filename": "qwen_image_vae.safetensors",
+              "pretty_filename": "qwen_image_vae.safetensors",
+              "size_bytes": null,
+              "primary": false,
+              "folder": "vae"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

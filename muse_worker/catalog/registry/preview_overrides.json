@@ -1,0 +1,13 @@
+{
+  "assets": {
+    "anima-cover.png": {
+      "label": "Anima cover",
+      "refs": [
+        "hf:circlestone-labsanima:qwen-image-vae",
+        "hf:circlestone-labsanima:qwen-3-06b-base",
+        "hf:circlestone-labsanima:anima-base-v10"
+      ],
+      "bundle_ids": ["anima"]
+    }
+  }
+}

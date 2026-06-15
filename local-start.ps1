@@ -24,7 +24,7 @@ if (-not $env:COMFY_ROOT) {
 
 if (-not $env:COMFY_URL) { $env:COMFY_URL = "http://127.0.0.1:8188" }
 if (-not $env:UI_PORT) { $env:UI_PORT = "3000" }
-if (-not $env:FAVORITES_PATH) { $env:FAVORITES_PATH = (Join-Path $RepoRoot "favorites.json") }
+if (-not $env:FAVORITES_PATH) { $env:FAVORITES_PATH = (Join-Path $RepoRoot "muse_worker\runtime\favorites.json") }
 
 $pythonCandidates = @(
   "C:\ComfyUI_windows_portable\python_embeded\python.exe",

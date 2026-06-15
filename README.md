@@ -18,8 +18,11 @@ This repo intentionally contains only worker-side files:
 - `docker-run.sh` - run the Flask bridge container on port 3000
 - `Dockerfile` - small Python runtime image with this Flask bridge copied in
 - `start-flask.sh` - container entrypoint
-- `app.py`, `worker_status.py`, `workflow_utils.py`, `studio_comfy_api.py`, `config.py`, `metadata.py` - Flask bridge
-- `workflow*.json`, `presets.json`, `models.json`, `download_models.py`, `bootstrap.sh` - workflow/model bootstrap support
+- `app.py` - stable Flask entrypoint wrapper (`python app.py` still works)
+- `muse_worker/app.py`, `muse_worker/runtime/*`, `muse_worker/worker/*` - Flask bridge, workflow patching, Comfy API, status/control
+- `muse_worker/catalog/*`, `muse_worker/catalog/sources/*`, `muse_worker/catalog/registry/*` - model catalog, download manager, registry build inputs/output
+- `muse_worker/llm/*` - optional self-hosted LLM manager/runner
+- `bootstrap.sh` - ComfyUI/llama.cpp bootstrap support
 - `.env.example` - optional config
 - `.gitignore` / `.dockerignore` - prevents models, outputs, secrets, logs, and app data from being committed
 

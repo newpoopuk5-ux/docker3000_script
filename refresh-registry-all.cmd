@@ -34,6 +34,6 @@ if %EXIT% neq 0 (
 )
 
 echo.
-echo All done. Commit model_registry/*.json when ready.
+echo All done. Commit muse_worker\catalog\registry\*.json when ready.
 echo.
 pause
