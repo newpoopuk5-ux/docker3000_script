@@ -12,7 +12,7 @@ from build_registry import (
     _preview_url_from_meta,
     _version_file_row,
 )
-from download_models import civitai_lookup, resolve_civitai_file
+from download_models import civitai_lookup, civitai_trigger_words, resolve_civitai_file
 from model_registry import load_entries, load_index, write_registry_files
 
 LOOKUP_DELAY_SEC = 0.25
@@ -139,6 +139,7 @@ def refresh_ref(ref: str, *, quiet: bool = False) -> int:
                 file_id=int(fid) if fid else None,
                 size_bytes=size_bytes,
                 preview_remote_url=_preview_url_from_meta(meta),
+                trigger_words=civitai_trigger_words(meta),
             )
         )
 

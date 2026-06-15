@@ -14,6 +14,7 @@ from muse_worker.paths import CATALOG_REGISTRY_DIR, CATALOG_SOURCES_DIR
 from download_models import (
     civitai_lookup,
     civitai_pretty_filename,
+    civitai_trigger_words,
     extract_civitai_file_id,
     resolve_civitai_file,
     _pick_primary_civitai_preview,
@@ -154,6 +155,7 @@ def _version_file_row(
     file_id: int | None = None,
     size_bytes: int | None = None,
     preview_remote_url: str | None = None,
+    trigger_words: list[str] | None = None,
     folder: str | None = None,
     primary: bool = True,
 ) -> dict:
@@ -173,13 +175,16 @@ def _version_file_row(
     }
     if folder:
         file_row["folder"] = folder
-    return {
+    version_row = {
         "version_id": int(version_id),
         "name": version_name or f"v{version_id}",
         "base_model": base_model or "",
         "preview_remote_url": preview_remote_url,
         "files": [file_row],
     }
+    if trigger_words:
+        version_row["trigger_words"] = trigger_words
+    return version_row
 
 
 # Civitai models whose checkpoint + TE + VAE ship as one catalog card (multi-file versions).
@@ -375,6 +380,7 @@ def _aggregate_versions_merged(
         file_id = _file_id_from_url(download_url)
         size_bytes = None
         preview_remote_url = None
+        trigger_words = None
 
         if refresh:
             if vid not in version_meta_cache:
@@ -390,6 +396,7 @@ def _aggregate_versions_merged(
                 file_id = int(fid)
             size_bytes = int(file_entry.get("size") or 0) or None
             preview_remote_url = _preview_url_from_meta(meta)
+            trigger_words = civitai_trigger_words(meta)
             download_url = (
                 f"https://civitai.com/api/download/models/{vid}?fileId={file_id}"
                 if file_id
@@ -416,6 +423,7 @@ def _aggregate_versions_merged(
                 "name": version_name or f"v{vid}",
                 "base_model": base_model or "",
                 "preview_remote_url": preview_remote_url,
+                "trigger_words": trigger_words or [],
                 "files": [],
             }
         elif preview_remote_url and not by_vid[vid].get("preview_remote_url"):
@@ -471,6 +479,7 @@ def _aggregate_versions_merged(
                         file_id=int(fid) if fid else None,
                         size_bytes=int(file_entry.get("size") or 0) or None,
                         preview_remote_url=_preview_url_from_meta(meta),
+                        trigger_words=civitai_trigger_words(meta),
                         folder="checkpoints",
                         primary=True,
                     )
@@ -503,6 +512,7 @@ def _aggregate_versions(
         file_id = _file_id_from_url(download_url)
         size_bytes = None
         preview_remote_url = None
+        trigger_words = None
 
         if refresh:
             if vid not in version_meta_cache:
@@ -522,6 +532,7 @@ def _aggregate_versions(
             elif isinstance(size_bytes, (int, float)):
                 size_bytes = int(size_bytes)
             preview_remote_url = _preview_url_from_meta(meta)
+            trigger_words = civitai_trigger_words(meta)
             download_url = (
                 f"https://civitai.com/api/download/models/{vid}?fileId={file_id}"
                 if file_id
@@ -538,6 +549,7 @@ def _aggregate_versions(
             file_id=file_id,
             size_bytes=size_bytes,
             preview_remote_url=preview_remote_url,
+            trigger_words=trigger_words,
         )
         existing = by_vid.get(vid)
         if not existing or int(row["files"][0].get("file_id") or 0) == int(file_id or 0):
@@ -581,6 +593,7 @@ def _aggregate_versions(
                         file_id=int(fid) if fid else None,
                         size_bytes=int(file_entry.get("size") or 0) or None,
                         preview_remote_url=_preview_url_from_meta(meta),
+                        trigger_words=civitai_trigger_words(meta),
                     )
                 )
             versions.sort(key=lambda row: int(row.get("version_id") or 0), reverse=True)

@@ -1006,6 +1006,7 @@ def _preview_from_version_meta(
         "preview_remote_url": preview_remote_url,
         "preview_images": cached_previews,
         "preview_image_count": len(cached_previews),
+        "trigger_words": civitai_trigger_words(meta),
     }
     if model_id is not None:
         payload["model_id"] = model_id
@@ -1139,6 +1140,21 @@ def civitai_lookup(version_id: int) -> dict:
     return r.json()
 
 
+def civitai_trigger_words(meta: dict) -> list[str]:
+    words: list[str] = []
+    for key in ("trainedWords", "trained_words", "triggerWords", "trigger_words"):
+        raw = meta.get(key)
+        if isinstance(raw, str):
+            raw = re.split(r"[,;\n]+", raw)
+        if not isinstance(raw, list):
+            continue
+        for value in raw:
+            text = str(value or "").strip()
+            if text and text not in words:
+                words.append(text)
+    return words[:40]
+
+
 def variant_from_basemodel(base_model: str) -> str:
     base = (base_model or "").strip().lower()
     if not base:
@@ -1206,6 +1222,7 @@ def write_civitai_sidecar(target: Path, meta: dict, preview_paths: list[str] | N
             "civitai_model_id": (meta.get("modelId") or (meta.get("model") or {}).get("id")),
             "name": meta.get("name"),
             "model_name": (meta.get("model") or {}).get("name"),
+            "trigger_words": civitai_trigger_words(meta),
             "preview_images": civitai_preview_entries(meta),
             "preview_paths": preview_paths or [],
         }

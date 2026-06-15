@@ -26,6 +26,7 @@ from build_registry import (
 from download_models import (
     civitai_lookup,
     civitai_pretty_filename,
+    civitai_trigger_words,
     extract_civitai_file_id,
     extract_civitai_version_id,
     is_civitai_model_page_url,
@@ -140,6 +141,7 @@ def append_from_url(url: str, category: str, *, kind: str | None = None, group: 
                     file_id=int(fid) if fid else None,
                     size_bytes=int(fentry.get("size") or 0) or None,
                     preview_remote_url=_preview_url_from_meta(vmeta),
+                    trigger_words=civitai_trigger_words(vmeta),
                 )
             )
     else:
@@ -169,6 +171,7 @@ def append_from_url(url: str, category: str, *, kind: str | None = None, group: 
                 file_id=int(file_id) if file_id else extract_civitai_file_id(url),
                 size_bytes=int(file_entry.get("size") or 0) or None,
                 preview_remote_url=_preview_url_from_meta(meta),
+                trigger_words=civitai_trigger_words(meta),
             )
         ]
 
