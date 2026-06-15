@@ -230,6 +230,9 @@ def merge_entry_versions(new_entry: dict, existing_entry: dict | None) -> dict:
     for row in new_versions:
         vid = str(row.get("version_id"))
         prev = by_vid.get(vid)
+        if prev and not row.get("trigger_words") and prev.get("trigger_words"):
+            row = dict(row)
+            row["trigger_words"] = prev.get("trigger_words")
         if not prev:
             by_vid[vid] = row
             continue

@@ -56,6 +56,17 @@ KINDS = {
     "upscaler": {"label": "Upscaler", "folder": "upscale_models"},
 }
 
+FOLDER_TO_KIND = {
+    "checkpoints": "checkpoint",
+    "loras": "lora",
+    "vae": "vae",
+    "text_encoders": "text_encoder",
+    "diffusion_models": "flux_diffusion",
+    "unet": "flux_gguf_unet",
+    "controlnet": "controlnet",
+    "upscale_models": "upscaler",
+}
+
 
 def registry_supported() -> bool:
     return INDEX_JSON.is_file() and ENTRIES_JSON.is_file()
@@ -458,6 +469,52 @@ def merge_index_installed(index: dict, disk_index: dict[str, list[dict]] | None 
     return installed_by_ref
 
 
+def _matched_disk_keys(by_ref: dict[str, dict], disk_index: dict[str, list[dict]]) -> set[tuple[str, str]]:
+    keys: set[tuple[str, str]] = set()
+    for entry in by_ref.values():
+        if not isinstance(entry, dict):
+            continue
+        for version in entry.get("versions") or []:
+            for file_row in version.get("files") or []:
+                hit = match_file_installed(file_row, disk_index, entry)
+                if hit:
+                    row = hit.get("disk_row") or {}
+                    folder = str(hit.get("folder") or row.get("folder") or "")
+                    path = str(row.get("path") or row.get("name") or "")
+                    if folder and path:
+                        keys.add((folder, path))
+    return keys
+
+
+def _disk_label(name: str) -> str:
+    label = Path(name).stem.replace("_", " ").replace("-", " ").strip()
+    return re.sub(r"\s+", " ", label) or name
+
+
+def _disk_only_summary(folder: str, row: dict) -> dict:
+    name = str(row.get("name") or row.get("path") or "").strip()
+    path = str(row.get("path") or name).strip()
+    version_id = f"disk:{folder}:{path}"
+    return {
+        "ref": version_id,
+        "source": "disk",
+        "kind": FOLDER_TO_KIND.get(folder, "checkpoint"),
+        "label": _disk_label(name),
+        "default_version_id": version_id,
+        "default_base_model": "",
+        "preview_remote_url": None,
+        "version_count": 1,
+        "tags": ["local"],
+        "installed": True,
+        "folder": folder,
+        "disk_name": name,
+        "disk_path": path,
+        "size_bytes": row.get("size_bytes"),
+        "installed_version_id": version_id,
+        "installed_version_ids": [version_id],
+    }
+
+
 def registry_index_payload() -> dict:
     if not registry_supported():
         return {"ok": False, "supported": False, "error": "model registry not found"}
@@ -500,6 +557,14 @@ def registry_index_payload() -> dict:
         summary["ref"] = ref
         summary = apply_preview_override(summary)
         entries[ref] = summary
+    matched_keys = _matched_disk_keys(by_ref, disk_index)
+    for folder, rows in disk_index.items():
+        for row in rows:
+            path = str(row.get("path") or row.get("name") or "")
+            if not path or (folder, path) in matched_keys:
+                continue
+            summary = _disk_only_summary(folder, row)
+            entries[summary["ref"]] = summary
     index = dict(index)
     index["entries"] = entries
     index["installed_by_ref"] = installed_by_ref
@@ -513,6 +578,9 @@ def registry_installed_payload() -> dict:
     index = load_index()
     disk_index = _scan_disk_index()
     installed_by_ref = merge_index_installed(index, disk_index)
+    entries_payload = load_entries()
+    by_ref = entries_payload.get("by_ref") or {}
+    matched_keys = _matched_disk_keys(by_ref, disk_index)
     disk_rows: list[dict] = []
     refs_installed = []
     for ref, status in installed_by_ref.items():
@@ -532,6 +600,23 @@ def registry_installed_payload() -> dict:
             "civitai_version_id": status.get("civitai_version_id"),
             "preview_thumb_file": status.get("preview_thumb_file"),
         })
+    for folder, rows in disk_index.items():
+        for row in rows:
+            path = str(row.get("path") or row.get("name") or "")
+            if not path or (folder, path) in matched_keys:
+                continue
+            summary = _disk_only_summary(folder, row)
+            refs_installed.append(summary["ref"])
+            disk_rows.append({
+                "ref": summary["ref"],
+                "label": summary["label"],
+                "kind": summary["kind"],
+                "folder": folder,
+                "name": summary["disk_name"],
+                "path": summary["disk_path"],
+                "size_bytes": summary.get("size_bytes"),
+                "installed_version_id": summary["installed_version_id"],
+            })
     return {
         "ok": True,
         "supported": True,

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-15T01:43:30.115776+00:00",
+  "generated_at": "2026-06-15T01:54:37.559173+00:00",
   "by_ref": {
     "civitai:1325426": {
       "ref": "civitai:1325426",
@@ -3931,6 +3931,9 @@
               "size_bytes": null,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "armbinder"
           ]
         },
         {
@@ -3999,6 +4002,17 @@
               "size_bytes": null,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "armbinder",
+            "legsplit",
+            "overedge",
+            "headhanging",
+            "kneeling_oral_position",
+            "ballgag",
+            "ringgag",
+            "blindfold",
+            "fuarmbinder"
           ]
         }
       ]
@@ -4049,6 +4063,10 @@
               "size_bytes": null,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "amputee",
+            "gold cappedlimb"
           ]
         },
         {
@@ -4137,6 +4155,9 @@
               "size_bytes": null,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "rparmbinder"
           ]
         },
         {
@@ -4187,6 +4208,10 @@
               "size_bytes": null,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "sex slave,black bondage costume,black corset,1girl,solo,chains,restrained",
+            "sex slave,1girl,solo,chains,black body harness,restrained,shibari,nude"
           ]
         },
         {
@@ -4203,6 +4228,10 @@
               "size_bytes": null,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "sex slave,1girl,solo,chains,black body harness,restrained,shibari,nude",
+            "sex slave,black bondage costume,1girl,solo,chains,restrained"
           ]
         }
       ]
@@ -4233,6 +4262,9 @@
               "size_bytes": null,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "bndg_armbinder"
           ]
         }
       ]
@@ -4301,6 +4333,9 @@
               "size_bytes": null,
               "primary": true
             }
+          ],
+          "trigger_words": [
+            "pussy spreader, clitoris, spread pussy, bdsm, bound, bondage"
           ]
         },
         {
