@@ -22,7 +22,7 @@
     "cfg": 6.5,
     "width": 832,
     "height": 1216,
-    "model": "waiIllustriousSDXL_v17.safetensors"
+    "model": "waiIllustriousSDXL_v170.safetensors"
   },
   "miaomiaoHarem_anima12": {
     "sampler_name": "euler",

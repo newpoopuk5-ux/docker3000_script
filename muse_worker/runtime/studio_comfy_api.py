@@ -58,7 +58,13 @@ def interrupt_comfy():
 
 def queue_prompt(workflow):
     r = requests.post(f"{COMFY_URL}/prompt", json={"prompt": workflow, "client_id": "custom-ui"}, timeout=30)
-    r.raise_for_status()
+    try:
+        r.raise_for_status()
+    except requests.HTTPError as exc:
+        detail = (r.text or "").strip()
+        if len(detail) > 2000:
+            detail = detail[:2000] + "..."
+        raise RuntimeError(f"{exc}; Comfy response: {detail}") from exc
     return r.json()
 
 

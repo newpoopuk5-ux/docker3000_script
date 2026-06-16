@@ -1,7 +1,7 @@
 {
   "5": {
     "inputs": {
-      "ckpt_name": "hassakuXLIllustrious.safetensors"
+      "ckpt_name": "amanatsuIllustrious_v2.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
